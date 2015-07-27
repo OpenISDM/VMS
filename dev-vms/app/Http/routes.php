@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('user/{id}', 'UserController@showProfile');
+
+Route::post('user/{id}/{username}/{sex}/{birthdate}/{email}/{cellphone}/{city}', 'UserController@editProfile');
