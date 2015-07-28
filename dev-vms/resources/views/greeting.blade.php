@@ -12,54 +12,9 @@
                }
            });
         </script>
-        <style type="text/css">
-            #edit
-            {
-                width:350px;
-                height:300px;   
-                text-align: center;
-                font-family:Meiryo,Microsoft JhengHei,SimHei;
-                font-size:50px;
-                
-                        
-                position:absolute;
-                left:50%;
-                top:10%;
-                        
-                
-                margin-left:-150px; 
-            }       
-            #form1
-            {
-                width:450px;
-                height:300px;
-                text-align:right; 
-                
-                font-family:Meiryo,Microsoft JhengHei,SimHei;
-                font-size:24px;
-                
-                        
-                position:absolute;
-                left:50%;
-                top:10%;
-                        
-                margin-top:130px;
-                margin-left:-250px; 
-            }
-            
-            input
-            {
-                font-family:Courier New,Meiryo,Microsoft YaHei;
-                font-size:20px;
-                width:300px;
-                border-radius: 10px;
-                border: 1px dashed blue;
-            }   
-                    
-
-        </style>
-
-
+		
+		{!! HTML::style('css/greeting.css') !!}
+		
     </head>
     <body>
         
@@ -91,10 +46,10 @@
                 
                 <input type='hidden' name='id' value='" . $id . "'>
                 
-                <input type = 'Submit' name = 'submit1' value ='save' style = 'width:100px'>
-                <input type = 'button' value ='reset' style = 'width:100px' onclick=\"location.href='" . $id . "'\">
-                <input type = 'button' value ='menu' style = 'width:100px' onclick=\"location.href='002.php'\">
-                <input type = 'button' value ='next' style = 'width:100px' onclick=\"location.href='002.php'\">
+                <input type = 'Submit' class = 'button' name = 'submit1' value ='save'>
+                <input type = 'button' class = 'button' value ='reset' onclick=\"location.href='" . $id . "'\">
+                <input type = 'button' class = 'button' value ='menu' onclick=\"location.href='002.php'\">
+                <input type = 'button' class = 'button' value ='next' onclick=\"location.href='002.php'\">
             
             ";
             
