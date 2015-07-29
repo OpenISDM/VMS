@@ -11,10 +11,13 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::any('/', function()
+{
+    return "Hello World!";
 });
+
+
 
 Route::get('user/{id}', 'UserController@showProfile');
 
-Route::post('user/{id}/{username}/{sex}/{birthdate}/{email}/{cellphone}/{city}', 'UserController@editProfile');
+Route::post('user/{id}/edit', 'UserController@editProfile');

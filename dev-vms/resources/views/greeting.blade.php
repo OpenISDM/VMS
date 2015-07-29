@@ -29,7 +29,7 @@
             <form name ='form1'
                   id = 'form1'
                   method = 'post'
-                  action = '" . $id . "/" . $username . "/" . $sex . "/" . $birthdate . "/" . $email . "/" . $cellphone . "/" . $city . "'>
+                  action = '" . $id . "/edit'>
             
                 姓名:<input type = 'text' name = 'username' value ='" . $username . "'>
                 <br>

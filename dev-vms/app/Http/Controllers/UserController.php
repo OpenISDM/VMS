@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use App\User;
+use App\personprofile;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,7 @@ class UserController extends Controller
     {
 
         //database information is in .env file
-        $user = DB::table('personprofile')
+        $user = personprofile::all()
                 ->where('id', $id)
                 ->first();
                 
@@ -48,7 +49,16 @@ class UserController extends Controller
         $cellphone = $request->input('cellphone');
         $city = $request->input('city');
         
-        
+        //use ORM to connect DB
+        $user = personprofile::find($id);
+        $user->username = $username;
+        $user->sex = $sex;
+        $user->birthdate = $birthdate;
+        $user->email = $email;
+        $user->cellphone = $cellphone;
+        $user->city = $city;
+        $user->save();
+        /*
         DB::table('personprofile')
             ->where('id', $id)
             ->update(['username'=> $username,
@@ -57,6 +67,8 @@ class UserController extends Controller
                       'email'=> $email,
                       'cellphone'=> $cellphone,
                       'city'=> $city]);
+        
+        */
         
         return redirect('user/'.$id);
     }
