@@ -10,9 +10,9 @@ class ProjectsTableSeeder extends Seeder {
         DB::table('projects')->delete();
  
         $projects = array(
-            ['id' => 1, 'name' => 'Project 1', 'description' => 'The first project', 'created_at' => new DateTime, 'updated_at' => new DateTime],
-            ['id' => 2, 'name' => 'Project 2', 'description' => 'The second project', 'created_at' => new DateTime, 'updated_at' => new DateTime],
-            ['id' => 3, 'name' => 'Project 3', 'description' => 'The third project', 'created_at' => new DateTime, 'updated_at' => new DateTime],
+            ['id' => 1, 'name' => 'Project 1', 'slug' => 'project-1', 'description' => 'The first project', 'created_at' => new DateTime, 'updated_at' => new DateTime],
+            ['id' => 2, 'name' => 'Project 2', 'slug' => 'project-2', 'description' => 'The second project', 'created_at' => new DateTime, 'updated_at' => new DateTime],
+            ['id' => 3, 'name' => 'Project 3', 'slug' => 'project-3', 'description' => 'The third project', 'created_at' => new DateTime, 'updated_at' => new DateTime],
         );
  
         // Uncomment the below to run the seeder
