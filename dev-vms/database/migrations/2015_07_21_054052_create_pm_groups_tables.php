@@ -20,20 +20,20 @@ class CreatePmGroupsTables extends Migration
         });
 
         Schema::create('pm_group_membership', function (Blueprint $table) {
-            $table->integer('fk_pm_group_id')->unsigned()->default(0);
-            $table->foreign('fk_pm_group_id')->references('id')->on('pm_groups')->onDelete('cascade');
-            $table->integer('fk_user_id')->unsigned()->default(0);
-            $table->foreign('fk_user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('pm_group_id')->unsigned()->default(0);
+            $table->foreign('pm_group_id')->references('id')->on('pm_groups')->onDelete('cascade');
+            $table->integer('user_id')->unsigned()->default(0);
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
         
         Schema::create('pm_project_ownership', function (Blueprint $table) {
-            $table->integer('fk_pm_group_id')->unsigned()->default(0);
-            $table->foreign('fk_pm_group_id')->references('id')->on('pm_groups')->onDelete('cascade');
-            $table->integer('fk_project_id')->unsigned()->default(0);
-            $table->foreign('fk_project_id')->references('id')->on('projects')->onDelete('cascade');;
-            $table->integer('fk_current_pm_id')->unsigned()->default(0);
-            $table->foreign('fk_current_pm_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('pm_group_id')->unsigned()->default(0);
+            $table->foreign('pm_group_id')->references('id')->on('pm_groups')->onDelete('cascade');
+            $table->integer('project_id')->unsigned()->default(0);
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');;
+            $table->integer('current_pm_id')->unsigned()->default(0);
+            $table->foreign('current_pm_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
 

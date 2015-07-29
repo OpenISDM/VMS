@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Project;
+use App\Process;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -14,9 +16,10 @@ class ProcessesController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Project $project)
     {
         //
+        return view('processes.index', compact('project'));
     }
 
     /**
@@ -24,9 +27,9 @@ class ProcessesController extends Controller
      *
      * @return Response
      */
-    public function create()
+    public function create(Project $project)
     {
-        //
+        return view('processes.create', compact('project'));
     }
 
     /**
@@ -35,7 +38,7 @@ class ProcessesController extends Controller
      * @param  Request  $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Project $project)
     {
         //
     }
@@ -46,9 +49,10 @@ class ProcessesController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function show($id)
+    public function show(Project $project, Process $process)
     {
         //
+        return view('processes.show', compact('project', 'process'));
     }
 
     /**
@@ -57,9 +61,10 @@ class ProcessesController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function edit($id)
+    public function edit(Project $project, Process $process)
     {
         //
+        return view('processes.edit', compact('project', 'process'));
     }
 
     /**
@@ -69,7 +74,7 @@ class ProcessesController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Project $project, Process $process)
     {
         //
     }
@@ -80,7 +85,7 @@ class ProcessesController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy(Project $project, Process $process)
     {
         //
     }

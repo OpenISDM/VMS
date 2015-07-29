@@ -24,8 +24,8 @@ class CreateProjectsAndProcessesTables extends Migration
 
         Schema::create('processes', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('fk_project_id')->unsigned()->default(0);
-            $table->foreign('fk_project_id')->references('id')->on('projects')->onDelete('cascade');
+            $table->integer('project_id')->unsigned()->default(0);
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
             $table->string('name')->default('');
             $table->text('description')->default('');
             $table->date('start_date')->nullable();

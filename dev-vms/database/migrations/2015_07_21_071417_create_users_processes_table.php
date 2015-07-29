@@ -13,10 +13,10 @@ class CreateUsersProcessesTable extends Migration
     public function up()
     {
         Schema::create('users_processes_membership', function (Blueprint $table) {
-            $table->integer('fk_user_id')->unsigned()->default(0);
-            $table->foreign('fk_user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->integer('fk_process_id')->unsigned()->default(0);
-            $table->foreign('fk_process_id')->references('id')->on('processes')->onDelete('cascade');
+            $table->integer('user_id')->unsigned()->default(0);
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('process_id')->unsigned()->default(0);
+            $table->foreign('process_id')->references('id')->on('processes')->onDelete('cascade');
             $table->timestamps();
         });
     }
