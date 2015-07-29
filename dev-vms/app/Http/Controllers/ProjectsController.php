@@ -13,6 +13,15 @@ use App\Http\Controllers\Controller;
 
 class ProjectsController extends Controller
 {
+
+    protected $rules = [
+        'name' => ['required', 'min:3'],
+        'slug' => ['required'],
+        'description' => ['required'],
+        'start_date' => ['date'],
+        'end_date' => ['date', 'after:start_date'],
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -45,7 +54,18 @@ class ProjectsController extends Controller
     public function store(Request $request)
     {
         //
+        $this->validate($request, $this->rules);
+        
         $input = Input::all();
+
+        $start_time = strtotime($input['start_date']);
+        $start_newformat = date('Y-m-d',$start_time);
+        $input['start_date'] = $start_newformat;
+
+        $end_time = strtotime($input['end_date']);
+        $end_newformat = date('Y-m-d',$end_time);
+        $input['end_date'] = $end_newformat;
+
         Project::create( $input );
 
         return Redirect::route('projects.index')->with('message', 'Project created');
@@ -85,7 +105,18 @@ class ProjectsController extends Controller
     public function update(Request $request, Project $project)
     {
         //
+        $this->validate($request, $this->rules);
+        
         $input = array_except(Input::all(), '_method');
+
+        $start_time = strtotime($input['start_date']);
+        $start_newformat = date('Y-m-d',$start_time);
+        $input['start_date'] = $start_newformat;
+
+        $end_time = strtotime($input['end_date']);
+        $end_newformat = date('Y-m-d',$end_time);
+        $input['end_date'] = $end_newformat;
+
         $project->update($input);
  
         return Redirect::route('projects.show', $project->slug)->with('message', 'Project updated.');
