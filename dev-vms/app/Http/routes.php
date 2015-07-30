@@ -11,12 +11,9 @@
 |
 */
 
-Route::any('/', function(){
+Route::any('/', function () {
     return "Hello World!";
 });
 
-
-
 Route::get('user/{id}', 'UserController@showProfile');
-
 Route::post('user/{id}/edit', 'UserController@editProfile');

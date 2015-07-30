@@ -37,8 +37,7 @@ class UserController extends Controller
                                 'birthdate'=> $birthdate,
                                 'email'=> $email,
                                 'cellphone'=> $cellphone,
-                                'city'=> $city]);
-        
+                                'city'=> $city]);        
     }
     public function editProfile(Request $request)
     {
