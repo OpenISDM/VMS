@@ -16,4 +16,5 @@ Route::any('/', function () {
 });
 
 Route::get('user/{id}', 'UserController@showProfile');
+
 Route::post('user/{id}/edit', 'UserController@editProfile');
