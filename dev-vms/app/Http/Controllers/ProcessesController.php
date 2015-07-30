@@ -58,13 +58,19 @@ class ProcessesController extends Controller
         $input = Input::all();
         $input['project_id'] = $project->id;
 
+        $input['is_ongoing'] = (Input::has('is_ongoing') ? true : false);
+
         $start_time = strtotime($input['start_date']);
         $start_newformat = date('Y-m-d',$start_time);
         $input['start_date'] = $start_newformat;
 
-        $end_time = strtotime($input['end_date']);
-        $end_newformat = date('Y-m-d',$end_time);
-        $input['end_date'] = $end_newformat;
+        if (!$input['is_ongoing']) {
+            $end_time = strtotime($input['end_date']);
+            $end_newformat = date('Y-m-d',$end_time);
+            $input['end_date'] = $end_newformat;
+        } else {
+            $input['end_date'] = null;
+        }
 
         Process::create( $input );
  
@@ -109,15 +115,21 @@ class ProcessesController extends Controller
         
         $input = array_except(Input::all(), '_method');
 
+        $input['is_ongoing'] = (Input::has('is_ongoing') ? true : false);
+
         $start_time = strtotime($input['start_date']);
         $start_newformat = date('Y-m-d',$start_time);
         $input['start_date'] = $start_newformat;
 
-        $end_time = strtotime($input['end_date']);
-        $end_newformat = date('Y-m-d',$end_time);
-        $input['end_date'] = $end_newformat;
+        if (!$input['is_ongoing']) {
+            $end_time = strtotime($input['end_date']);
+            $end_newformat = date('Y-m-d',$end_time);
+            $input['end_date'] = $end_newformat;
+        } else {
+            $input['end_date'] = null;
+        }
 
-        $task->update($input);
+        $process->update($input);
  
         return Redirect::route('projects.processes.show', [$project->slug, $process->slug])->with('message', 'Process updated.');
     }

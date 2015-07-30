@@ -1,0 +1,3 @@
+textarea.no-horiz-resize {
+  resize: vertical;
+}

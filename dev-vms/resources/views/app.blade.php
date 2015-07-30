@@ -10,6 +10,18 @@
     <link href="{{ asset('/css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('/css/bootstrap-datepicker.standalone.min.css') }}" rel="stylesheet">
     <link href="{{ asset('/css/bootstrap-datepicker3.standalone.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
+
+
+    <!-- Bootstrap CDN -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+	<!-- custom Bootstrap css theme -->
+    <!--<link href="{{ asset('/css/journal/bootstrap.min.css') }}" rel="stylesheet">-->
+
+	<!-- Font-Awesome CDN -->
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
     <!-- Fonts -->
     <link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
@@ -37,7 +49,9 @@
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ url('/projects/') }}">Home</a></li>
+                    <li><a href="{{ url('/projects/') }}">Projects</a></li>
+                    <li><a href="#">Register</a></li>
+                    <li><a href="#">Edit Profile</a></li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -78,23 +92,8 @@
     {!! HTML::script('js/bootstrap-datepicker.min.js'); !!}
     {!! HTML::script('js/bootstrap-datepicker.zh-TW.min.js'); !!}
     
-    <!-- DatePicker JS -->
-    <script>
-    $(function() {
-        $( "#startdatepicker" ).datepicker({
-                format: "yyyy-mm-dd",
-                //language: "zh-TW",
-                todayHighlight: true
-        });
-    });
-
-    $(function() {
-        $( "#enddatepicker" ).datepicker({
-                format: "yyyy-mm-dd",
-                //language: "zh-TW",    
-                todayHighlight: true
-        });
-    });
-    </script>
+    <!-- Custom JS -->
+    {!! HTML::script('js/dev-vms.js'); !!}
+    
 </body>
 </html>
