@@ -11,8 +11,7 @@
 |
 */
 
-Route::any('/', function()
-{
+Route::any('/', function(){
     return "Hello World!";
 });
 

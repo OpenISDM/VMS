@@ -14,12 +14,12 @@ class CreatePersonprofileTable extends Migration
     {
         Schema::create('personprofile', function (Blueprint $table) {
             $table->string('id')->primary('id');
-			$table->string('username');
-			$table->string('sex');
-			$table->string('birthdate');
-			$table->string('email');
-			$table->string('cellphone');
-			$table->string('city');
+            $table->string('username');
+            $table->string('sex');
+            $table->string('birthdate');
+            $table->string('email');
+            $table->string('cellphone');
+            $table->string('city');
             $table->timestamps();
         });
     }
