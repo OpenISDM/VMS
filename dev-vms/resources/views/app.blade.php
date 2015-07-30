@@ -6,7 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Laravel</title>
 
+    <!-- CSS -->
     <link href="{{ asset('/css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('/css/bootstrap-datepicker.standalone.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/css/bootstrap-datepicker3.standalone.min.css') }}" rel="stylesheet">
 
     <!-- Fonts -->
     <link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
@@ -18,8 +21,6 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <!-- JQuery CSS -->
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
 </head>
 <body>
     <nav class="navbar navbar-default">
@@ -36,7 +37,7 @@
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ url('/') }}">Home</a></li>
+                    <li><a href="{{ url('/projects/') }}">Home</a></li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -74,17 +75,25 @@
     <!-- Scripts -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    {!! HTML::script('js/bootstrap-datepicker.min.js'); !!}
+    {!! HTML::script('js/bootstrap-datepicker.zh-TW.min.js'); !!}
     
     <!-- DatePicker JS -->
     <script>
     $(function() {
-        $( "#startdatepicker" ).datepicker();
+        $( "#startdatepicker" ).datepicker({
+                format: "yyyy-mm-dd",
+                //language: "zh-TW",
+                todayHighlight: true
+        });
     });
 
     $(function() {
-        $( "#enddatepicker" ).datepicker();
+        $( "#enddatepicker" ).datepicker({
+                format: "yyyy-mm-dd",
+                //language: "zh-TW",    
+                todayHighlight: true
+        });
     });
     </script>
 </body>
