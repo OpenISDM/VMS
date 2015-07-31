@@ -3,11 +3,11 @@ namespace App\Http\Controllers;
 
 use DB;
 use App\User;
-use App\personprofile;
+use App\Users;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class EditProfileController extends Controller
 {
     /**
      * 顯示給定使用者的個人資料。
@@ -19,25 +19,24 @@ class UserController extends Controller
     {
 
         //database information is in .env file
-        $user = personprofile::all()
-                ->where('id', $id)
+        $user = Users::all()
+                ->where('id', (int)$id)
                 ->first();
                 
-        $username = $user->username;
-        $sex = $user->sex;
-        $birthdate = $user->birthdate;
+        $username = $user->full_name;
+        $sex = $user->gender;
+        $birthdate = $user->birth_date;
         $email = $user->email;
-        $cellphone = $user->cellphone;
-        $city = $user->city;
+        $cellphone = $user->phone;
         
         
-        return view('greeting', ['id'=> $id,
+        
+        return view('editprofile', ['id'=> $id,
                                 'username'=> $username,
                                 'sex'=> $sex,
                                 'birthdate'=> $birthdate,
                                 'email'=> $email,
-                                'cellphone'=> $cellphone,
-                                'city'=> $city]);
+                                'cellphone'=> $cellphone]);
     }
     public function editProfile(Request $request)
     {
@@ -47,28 +46,17 @@ class UserController extends Controller
         $birthdate = $request->input('birthdate');
         $email = $request->input('email');
         $cellphone = $request->input('cellphone');
-        $city = $request->input('city');
+        
         
         //use ORM to connect DB
-        $user = personprofile::find($id);
-        $user->username = $username;
-        $user->sex = $sex;
-        $user->birthdate = $birthdate;
+        $user = Users::find($id);
+        $user->full_name = $username;
+        $user->gender = $sex;
+        $user->birth_date = $birthdate;
         $user->email = $email;
-        $user->cellphone = $cellphone;
-        $user->city = $city;
+        $user->phone = $cellphone;
         $user->save();
-        /*
-        DB::table('personprofile')
-            ->where('id', $id)
-            ->update(['username'=> $username,
-                      'sex'=> $sex,
-                      'birthdate'=> $birthdate,
-                      'email'=> $email,
-                      'cellphone'=> $cellphone,
-                      'city'=> $city]);
         
-        */
         
         return redirect('user/'.$id);
     }

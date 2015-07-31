@@ -15,6 +15,7 @@ Route::any('/', function () {
     return "Hello World!";
 });
 
-Route::get('user/{id}', 'UserController@showProfile');
 
-Route::post('user/{id}/edit', 'UserController@editProfile');
+Route::get('user/{id}', 'EditProfileController@showProfile');
+
+Route::post('user/{id}/edit', 'EditProfileController@editProfile');

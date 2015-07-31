@@ -41,8 +41,7 @@
                 <br>
                 手機號碼:<input type = 'text' name = 'cellphone' value ='" . $cellphone . "'>
                 <br>
-                居住城市:<input type = 'text' name = 'city' value ='" . $city . "'>
-                <br>
+                
                 
                 <input type='hidden' name='id' value='" . $id . "'>
                 
