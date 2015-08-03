@@ -36,8 +36,6 @@ class CreatePmGroupsTables extends Migration
             $table->foreign('current_pm_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
-
-        
     }
 
     /**

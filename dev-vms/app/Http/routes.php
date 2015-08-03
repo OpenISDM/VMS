@@ -11,8 +11,8 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::any('/', function () {
+    return "Hello World!";
 });
 
 Route::model('processes', 'Process');
@@ -27,3 +27,7 @@ Route::bind('projects', function($value, $route) {
 
 Route::resource('projects.processes', 'ProcessesController');
 Route::resource('projects', 'ProjectsController');
+
+Route::get('user/{id}', 'EditProfileController@showProfile');
+Route::post('user/{id}/edit', 'EditProfileController@editProfile');
+

@@ -1,0 +1,47 @@
+            #edit
+            {
+                width:350px;
+                height:300px;
+                text-align: center;
+                font-family:Meiryo,Microsoft JhengHei,SimHei;
+                font-size:50px;
+                
+                        
+                position:absolute;
+                left:50%;
+                top:10%;
+                        
+                
+                margin-left:-150px;
+            }
+            #form1
+            {
+                width:450px;
+                height:300px;
+                text-align:right;
+                
+                font-family:Meiryo,Microsoft JhengHei,SimHei;
+                font-size:24px;
+                
+                        
+                position:absolute;
+                left:50%;
+                top:10%;
+                        
+                margin-top:130px;
+                margin-left:-250px;
+            }
+            
+            input
+            {
+                font-family:Courier New,Meiryo,Microsoft YaHei;
+                font-size:20px;
+                width:300px;
+                border-radius: 10px;
+                border: 1px dashed blue;
+            }
+            
+            .button
+            {
+                width:100px;
+            }
