@@ -46,7 +46,7 @@
                 <input type='hidden' name='id' value='{!! $id !!}'>
                 
                 <input type = 'Submit' class = 'button' name = 'submit1' value ='save'>
-                <input type = 'button' class = 'button' value ='reset' onclick="location.href='#'">
+                <input type = 'button' class = 'button' value ='reset' onclick="location.href='/user'">
                 <input type = 'button' class = 'button' value ='menu' onclick="location.href='/home'">
                 <input type = 'button' class = 'button' value ='next' onclick="location.href='002.php'">
             
