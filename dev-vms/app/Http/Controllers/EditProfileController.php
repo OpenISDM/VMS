@@ -3,9 +3,9 @@ namespace App\Http\Controllers;
 
 use DB;
 use App\User;
-use App\Users;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Auth;
 
 class EditProfileController extends Controller
 {
@@ -15,12 +15,18 @@ class EditProfileController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function showProfile($id)
+    public function showProfile()
     {
 
         //database information is in .env file
-        $user = Users::all()
-                ->where('id', (int)$id)
+		$id = Auth::user();
+		
+		//if people want edit profile,they must login
+		if($id == null)
+			return redirect('/auth/login');
+		
+        $user = User::all()
+                ->where('id', (int)$id->id)
                 ->first();
                 
         $username = $user->full_name;
@@ -31,7 +37,7 @@ class EditProfileController extends Controller
         
         
         
-        return view('editprofile', ['id'=> $id,
+        return view('editprofile', ['id'=> (int)$id->id,
                                 'username'=> $username,
                                 'sex'=> $sex,
                                 'birthdate'=> $birthdate,
@@ -49,7 +55,7 @@ class EditProfileController extends Controller
         
         
         //use ORM to connect DB
-        $user = Users::find($id);
+        $user = User::find($id);
         $user->full_name = $username;
         $user->gender = $sex;
         $user->birth_date = $birthdate;
@@ -58,6 +64,6 @@ class EditProfileController extends Controller
         $user->save();
         
         
-        return redirect('user/'.$id);
+        return redirect('user');
     }
 }
