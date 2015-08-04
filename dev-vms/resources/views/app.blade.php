@@ -51,7 +51,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="{{ url('/projects/') }}">Projects</a></li>
                     <li><a href="#">Register</a></li>
-                    <li><a href="#">Edit Profile</a></li>
+                    <li><a href="{{ url('/user') }}">Edit Profile</a></li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">

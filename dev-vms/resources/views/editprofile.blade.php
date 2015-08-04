@@ -12,14 +12,14 @@
                }
            });
         </script>
-		
-		{!! HTML::style('css/greeting.css') !!}
-		
+        
+        {!! HTML::style('css/greeting.css') !!}
+        
     </head>
     <body>
         
         
-        <?php echo "
+        
         
         
             <p id = 'edit'>
@@ -29,30 +29,29 @@
             <form name ='form1'
                   id = 'form1'
                   method = 'post'
-                  action = '" . $id . "/edit'>
+                  action = '/user/edit'>
             
-                姓名:<input type = 'text' name = 'username' value ='" . $username . "'>
+                姓名:<input type = 'text' name = 'username' value ='{!! $username !!}'>
                 <br>
-                性別:<input type = 'text' name = 'sex' value ='" . $sex . "'>
+                性別:<input type = 'text' name = 'sex' value ='{!! $sex !!}'>
                 <br>
-                生日:<input type = 'text' name = 'birthdate' value ='" . $birthdate . "'>
+                生日:<input type = 'text' name = 'birthdate' value ='{!! $birthdate !!}'>
                 <br>
-                電子郵件:<input type = 'text' name = 'email' value ='" . $email . "'>
+                電子郵件:<input type = 'text' name = 'email' value ='{!! $email !!}'>
                 <br>
-                手機號碼:<input type = 'text' name = 'cellphone' value ='" . $cellphone . "'>
+                手機號碼:<input type = 'text' name = 'cellphone' value ='{!! $cellphone !!}'>
                 <br>
                 
                 
-                <input type='hidden' name='id' value='" . $id . "'>
+                <input type='hidden' name='id' value='{!! $id !!}'>
                 
                 <input type = 'Submit' class = 'button' name = 'submit1' value ='save'>
-                <input type = 'button' class = 'button' value ='reset' onclick=\"location.href='" . $id . "'\">
-                <input type = 'button' class = 'button' value ='menu' onclick=\"location.href='002.php'\">
-                <input type = 'button' class = 'button' value ='next' onclick=\"location.href='002.php'\">
+                <input type = 'button' class = 'button' value ='reset' onclick="location.href='#'">
+                <input type = 'button' class = 'button' value ='menu' onclick="location.href='/home'">
+                <input type = 'button' class = 'button' value ='next' onclick="location.href='002.php'">
             
-            ";
-            
-        ?>
+                       
+        
         
             <!!laravel will check token if we have post some message to other pages.>
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
