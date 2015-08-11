@@ -4,6 +4,12 @@
 
 ## Coding style
 
-VMS follows the [PSR-2](http://www.php-fig.org/psr/psr-2/) coding standard and the [PSR-4](http://www.php-fig.org/psr/psr-4/) autoloading standard.
+### PHP code
+
+PHP code in VMS follows the [PSR-2](http://www.php-fig.org/psr/psr-2/) coding standard and the [PSR-4](http://www.php-fig.org/psr/psr-4/) autoloading standard.
 
 After pushing to VMS repository, the StyleCI is triggered to check the repository.
+
+### HTML & CSS
+
+HTML & CSS in VMS follows the [Code Guide](http://codeguide.co/)   
