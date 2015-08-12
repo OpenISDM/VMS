@@ -31,3 +31,7 @@ Route::resource('projects', 'ProjectsController');
 Route::get('user', 'EditProfileController@showProfile');
 Route::post('user/edit', 'EditProfileController@editProfile');
 
+Route::controllers([
+
+	'password' =>'Auth\PasswordController',
+]);
