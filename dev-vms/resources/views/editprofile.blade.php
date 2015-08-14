@@ -1,41 +1,30 @@
-@extends('app')
+@extends("app")
 
-@section('content')
-        
-        <p id = 'edit'>
-            edit profile
-        </p>
-            
-        <form name ='form1'
-            id = 'form1'
-            method = 'post'
-            action = '/user/edit'>
-            
-            姓名:<input type = 'text' name = 'username' value ='{!! $username !!}'>
-            <br>
-            性別:<input type = 'text' name = 'sex' list = 'gender' value ='{!! $sex !!}'>
-                <datalist id='gender'>
-                    <option value='M'>
-                    <option value='F'>
-                </datalist>
-            <br>
-            生日:<input type = 'text' name = 'birthdate' id = 'startdatepicker' value ='{!! $birthdate !!}'>
-            <br>
-            電子郵件:<input type = 'text' name = 'email' value ='{!! $email !!}'>
-            <br>
-            手機號碼:<input type = 'text' name = 'cellphone' value ='{!! $cellphone !!}'>
-            <br>
-                
-            <input type='hidden' name='id' value='{!! $id !!}'>
-                
-            <input type = 'Submit' class = 'button' name = 'submit1' value ='save'>
-            <input type = 'button' class = 'button' value ='reset' onclick="location.href='/user'">
-            <input type = 'button' class = 'button' value ='menu' onclick="location.href='/home'">
-            <input type = 'button' class = 'button' value ='next' onclick="location.href='/home'">
-        
-        
-            <!!laravel will check token if we have post some message to other pages.>
-            <?php echo csrf_field(); ?>
-        </form>
+@section("content")
+
+<p id="edit">edit profile</p>
+<form id="form1" name="form1" method="post" action="/user/edit">
+  姓名:<input name="username" type="text" value="{!! $username !!}">
+  <br>
+  性別:<input name="sex" type="text" list="gender" value="{!! $sex !!}">
+  <datalist id="gender">
+    <option value="M">
+    <option value="F">
+  </datalist>
+  <br>
+  生日:<input id="startdatepicker" name="birthdate" type="text" value="{!! $birthdate !!}">
+  <br>
+  電子郵件:<input name="email" type="text" value="{!! $email !!}">
+  <br>
+  手機號碼:<input name="cellphone" type="text" value="{!! $cellphone !!}">
+  <br>
+  <input name="id" type="hidden" value="{!! $id !!}">
+  <input class="button" name="submit1" type="Submit" value="save">
+  <input class="button" type="button" value="reset" onclick="location.href='/user'">
+  <input class="button" type="button" value="menu" onclick="location.href='/home'">
+  <input class="button" type="button" value="next" onclick="location.href='/home'">
+  <!!laravel will check token if we have post some message to other pages.>
+  <?php echo csrf_field(); ?>
+</form>
 
 @endsection
