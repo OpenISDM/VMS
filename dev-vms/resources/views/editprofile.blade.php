@@ -1,6 +1,6 @@
-@extends("app")
+@extends('app')
 
-@section("content")
+@section('content')
 
 <p id="edit">edit profile</p>
 <form id="form1" name="form1" method="post" action="/user/edit">
