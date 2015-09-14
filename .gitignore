@@ -50,3 +50,7 @@ Temporary Items
 
 # Vim swp files
 *.swp
+
+/bootstrap/compiled.php
+.env.*.php
+.env.php
