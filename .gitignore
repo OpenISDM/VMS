@@ -54,3 +54,5 @@ Temporary Items
 /bootstrap/compiled.php
 .env.*.php
 .env.php
+/vendor
+/.phpintel/
