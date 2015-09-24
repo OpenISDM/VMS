@@ -17,7 +17,7 @@ class CreateSkillsTable extends Migration
             $table->string('name');
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
-        }
+        });
     }
 
     /**
