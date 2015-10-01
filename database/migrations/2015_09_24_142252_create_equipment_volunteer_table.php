@@ -14,10 +14,17 @@ class CreateEquipmentVolunteerTable extends Migration
     {
         Schema::create('equipment_volunteer', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('volunteer_id');
-            $table->integer('skill_id');
+            $table->integer('volunteer_id')->unsigned();
+            $table->integer('equipment_id')->unsigned();
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
+
+            // foreign constraints
+            $table->foreign('volunteer_id')->references('id')
+                  ->on('volunteers')->onDelete('cascade');
+            $table->foreign('equipment_id')->references('id')
+                  ->on('equipment')->onDelete('cascade')
+                  ->onUpdate('cascade');
         });
     }
 

@@ -18,9 +18,14 @@ class CreateExperiencesTable extends Migration
             $table->string('job_title', 100);
             $table->integer('start_year');
             $table->integer('end_year');
-            $table->integer('volunteer_id')->index();    // foreign key
+            $table->integer('volunteer_id')->index()->unsigned();    // foreign key
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
+
+            // foreign constraint
+            $table->foreign('volunteer_id')->references('id')
+                  ->on('volunteers')->onDelete('cascade')
+                  ->onUpdate('cascade');
         });
     }
 

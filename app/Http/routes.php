@@ -33,10 +33,6 @@ $api->version('v1.0', function ($api) {
         $api->post('register', 'App\Http\Controllers\Api\V1_0\VolunteerAuthController@register');        
     });
 
-    //$api->post('register', function () {
-    //    return 'register';
-    //});
-
     $api->get('qqq', function () {
         return 'qqq';
     });

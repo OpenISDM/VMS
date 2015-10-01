@@ -14,10 +14,17 @@ class CreateSkillVolunteerTable extends Migration
     {
         Schema::create('skill_volunteer', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('volunteer_id');
-            $table->integer('skill_id');
+            $table->integer('volunteer_id')->unsigned();
+            $table->integer('skill_id')->unsigned();
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
+
+            // foreign constraints
+            $table->foreign('volunteer_id')->references('id')
+                  ->on('volunteers')->onDelete('cascade');
+            $table->foreign('skill_id')->references('id')
+                  ->on('skills')->onDelete('cascade')
+                  ->onUpdate('cascade');
         });
     }
 

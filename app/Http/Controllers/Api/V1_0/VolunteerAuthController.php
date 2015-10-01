@@ -15,9 +15,17 @@ class VolunteerAuthController extends Controller
         return 'test';
     }
 
+    /**
+     * Register a new volunteer. The request will be validated by 
+     * App\Http\Middleware\CheckHeaderFieldsMiddleware and 
+     * App\Http\Requests\Api\V1_0\VolunteerRegistrationRequest classes
+     * 
+     * 
+     * @param  VolunteerRegistrationRequest $request
+     * @return [type]                                
+     */
     public function register(VolunteerRegistrationRequest $request)
     {
-        //return response()->noContent();
-        return 'qqq';
+
     }   
 }
