@@ -19,5 +19,10 @@ class User extends Model implements AuthenticatableContract,
                             'birth_year', 'gender', 'city', 'address',
                             'phone_number', 'email', 'emergency_contact', 'emergency_phone',
                             'introduction'];
-    protected $hidden = ['password', 'remember_token'];    
+    protected $hidden = ['password', 'remember_token'];
+
+    public function cities()
+    {
+        return $this->belongsToMany('App\City');
+    }
 }
