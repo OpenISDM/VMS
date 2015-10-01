@@ -26,3 +26,13 @@ $factory->define(App\ApiKey::class, function (Faker\Generator $faker) {
         'api_key' => '581dba93a4dbafa42a682d36b015d8484622f8e3543623bec5a291f67f5ddff1'
     ];
 });
+
+$factory->define(App\Country::class, function (Faker\Generator $faker) {
+    return [
+        'Taiwan'
+    ];
+});
+
+$factory->define(App\City::class, function (Fake\Generator $faker) {
+    return [];
+});

@@ -26,6 +26,6 @@ class VolunteerAuthController extends Controller
      */
     public function register(VolunteerRegistrationRequest $request)
     {
-
+        
     }   
 }

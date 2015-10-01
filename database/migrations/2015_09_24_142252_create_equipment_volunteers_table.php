@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSkillVolunteerTable extends Migration
+class CreateEquipmentVolunteersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,18 +12,18 @@ class CreateSkillVolunteerTable extends Migration
      */
     public function up()
     {
-        Schema::create('skill_volunteer', function (Blueprint $table) {
+        Schema::create('equipment_volunteers', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('volunteer_id')->unsigned();
-            $table->integer('skill_id')->unsigned();
+            $table->integer('equipment_id')->unsigned();
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
 
             // foreign constraints
             $table->foreign('volunteer_id')->references('id')
                   ->on('volunteers')->onDelete('cascade');
-            $table->foreign('skill_id')->references('id')
-                  ->on('skills')->onDelete('cascade')
+            $table->foreign('equipment_id')->references('id')
+                  ->on('equipment')->onDelete('cascade')
                   ->onUpdate('cascade');
         });
     }
@@ -35,6 +35,6 @@ class CreateSkillVolunteerTable extends Migration
      */
     public function down()
     {
-        Schema::drop('skill_volunteer');
+        Schema::drop('equipment_volunteers');
     }
 }
