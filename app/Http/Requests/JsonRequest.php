@@ -46,7 +46,12 @@ abstract class JsonRequest extends Request
     public function messages()
     {
         return [
-            'required' => "missing_field"
+            'required' => 'missing_field',
+            'email' => 'incorrect_email_format',
+            'unique' => 'not_unique_value',
+            'max' => 'exceed_max_length',
+            'in' => 'not_in_acceptable_list',
+            'exists' => 'not_exist'
         ];
     }
 

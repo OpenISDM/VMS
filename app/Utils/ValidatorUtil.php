@@ -2,7 +2,7 @@
 
 namespace App\Utils;
 
-use App\Http\Requests\ValidationError;
+use App\Http\Responses\ValidationError;
 
 class ValidatorUtil
 {

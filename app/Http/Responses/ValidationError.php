@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Responses;
 
 class ValidationError implements \JsonSerializable
 {
@@ -29,9 +29,14 @@ class ValidationError implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        return [
-            "fields" => $this->fields,
-            "code" => $this->code
-        ];
+        $errors = [];
+
+        if (!empty($this-> fields)) {
+            $errors['fields'] = $this->fields;
+        }
+
+        $errors['code'] = $this->code;
+
+        return $errors;
     }
 }

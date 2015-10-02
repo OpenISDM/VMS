@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\V1_0;
 use App\Http\Requests\Api\V1_0\VolunteerRegistrationRequest;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Routing\Helpers;
+use App\Vounteer;
+use App\City;
 
 class VolunteerAuthController extends Controller
 {
@@ -26,6 +28,20 @@ class VolunteerAuthController extends Controller
      */
     public function register(VolunteerRegistrationRequest $request)
     {
+        // Get volunteer data, except city object
+        $volunteerInput = $request->except(['city']);
+        // Get city ID
+        //$cityId = $request->input('city.id');
         
+        // Create a new volunteer
+        //$volunteer = Volunteer::create($volunteerInput);
+        //$city = City::find($cityId);
+        //$volunteer->cities()->save($city);
+
+        // Send verification email
+
+        // Get authentication token
+        
+        return 'qqq';
     }   
 }

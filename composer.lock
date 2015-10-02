@@ -5,6 +5,7 @@
         "This file is @generated automatically"
     ],
     "hash": "735cb1903e057d3f58a6774815770f84",
+    "content-hash": "e0aae4daa582f82afcb421ab4adbefe8",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -620,12 +621,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "076a054b6c78888acb3d0b93030402dbf736d824"
+                "reference": "943b01c1e70c6b6bcca2f2902689b6e59c0c3b7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/076a054b6c78888acb3d0b93030402dbf736d824",
-                "reference": "076a054b6c78888acb3d0b93030402dbf736d824",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/943b01c1e70c6b6bcca2f2902689b6e59c0c3b7f",
+                "reference": "943b01c1e70c6b6bcca2f2902689b6e59c0c3b7f",
                 "shasum": ""
             },
             "require": {
@@ -740,20 +741,20 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2015-09-29 22:17:29"
+            "time": "2015-10-02 02:30:20"
         },
         {
             "name": "league/flysystem",
-            "version": "1.0.14",
+            "version": "1.0.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "202c7775d959f377e2e302d93e7127c47604438a"
+                "reference": "31525caf9e8772683672fefd8a1ca0c0736020f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/202c7775d959f377e2e302d93e7127c47604438a",
-                "reference": "202c7775d959f377e2e302d93e7127c47604438a",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/31525caf9e8772683672fefd8a1ca0c0736020f4",
+                "reference": "31525caf9e8772683672fefd8a1ca0c0736020f4",
                 "shasum": ""
             },
             "require": {
@@ -824,7 +825,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2015-09-22 19:18:28"
+            "time": "2015-09-30 22:26:59"
         },
         {
             "name": "league/fractal",
@@ -2688,16 +2689,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.8.9",
+            "version": "4.8.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "73fad41adb5b7bc3a494bb930d90648df1d5e74b"
+                "reference": "463163747474815c5ccd4ae12b5b355ec12158e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/73fad41adb5b7bc3a494bb930d90648df1d5e74b",
-                "reference": "73fad41adb5b7bc3a494bb930d90648df1d5e74b",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/463163747474815c5ccd4ae12b5b355ec12158e8",
+                "reference": "463163747474815c5ccd4ae12b5b355ec12158e8",
                 "shasum": ""
             },
             "require": {
@@ -2756,7 +2757,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-09-20 12:56:44"
+            "time": "2015-10-01 09:14:30"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

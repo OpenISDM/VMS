@@ -56,4 +56,4 @@ Temporary Items
 .env.php
 /vendor
 /.phpintel/
-storage/database.sqlite
+/storage/database.sqlite
