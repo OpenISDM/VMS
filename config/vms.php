@@ -1,7 +1,7 @@
 <?php
 
 return [
-	/*
+    /*
     |--------------------------------------------------------------------------
     | Email verification code expired time
     |--------------------------------------------------------------------------
@@ -10,5 +10,5 @@ return [
     | The default value is 8 hours
     |
     */
-   	'emailVerificationExpired' => env('VMS_EMAIL_VERIFICATION_EXPIRED', 8),
+    'emailVerificationExpired' => env('VMS_EMAIL_VERIFICATION_EXPIRED', 8),
 ];

@@ -32,7 +32,7 @@ class CheckHeaderFieldsMiddleware
         // Get API key header fields
         $apiKey = $request->header('X-VMS-API-Key');
         // Query the API key
-        $apiKeyCount = ApiKey::where('api_key', '=' , $apiKey)->count();
+        $apiKeyCount = ApiKey::where('api_key', '=', $apiKey)->count();
 
         if ($apiKeyCount != 1) {
             // API key is not found

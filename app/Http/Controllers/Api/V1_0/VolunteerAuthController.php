@@ -24,12 +24,12 @@ class VolunteerAuthController extends Controller
     {
         if (env('APP_ENV') == 'testing' && array_key_exists("HTTP_AUTHORIZATION", request()->server())) {
             JWTAuth::setRequest(\Route::getCurrentRequest());
-        } 
+        }
     }
 
     /**
-     * Register a new volunteer. The request will be validated by 
-     * App\Http\Middleware\CheckHeaderFieldsMiddleware and 
+     * Register a new volunteer. The request will be validated by
+     * App\Http\Middleware\CheckHeaderFieldsMiddleware and
      * App\Http\Requests\Api\V1_0\VolunteerRegistrationRequest classes
      * 
      * 
@@ -48,7 +48,7 @@ class VolunteerAuthController extends Controller
         $volunteer = Volunteer::firstOrNew($volunteerInput);
         $city = City::find($cityId);
         
-        $volunteer->password = bcrypt($request->password); 
+        $volunteer->password = bcrypt($request->password);
         $volunteer->city()->associate($city);
         $volunteer->save();
         
@@ -86,7 +86,7 @@ class VolunteerAuthController extends Controller
 
         $responseJson = [
             'href' => env('APP_URL', $rootUrl) . '/api/users/me',
-            'username' => $volunteer->username, 
+            'username' => $volunteer->username,
             'auth_access_token' => $token
         ];
 
@@ -129,7 +129,7 @@ class VolunteerAuthController extends Controller
         $rootUrl = request()->root();
 
         $responseJson = [
-            'href' => env('APP_URL', $rootUrl) . '/api/users/me', 
+            'href' => env('APP_URL', $rootUrl) . '/api/users/me',
             'auth_access_token' => $token
         ];
 

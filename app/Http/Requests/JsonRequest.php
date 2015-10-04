@@ -25,9 +25,9 @@ abstract class JsonRequest extends Request
         }
         
         return $factory->make($this->json()->all(), 
-                              $this->container->call([$this, 'rules']), 
+                              $this->container->call([$this, 'rules']),
                               $this->messages(), $this->attributes()
-                              );        
+                              );
     }
 
     /**
@@ -39,8 +39,8 @@ abstract class JsonRequest extends Request
     {
         $acceptable = $this->getAcceptableContentTypes();
 
-        return isset($acceptable[0]) && 
-            preg_match("/^(application?\/)?(([\w]*\.){2}(\w)*(json)?)?/", $acceptable[0] );
+        return isset($acceptable[0]) &&
+            preg_match("/^(application?\/)?(([\w]*\.){2}(\w)*(json)?)?/", $acceptable[0]);
     }
 
     public function messages()
@@ -66,5 +66,4 @@ abstract class JsonRequest extends Request
             "errors" => $formattedResult
         ];
     }
-
 }

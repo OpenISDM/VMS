@@ -37,16 +37,16 @@ class SendVerificationEmail extends Job implements SelfHandling, ShouldQueue
      */
     public function handle(Mailer $mailer)
     {
-        if ($this->attempts() < 10 ) {
+        if ($this->attempts() < 10) {
             $data = [
-                    'name' => $this->volunteer->last_name, 
+                    'name' => $this->volunteer->last_name,
                     'verifcationUrl' => $this->verificationCode
                 ];
             $lastName = $this->volunteer->last_name;
             $emailAddress = $this->volunteer->email;
             $subject = $this->subject;
 
-            $mailer->send('emails.verify', 
+            $mailer->send('emails.verify',
                             $data, 
                             function ($message) use ($lastName, $emailAddress, $subject) {
                                 $message->to($emailAddress, $lastName)->subject($subject);

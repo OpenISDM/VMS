@@ -17,7 +17,7 @@ class Volunteer extends Model implements AuthenticatableContract,
     use Authenticatable, Authorizable, CanResetPassword;
 
     protected $table = 'volunteers';
-    protected $fillable = ['username', 'password', 'first_name', 'last_name', 
+    protected $fillable = ['username', 'password', 'first_name', 'last_name',
                             'birth_year', 'gender', 'city', 'address',
                             'phone_number', 'email', 'emergency_contact', 'emergency_phone',
                             'introduction'];
