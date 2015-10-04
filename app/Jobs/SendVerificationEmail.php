@@ -47,7 +47,7 @@ class SendVerificationEmail extends Job implements SelfHandling, ShouldQueue
             $subject = $this->subject;
 
             $mailer->send('emails.verify',
-                            $data, 
+                            $data,
                             function ($message) use ($lastName, $emailAddress, $subject) {
                                 $message->to($emailAddress, $lastName)->subject($subject);
                         });
