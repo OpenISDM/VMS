@@ -12,7 +12,7 @@ class City extends Model
 
     public function volunteers()
     {
-        return $this->belongsToMany('App\Volunteer');
+        return $this->hasMany('App\Volunteer');
     }
 
     public function country()

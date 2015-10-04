@@ -3,6 +3,8 @@
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Utils\StringUtil;
 
 class VolunteerAuthControllerTest extends TestCase
 {
@@ -52,7 +54,47 @@ class VolunteerAuthControllerTest extends TestCase
              ->assertResponseStatus(422);
     }
 
-    public function factoryModel()
+    public function testSuccessfulRegisteration()
+    {
+        $this->factoryModel();
+        $this->expectsJobs(App\Jobs\SendVerificationEmail::class);
+        $this->json('post', '/api/register', $this->postData, $this->headerArray)
+             ->seeJson([
+                'username' => $this->postData['username']
+             ])
+             ->assertResponseStatus(201);
+        $this->seeInDatabase('volunteers', ['email' => $this->postData['email']]);
+    }
+
+    public function testSuccessfulEmailVerification()
+    {
+        $this->factoryModel();
+        
+        $volunteer = factory(App\Volunteer::class)->create();
+        $code = StringUtil::generateHashToken();
+        $verificationCode = factory(App\VerificationCode::class)->make([
+            'code' => $code
+        ]);
+        $verificationCode->volunteer()->associate($volunteer);
+        $verificationCode->save();
+
+        $token = JWTAuth::fromUser($volunteer);
+
+        $this->json('get', 
+                    '/api/email_verification/' . $volunteer->email . '/' . $code . '?token=' . $token,
+                    [],
+                    [
+                        'Authorization' => 'Bearer ' . $token,
+                        'X-VMS-API-Key' => $this->apiKey
+                    ])
+             ->seeJsonEquals([
+                'message' => 'Successful email verification'
+             ])
+             ->assertResponseStatus(200);
+
+    }
+
+    protected function factoryModel()
     {
         factory(App\ApiKey::class)->create([
             'api_key' => $this->apiKey

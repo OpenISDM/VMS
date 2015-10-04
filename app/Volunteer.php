@@ -10,10 +10,12 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-class User extends Model implements AuthenticatableContract,
+class Volunteer extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
                                     CanResetPasswordContract
 {
+    use Authenticatable, Authorizable, CanResetPassword;
+
     protected $table = 'volunteers';
     protected $fillable = ['username', 'password', 'first_name', 'last_name', 
                             'birth_year', 'gender', 'city', 'address',
@@ -21,12 +23,12 @@ class User extends Model implements AuthenticatableContract,
                             'introduction'];
     protected $hidden = ['password', 'remember_token'];
 
-    public function cities()
+    public function city()
     {
-        return $this->belongsToMany('App\City');
+        return $this->belongsTo('App\City');
     }
 
-    public function verificationToken()
+    public function verificationCode()
     {
         return $this->hasOne('App\VerificationCode');
     }

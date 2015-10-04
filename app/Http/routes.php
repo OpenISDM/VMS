@@ -30,7 +30,8 @@ $api = app('Dingo\Api\Routing\Router');
 $api->version('v1.0', function ($api) {
     // Public routing group
     $api->group(['middleware' => 'check.header'] , function ($api) {
-        $api->post('register', 'App\Http\Controllers\Api\V1_0\VolunteerAuthController@register');        
+        $api->post('register', 'App\Http\Controllers\Api\V1_0\VolunteerAuthController@register');
+        $api->get('email_verification/{email_address}/{verification_code}', 'App\Http\Controllers\Api\V1_0\VolunteerAuthController@emailVerification');       
     });
 
     $api->get('qqq', function () {

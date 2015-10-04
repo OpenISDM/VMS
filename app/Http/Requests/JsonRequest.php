@@ -48,7 +48,7 @@ abstract class JsonRequest extends Request
         return [
             'required' => 'missing_field',
             'email' => 'incorrect_email_format',
-            'unique' => 'not_unique_value',
+            'unique' => 'used_field',
             'max' => 'exceed_max_length',
             'in' => 'not_in_acceptable_list',
             'exists' => 'not_exist'

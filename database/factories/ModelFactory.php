@@ -38,3 +38,25 @@ $factory->define(App\City::class, function (Faker\Generator $faker) {
         'name' => 'Taipei City'
     ];
 });
+
+$factory->define(App\Volunteer::class ,function (Faker\Generator $faker) {
+    return [
+        'username' => $faker->userName,
+        'password' => bcrypt($faker->password),
+        'first_name' => $faker->firstNameMale,
+        'last_name' => $faker->lastName, 
+        'birth_year' => 1991,
+        'gender' => 'male',
+        'city_id' => 1,
+        'address' => $faker->address,
+        'phone_number' => $faker->phoneNumber,
+        'email' => $faker->email,
+        'emergency_contact' => $faker->name(),
+        'emergency_phone' => $faker->phoneNumber,
+    ];
+});
+
+$factory->define(App\VerificationCode::class, function (Faker\Generator $fake) {
+    return [
+    ];
+});

@@ -34,8 +34,6 @@ class CheckHeaderFieldsMiddleware
         // Query the API key
         $apiKeyCount = ApiKey::where('api_key', '=' , $apiKey)->count();
 
-        //var_dump($apiKeyCount);
-
         if ($apiKeyCount != 1) {
             // API key is not found
             $message = 'API key is not validated';

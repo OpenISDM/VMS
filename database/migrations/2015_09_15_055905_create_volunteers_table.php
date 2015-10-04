@@ -19,7 +19,7 @@ class CreateVolunteersTable extends Migration
             $table->string('last_name');
             $table->integer('birth_year');
             $table->string('gender');
-            $table->string('city');
+            $table->integer('city_id');
             $table->string('address')->nullable();
             $table->string('phone_number', 20)->nullable();
             $table->string('email')->unique();
@@ -32,6 +32,11 @@ class CreateVolunteersTable extends Migration
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
             $table->softDeletes();
+
+            // Foreign key constraint
+            $table->foreign('city_id')->references('id')
+                  ->on('cities')->onDelete('cascade')
+                  ->onUpdate('cascade');
         });
     }
 
