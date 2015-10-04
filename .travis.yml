@@ -18,6 +18,6 @@ matrix:
 
 sudo: false
 
+before_install: composer selfupdate
 install: travis_retry composer install --no-interaction --ignore-platform-reqs --no-scripts --prefer-source
-
 script: vendor/bin/phpunit
