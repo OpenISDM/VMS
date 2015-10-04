@@ -42,7 +42,7 @@ $factory->define(App\City::class, function (Faker\Generator $faker) {
 $factory->define(App\Volunteer::class ,function (Faker\Generator $faker) {
     return [
         'username' => $faker->userName,
-        'password' => bcrypt($faker->password),
+        'password' => bcrypt('ThisIsMyPassW0Rd'),
         'first_name' => $faker->firstNameMale,
         'last_name' => $faker->lastName, 
         'birth_year' => 1991,

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1_0;
 
 use App\Http\Requests\Api\V1_0\VolunteerRegistrationRequest;
+use App\Http\Requests\Api\V1_0\CredentialRequest;
 use App\Http\Requests\Request;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Routing\Helpers;
@@ -95,6 +96,49 @@ class VolunteerAuthController extends Controller
         ];
 
         return response()->json($responseJson, 201);
+    }
+
+    public function login(CredentialRequest $request)
+    {
+        $credentials = $request->only('username', 'password');
+
+        try {
+            if (! $token = JWTAuth::attempt($credentials)) {
+                $message = 'Authentication failed';
+                $error = new Error('incorrect_login_credentials');
+                $statusCode = 401;
+
+                return response()->apiJsonError($message, $error, $statusCode);
+            }
+        } catch (JWTException $e) {
+            $message = 'Server error';
+            $error = new Error('could_not_create_token');
+            $statusCode = 500;
+
+            return response()->apiJsonError($message, $error, $statusCode);
+        }
+
+        // Check if the volunteer was locked
+        $volunteer = Volunteer::where('username', '=', $credentials['username'])->first();
+
+        if ($volunteer->is_locked == 1 || $volunteer->is_locked == true) {
+            $token = null;
+
+            $message = 'Authentication failed';
+            $error = new Error('account_was_locked');
+            $statusCode = 401;
+
+            return response()->apiJsonError($message, $error, $statusCode);
+        }
+
+        $rootUrl = request()->root();
+
+        $responseJson = [
+            'href' => env('APP_URL', $rootUrl) . '/api/users/me', 
+            'auth_access_token' => $token
+        ];
+
+        return response()->json($responseJson, 200);
     }
 
     /**

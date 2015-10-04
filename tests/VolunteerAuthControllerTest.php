@@ -101,6 +101,25 @@ class VolunteerAuthControllerTest extends TestCase
         $this->assertNull($codeModel);
     }
 
+    public function testSuccessfullyLogin()
+    {
+        $this->factoryModel();
+        $volunteer = factory(App\Volunteer::class)->create();
+        $volunteer->is_actived = true;
+
+        $this->json('post',
+                    '/api/auth',
+                    [
+                        'username' => $volunteer->username,
+                        'password' => 'ThisIsMyPassW0Rd'
+                    ],
+                    $this->headerArray)
+             ->seeJson([
+                'href' => 'http://vms.app/api/users/me'
+             ])
+             ->assertResponseStatus(200);
+    }
+
     protected function factoryModel()
     {
         factory(App\ApiKey::class)->create([
