@@ -115,7 +115,7 @@ class VolunteerAuthControllerTest extends TestCase
                     ],
                     $this->headerArray)
              ->seeJson([
-                'href' => 'http://vms.app/api/users/me'
+                'href' => env('APP_URL') . '/api/users/me'
              ])
              ->assertResponseStatus(200);
     }
