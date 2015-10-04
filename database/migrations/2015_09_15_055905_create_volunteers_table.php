@@ -7,7 +7,6 @@ class CreateVolunteersTable extends Migration
 {
     /**
      * Run the migrations.
-     *
      * @return void
      */
     public function up()
@@ -20,19 +19,24 @@ class CreateVolunteersTable extends Migration
             $table->string('last_name');
             $table->integer('birth_year');
             $table->string('gender');
-            $table->string('city');
-            $table->string('address');
-            $table->string('phone_number', 20);
+            $table->integer('city_id');
+            $table->string('address')->nullable();
+            $table->string('phone_number', 20)->nullable();
             $table->string('email')->unique();
-            $table->string('emergency_contact');
-            $table->string('emergency_phone', 20);
-            $table->string('introduction');
-            $table->boolean('is_actived');
-            $table->boolean('is_locked');
+            $table->string('emergency_contact')->nullable();
+            $table->string('emergency_phone', 20)->nullable();
+            $table->string('introduction')->nullable();
+            $table->boolean('is_actived')->default(false);
+            $table->boolean('is_locked')->default(false);
             $table->rememberToken();
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
             $table->softDeletes();
+
+            // Foreign key constraint
+            $table->foreign('city_id')->references('id')
+                  ->on('cities')->onDelete('cascade')
+                  ->onUpdate('cascade');
         });
     }
 

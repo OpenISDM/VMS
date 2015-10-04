@@ -18,9 +18,14 @@ class CreateEducationsTable extends Migration
             $table->string('degree');
             $table->integer('start_year');
             $table->integer('end_year');
-            $table->integer('volunteer_id')->index();    // foregin key
+            $table->integer('volunteer_id')->index()->unsigned();    // foregin key
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
+
+            // foreign constraint
+            $table->foreign('volunteer_id')->references('id')
+                  ->on('volunteers')->onDelete('cascade')
+                  ->onUpdate('cascade');
         });
     }
 
