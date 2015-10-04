@@ -54,6 +54,7 @@ Temporary Items
 /bootstrap/compiled.php
 .env.*.php
 .env.php
+composer.lock
 /vendor
 /.phpintel/
 /storage/database.sqlite
