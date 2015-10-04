@@ -34,10 +34,6 @@ $api->version('v1.0', function ($api) {
         $api->post('auth', 'App\Http\Controllers\Api\V1_0\VolunteerAuthController@login');
         $api->get('email_verification/{email_address}/{verification_code}', 'App\Http\Controllers\Api\V1_0\VolunteerAuthController@emailVerification');       
     });
-
-    $api->get('qqq', function () {
-        return 'qqq';
-    });
 });
 
 

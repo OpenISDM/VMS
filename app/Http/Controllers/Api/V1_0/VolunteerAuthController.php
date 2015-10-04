@@ -27,11 +27,6 @@ class VolunteerAuthController extends Controller
         } 
     }
 
-    public function test()
-    {
-        return 'test';
-    }
-
     /**
      * Register a new volunteer. The request will be validated by 
      * App\Http\Middleware\CheckHeaderFieldsMiddleware and 
