@@ -34,7 +34,7 @@ class MiddlewareTest extends TestCase
     public function testApiKeyCheck()
     {
         $this->factoryModel();
-        $this->expectsJobs(App\Jobs\SendVerificationEmail::class);
+        
         $this->json('post', '/api/register', $this->postData, ['Content-Type'=> 'application/json'])
              ->seeJsonEquals([
                 'message' => 'API key is not validated',
