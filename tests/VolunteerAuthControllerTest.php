@@ -5,6 +5,8 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Utils\StringUtil;
+use App\Volunteer;
+use App\VerificationCode;
 
 class VolunteerAuthControllerTest extends TestCase
 {
@@ -92,6 +94,11 @@ class VolunteerAuthControllerTest extends TestCase
              ])
              ->assertResponseStatus(200);
 
+        $volunteerModel = Volunteer::find($volunteer->id);
+        $codeModel = $volunteerModel->verificationCode;
+
+        $this->assertEquals(1, $volunteerModel->is_actived);
+        $this->assertNull($codeModel);
     }
 
     protected function factoryModel()
