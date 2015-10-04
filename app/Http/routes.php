@@ -36,5 +36,3 @@ $api->version('v1.0', function ($api) {
                   'App\Http\Controllers\Api\V1_0\VolunteerAuthController@emailVerification');
     });
 });
-
-

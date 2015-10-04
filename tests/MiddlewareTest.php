@@ -52,7 +52,7 @@ class MiddlewareTest extends TestCase
         ];
 
         $this->json('post', '/api/register', $this->postData, $headerArray)
-             ->assertResponseStatus(200);
+             ->assertResponseStatus(201);
     }
 
     protected function factoryModel()
