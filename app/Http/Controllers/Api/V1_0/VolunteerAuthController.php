@@ -93,6 +93,13 @@ class VolunteerAuthController extends Controller
         return response()->json($responseJson, 201);
     }
 
+    /**
+     * Volunteer logs in the system. 
+     * It will response the JSON Web token.
+     * 
+     * @param  CredentialRequest $request
+     * @return Response
+     */
     public function login(CredentialRequest $request)
     {
         $credentials = $request->only('username', 'password');
@@ -134,6 +141,27 @@ class VolunteerAuthController extends Controller
         ];
 
         return response()->json($responseJson, 200);
+    }
+
+    /**
+     * Volunteer logs out the system.
+     * The JWT token will be in blacklist.
+     * 
+     * @return Response
+     */
+    public function logout()
+    {
+        if (! $token = JWTAuth::getToken()) {
+            $message = 'Failed to logout';
+            $error = new Error('no_existing_auth_access_token');
+            $statusCode = 400;
+
+            return response()->apiJsonError($message, $error, $statusCode);
+        }
+
+        JWTAuth::invalidate($token);
+
+        return response(null, 204);
     }
 
     /**

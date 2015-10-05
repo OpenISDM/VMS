@@ -120,6 +120,24 @@ class VolunteerAuthControllerTest extends TestCase
              ->assertResponseStatus(200);
     }
 
+    public function testSuccessfullyLogout()
+    {
+        $this->factoryModel();
+        $volunteer = factory(App\Volunteer::class)->create();
+        $volunteer->is_actived = true;
+
+        $token = JWTAuth::fromUser($volunteer);
+        $this->json('delete',
+                    '/api/auth',
+                    [],
+                    [
+                        'Authorization' => 'Bearer ' . $token,
+                        'X-VMS-API-Key' => $this->apiKey
+                    ])
+             ->assertResponseStatus(204);
+
+    }
+
     protected function factoryModel()
     {
         factory(App\ApiKey::class)->create([
