@@ -11,6 +11,7 @@ use App\Http\Requests\Api\V1_0\UpdateProfileRequest;
 use App\Http\Requests\Api\V1_0\UpdateSkillsRequest;
 use App\Exceptions\AuthenticatedUserNotFoundException;
 use App\Exceptions\JWTTokenNotFoundException;
+use App\Exceptions\ExceedingIndexException;
 use App\City;
 use App\Utils\ArrayUtil;
 
@@ -61,14 +62,16 @@ class VolunteerProfileController extends Controller
         $skillsList = $request->input('skills');
         $existingSkillIndexes = $request->input('existing_skill_indexes');
 
-        $maxIndex = max($existingSkillIndexes);
-
-        if (ArrayUtil::isIndexExceed($skillsList, $maxIndex)) {
-            // Index exceeds $skillsList size
-            // throw exception
+        if (count($existingSkillIndexes) != 0) {
+            $maxIndex = max($existingSkillIndexes);
+            
+            if (ArrayUtil::isIndexExceed($skillsList, $maxIndex)) {
+                // Index exceeds $skillsList size
+                throw new ExceedingIndexException();
+            }
         }
 
-        $unexistingSkills = ArrayUtil::getUnexisting($skillsList, $existingIndexes);
+        $unexistingSkills = ArrayUtil::getUnexisting($skillsList, $existingSkillIndexes);
 
         // Update volunteer's skills
         foreach ($unexistingSkills as $skill) {

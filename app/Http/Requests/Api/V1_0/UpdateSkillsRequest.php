@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Api\V1_0;
 
-use App\Http\Requests\Request;
+use App\Http\Requests\JsonRequest;
 
-class UpdateSkillsRequest extends Request
+class UpdateSkillsRequest extends JsonRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,7 @@ class UpdateSkillsRequest extends Request
         // TODO: array validation
         return [
             'skills' => 'required',
-            'existing_skill_index' => 'required',
+            'existing_skill_indexes' => '',
         ];
     }
 }

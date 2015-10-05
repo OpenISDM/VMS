@@ -8,7 +8,6 @@ class VolunteerProfileControllerTest extends TestCase
 {
     use DatabaseMigrations;
 
-    protected $postData;
     protected $apiKey;
     protected $headerArray = [];
 
@@ -21,7 +20,7 @@ class VolunteerProfileControllerTest extends TestCase
             'X-VMS-API-Key' => $this->apiKey
         ];
 
-        $this->postData = json_decode(file_get_contents(__DIR__ . '/examples/register_post.json'), true);
+        //$this->postData = json_decode(file_get_contents(__DIR__ . '/examples/register_post.json'), true);
     }
 
     /**
@@ -29,7 +28,7 @@ class VolunteerProfileControllerTest extends TestCase
      *
      * @return void
      */
-    public function testShowMe()
+    public function DISABLEtestShowMe()
     {
         $this->factoryModel();
         $volunteer = factory(App\Volunteer::class)->create();
@@ -48,6 +47,44 @@ class VolunteerProfileControllerTest extends TestCase
                 'username' => $this->postData['username']
              ])
              ->assertResponseStatus(204);
+    }
+
+    public function testSuccessfullyUpdateSkillsMe()
+    {
+        $this->factoryModel();
+        $volunteer = factory(App\Volunteer::class)->create();
+        $volunteer->is_actived = true;
+
+        $token = JWTAuth::fromUser($volunteer);
+
+        $postData = [
+            'skills' => [
+                'Swimming',
+                'Programming',
+                'Repo rescue'
+            ],
+            'existing_skill_indexes' => [
+            ]
+        ];
+
+        $this->json('post',
+                    '/api/users/me/skills',
+                    $postData,
+                    [
+                        'Authorization' => 'Bearer ' . $token,
+                        'X-VMS-API-Key' => $this->apiKey
+                    ])
+             //->seeJson([
+             //   'username' => 'a'
+             //])
+             ->assertResponseStatus(204);
+
+        $testVolunter = App\Volunteer::find($volunteer->id);
+
+        foreach ($postData['skills'] as $skill) {
+            $testSkill = $testVolunter->skills()->where('name', $skill)->first();
+            $this->assertEquals($skill, $testSkill->name);
+        }
     }
 
     protected function factoryModel()
