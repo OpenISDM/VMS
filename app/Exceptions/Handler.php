@@ -57,6 +57,11 @@ class Handler extends ExceptionHandler
             $statusCode = $e->getStatusCode();
 
             return response()->apiJsonError($message, $error, $statusCode);
+        } elseif ($e instanceof App\Exceptions\AbstractException) {
+            return response()->apiJsonError(
+                    $e->getMessage(),
+                    $e->getErrors(),
+                    $e->statusCode());
         }
 
         return parent::render($request, $e);

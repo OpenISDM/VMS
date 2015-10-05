@@ -34,6 +34,7 @@ $api->version('v1.0', function ($api) {
         $api->post('auth', 'App\Http\Controllers\Api\V1_0\VolunteerAuthController@login');
         $api->delete('auth',
                   'App\Http\Controllers\Api\V1_0\VolunteerAuthController@logout');
+        $api->get('/users/me', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@showMe');
 
         $api->get('email_verification/{email_address}/{verification_code}',
                   'App\Http\Controllers\Api\V1_0\VolunteerAuthController@emailVerification');

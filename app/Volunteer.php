@@ -32,4 +32,9 @@ class Volunteer extends Model implements AuthenticatableContract,
     {
         return $this->hasOne('App\VerificationCode');
     }
+
+    public function skills()
+    {
+        return $this->belongsToMany('App\Skill');
+    }
 }
