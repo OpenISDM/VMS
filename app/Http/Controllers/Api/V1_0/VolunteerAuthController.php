@@ -97,8 +97,8 @@ class VolunteerAuthController extends Controller
      * Volunteer logs in the system. 
      * It will response the JSON Web token.
      * 
-     * @param  CredentialRequest $request [description]
-     * @return [type]                     [description]
+     * @param  CredentialRequest $request
+     * @return Response
      */
     public function login(CredentialRequest $request)
     {
@@ -143,6 +143,12 @@ class VolunteerAuthController extends Controller
         return response()->json($responseJson, 200);
     }
 
+    /**
+     * Volunteer logs out the system.
+     * The JWT token will be in blacklist.
+     * 
+     * @return Response
+     */
     public function logout()
     {
         if (! $token = JWTAuth::getToken()) {
