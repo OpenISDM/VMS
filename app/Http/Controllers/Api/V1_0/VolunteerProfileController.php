@@ -9,11 +9,13 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use JWTAuth;
 use App\Http\Requests\Api\V1_0\UpdateProfileRequest;
 use App\Http\Requests\Api\V1_0\UpdateSkillsRequest;
+use App\Http\Requests\Api\V1_0\UpdateEquipmentRequest;
 use App\Exceptions\AuthenticatedUserNotFoundException;
 use App\Exceptions\JWTTokenNotFoundException;
 use App\Exceptions\ExceedingIndexException;
 use App\City;
 use App\Utils\ArrayUtil;
+use App\Http\Responses\Error;
 
 class VolunteerProfileController extends Controller
 {
@@ -67,7 +69,11 @@ class VolunteerProfileController extends Controller
             
             if (ArrayUtil::isIndexExceed($skillsList, $maxIndex)) {
                 // Index exceeds $skillsList size
-                throw new ExceedingIndexException();
+                $message = 'Unable to execute';
+                $error = new Error('exceeding_index_value');
+                $statusCode = 400;
+
+                return response()->apiJsonError($message, $error, $statusCode);
             }
         }
 
@@ -77,6 +83,37 @@ class VolunteerProfileController extends Controller
         foreach ($unexistingSkills as $skill) {
             $this->volunteer->skills()
                  ->firstOrCreate(['name' => $skill]);
+        }
+
+        return response()->json(null, 204);
+    }
+
+    public function updateEquipmentMe(UpdateEquipmentRequest $request)
+    {
+        $this->getVolunteerIdentifier();
+
+        $equipmentList = $request->input('equipment');
+        $existingEquipmentIndexes = $request->input('existing_equipment_indexes');
+
+        if (count($existingEquipmentIndexes) != 0) {
+            $maxIndex = max($existingEquipmentIndexes);
+            
+            if (ArrayUtil::isIndexExceed($equipmentList, $maxIndex)) {
+                // Index exceeds $equipmentList size
+                $message = 'Unable to execute';
+                $error = new Error('exceeding_index_value');
+                $statusCode = 400;
+
+                return response()->apiJsonError($message, $error, $statusCode);
+            }
+        }
+
+        $unexistingEquipment = ArrayUtil::getUnexisting($equipmentList, $existingEquipmentIndexes);
+
+        // Update volunteer's skills
+        foreach ($unexistingEquipment as $equipment) {
+            $this->volunteer->equipment()
+                 ->firstOrCreate(['name' => $equipment]);
         }
 
         return response()->json(null, 204);

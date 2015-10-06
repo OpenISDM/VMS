@@ -36,7 +36,7 @@ $api->version('v1.0', function ($api) {
                   'App\Http\Controllers\Api\V1_0\VolunteerAuthController@logout');
         $api->get('/users/me', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@showMe');
         $api->post('/users/me/skills', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@updateSkillsMe');
-
+        $api->post('/users/me/equipment', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@updateEquipmentMe');
         $api->get('email_verification/{email_address}/{verification_code}',
                   'App\Http\Controllers\Api\V1_0\VolunteerAuthController@emailVerification');
     });

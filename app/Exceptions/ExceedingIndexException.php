@@ -2,6 +2,9 @@
 
 namespace App\Exceptions;
 
+use App\Http\Responses\Error;
+use App\Exceptions\AbstractException;
+
 class ExceedingIndexException extends AbstractException
 {
     public function __construct()

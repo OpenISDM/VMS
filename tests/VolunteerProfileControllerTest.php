@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use App\Exceptions\ExceedingIndexException;
 
 class VolunteerProfileControllerTest extends TestCase
 {
@@ -85,6 +86,129 @@ class VolunteerProfileControllerTest extends TestCase
             $testSkill = $testVolunter->skills()->where('name', $skill)->first();
             $this->assertEquals($skill, $testSkill->name);
         }
+    }
+
+    public function testUpdateSkillsMeExceedingIndexException()
+    {
+        $this->factoryModel();
+        $volunteer = factory(App\Volunteer::class)->create();
+        $volunteer->is_actived = true;
+
+        $token = JWTAuth::fromUser($volunteer);
+
+        $postData = [
+            'skills' => [
+                'Swimming',
+                'Programming',
+                'Repo rescue'
+            ],
+            'existing_skill_indexes' => [
+                1,
+                2,
+                3,
+                4
+            ]
+        ];
+
+        foreach ($postData['skills'] as $skill) {
+            $volunteer->skills()->create(['name' => $skill]);
+        }
+
+        $this->json('post',
+                    '/api/users/me/skills',
+                    $postData,
+                    [
+                        'Authorization' => 'Bearer ' . $token,
+                        'X-VMS-API-Key' => $this->apiKey
+                    ])
+             ->seeJsonEquals([
+                        'message' => 'Unable to execute',
+                        'errors' => [[
+                            'code' => 'exceeding_index_value'
+                        ]]
+                    ])
+             ->assertResponseStatus(400);
+    }
+
+    public function testSuccessfullyUpdateEqiupmentMe()
+    {
+        $this->factoryModel();
+        $volunteer = factory(App\Volunteer::class)->create();
+        $volunteer->is_actived = true;
+
+        $token = JWTAuth::fromUser($volunteer);
+
+        $postData = [
+            'equipment' => [
+                'Car',
+                'Scooter',
+                'Camera'
+            ],
+            'existing_equipment_indexes' => [
+            ]
+        ];
+
+        $this->json('post',
+                    '/api/users/me/equipment',
+                    $postData,
+                    [
+                        'Authorization' => 'Bearer ' . $token,
+                        'X-VMS-API-Key' => $this->apiKey
+                    ])
+             //->seeJson([
+             //   'username' => 'a'
+             //])
+             ->assertResponseStatus(204);
+
+        $testVolunter = App\Volunteer::find($volunteer->id);
+
+        foreach ($postData['equipment'] as $equipment) {
+            $testEquipment = $testVolunter->equipment()->where('name', $equipment)->first();
+            $this->assertEquals($equipment, $testEquipment->name);
+        }
+    }
+
+    public function testUpdateEquipmentMeExceedingIndexException()
+    {
+        $this->factoryModel();
+        $volunteer = factory(App\Volunteer::class)->create();
+        $volunteer->is_actived = true;
+
+        $token = JWTAuth::fromUser($volunteer);
+
+        $postData = [
+            'equipment' => [
+                'Car',
+                'Scooter',
+                'Camera'
+            ],
+            'existing_equipment_indexes' => [
+                0,
+                1,
+                2,
+                3,
+                4
+            ]
+        ];
+
+        foreach ($postData['equipment'] as $equipment) {
+            $volunteer->skills()->create(['name' => $equipment]);
+        }
+
+        $this->json('post',
+                    '/api/users/me/equipment',
+                    $postData,
+                    [
+                        'Authorization' => 'Bearer ' . $token,
+                        'X-VMS-API-Key' => $this->apiKey
+                    ])
+             ->seeJsonEquals([
+                        'message' => 'Unable to execute',
+                        'errors' => [[
+                            'code' => 'exceeding_index_value'
+                        ]]
+                    ])
+             ->assertResponseStatus(400);
     }
 
     protected function factoryModel()
