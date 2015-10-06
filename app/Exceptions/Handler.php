@@ -45,43 +45,9 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        echo 'abcdefg123';
-
         if ($e instanceof ModelNotFoundException) {
             $e = new NotFoundHttpException($e->getMessage(), $e);
-        } elseif ($e instanceof Tymon\JWTAuth\Exceptions\TokenExpiredException) {
-            $message = 'Token expired';
-            $error = new Error('token_expired');
-            $statusCode = $e->getStatusCode();
-
-            return response()->apiJsonError($message, $error, $statusCode);
-        } elseif ($e instanceof Tymon\JWTAuth\Exceptions\TokenInvalidException) {
-            $message = 'Token invalid';
-            $error = new Error('token_invalid');
-            $statusCode = $e->getStatusCode();
-
-            return response()->apiJsonError($message, $error, $statusCode);
-        } elseif ($e instanceof ExceedingIndexException) {
-            echo 'qqq123';
-
-            return response()->apiJsonError(
-                    $e->getMessage(),
-                    $e->getErrors(),
-                    $e->statusCode());
-        } elseif ($e instanceof AbstractException) {
-            echo 'qqq456';
-
-            return response()->apiJsonError(
-                    $e->getMessage(),
-                    $e->getErrors(),
-                    $e->statusCode());
-        } elseif ($e instanceof Exception) {
-            echo 'qqq000';
-
-            return response()->apiJsonError(
-                    'jim',
-                    '000',
-                    $e->statusCode());        }
+        } 
 
         return parent::render($request, $e);
     }

@@ -75,9 +75,6 @@ class VolunteerProfileControllerTest extends TestCase
                         'Authorization' => 'Bearer ' . $token,
                         'X-VMS-API-Key' => $this->apiKey
                     ])
-             //->seeJson([
-             //   'username' => 'a'
-             //])
              ->assertResponseStatus(204);
 
         $testVolunter = App\Volunteer::find($volunteer->id);
@@ -155,9 +152,6 @@ class VolunteerProfileControllerTest extends TestCase
                         'Authorization' => 'Bearer ' . $token,
                         'X-VMS-API-Key' => $this->apiKey
                     ])
-             //->seeJson([
-             //   'username' => 'a'
-             //])
              ->assertResponseStatus(204);
 
         $testVolunter = App\Volunteer::find($volunteer->id);

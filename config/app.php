@@ -148,6 +148,7 @@ return [
         App\Providers\ErrorResponseMacroServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
+        App\Providers\ApiErrorHandlerServiceProvider::class,
     ],
 
     /*

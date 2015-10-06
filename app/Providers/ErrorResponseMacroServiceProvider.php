@@ -32,7 +32,7 @@ class ErrorResponseMacroServiceProvider extends ServiceProvider
                 'errors' => [ $errors ]
             ];
 
-            return $factory->json($jsonResponse, $statusCode);
+            return response()->make($jsonResponse, $statusCode);
         });
     }
 

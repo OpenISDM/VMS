@@ -69,11 +69,7 @@ class VolunteerProfileController extends Controller
             
             if (ArrayUtil::isIndexExceed($skillsList, $maxIndex)) {
                 // Index exceeds $skillsList size
-                $message = 'Unable to execute';
-                $error = new Error('exceeding_index_value');
-                $statusCode = 400;
-
-                return response()->apiJsonError($message, $error, $statusCode);
+                throw new ExceedingIndexException();
             }
         }
 
@@ -100,11 +96,7 @@ class VolunteerProfileController extends Controller
             
             if (ArrayUtil::isIndexExceed($equipmentList, $maxIndex)) {
                 // Index exceeds $equipmentList size
-                $message = 'Unable to execute';
-                $error = new Error('exceeding_index_value');
-                $statusCode = 400;
-
-                return response()->apiJsonError($message, $error, $statusCode);
+                throw new ExceedingIndexException();
             }
         }
 
