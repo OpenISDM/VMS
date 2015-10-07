@@ -60,3 +60,13 @@ $factory->define(App\VerificationCode::class, function (Faker\Generator $fake) {
     return [
     ];
 });
+
+$factory->define(App\Education::class, function (Faker\Generator $faker) {
+    return [
+        'school' => 'NCKU',
+        'degree' => 5,
+        'field_of_study' => 'Computer Science',
+        'start_year' => 2012,
+        'end_year' => 2014
+    ];
+});

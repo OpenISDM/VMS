@@ -20,6 +20,7 @@ use App\City;
 use App\Education;
 use App\Utils\ArrayUtil;
 use App\Http\Responses\Error;
+use App\Utils\StringUtil;
 
 class VolunteerProfileController extends Controller
 {
@@ -127,6 +128,12 @@ class VolunteerProfileController extends Controller
         return response()->json(null, 204);
     }
 
+    /**
+     * Store a new education
+     * 
+     * @param  EducationRequest $request
+     * @return Response
+     */
     public function storeEducationMe(EducationRequest $request)
     {
         $this->getVolunteerIdentifier();
@@ -140,6 +147,13 @@ class VolunteerProfileController extends Controller
         return response()->json($responseJson, 201);
     }
 
+    /**
+     * Update volunteer's own education
+     * TODO: implement Laravel Policy to authorize volunteer to update education
+     * 
+     * @param  UpdateEducationRequest $request
+     * @return Response
+     */
     public function updateEducationMe(UpdateEducationRequest $request)
     {
         $this->getVolunteerIdentifier();

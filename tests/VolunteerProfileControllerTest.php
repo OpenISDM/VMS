@@ -206,7 +206,7 @@ class VolunteerProfileControllerTest extends TestCase
              ->assertResponseStatus(400);
     }
 
-    public function testSuccessfullyStoreNewEduction()
+    public function testSuccessfullyStoreEductionMe()
     {
         $this->factoryModel();
 
@@ -230,6 +230,35 @@ class VolunteerProfileControllerTest extends TestCase
                     ])
              ->seeJsonEquals(['education_id' => $volunteer->username . '_1'])
              ->assertResponseStatus(201);
+    }
+
+    public function testSuccessfullyUpdateEducationMe()
+    {
+        $this->factoryModel();
+
+        $volunteer = factory(App\Volunteer::class)->create();
+        $volunteer->is_actived = true;
+
+        $education = factory(App\Education::class)->make();
+        $volunteer->educations()->save($education);
+
+        $token = JWTAuth::fromUser($volunteer);
+
+        $putData = [
+            'education_id' => $volunteer->username . '_' .$education->id,
+            'school' => 'NCKU',
+            'degree' => 4,
+            'field_of_study' => 'Computer Science',
+            'start_year' => 2012,
+            'end_year' => 2014
+        ];
+
+        $this->json('put', '/api/users/me/education', $putData,
+                    [
+                        'Authorization' => 'Bearer ' . $token,
+                        'X-VMS-API-Key' => $this->apiKey
+                    ])
+             ->assertResponseStatus(204);
     }
 
     protected function factoryModel()
