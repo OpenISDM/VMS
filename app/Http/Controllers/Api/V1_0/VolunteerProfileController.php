@@ -10,10 +10,14 @@ use JWTAuth;
 use App\Http\Requests\Api\V1_0\UpdateProfileRequest;
 use App\Http\Requests\Api\V1_0\UpdateSkillsRequest;
 use App\Http\Requests\Api\V1_0\UpdateEquipmentRequest;
+use App\Http\Requests\Api\V1_0\EducationRequest;
+use App\Http\Requests\Api\V1_0\UpdateEducationRequest;
 use App\Exceptions\AuthenticatedUserNotFoundException;
 use App\Exceptions\JWTTokenNotFoundException;
 use App\Exceptions\ExceedingIndexException;
+use App\Exceptions\AccessDeniedException;
 use App\City;
+use App\Education;
 use App\Utils\ArrayUtil;
 use App\Http\Responses\Error;
 
@@ -57,6 +61,12 @@ class VolunteerProfileController extends Controller
         // retrive volunteer's profile
     }
 
+    /**
+     * Update volunteer's own skills
+     * 
+     * @param  UpdateSkillsRequest $request
+     * @return Response
+     */
     public function updateSkillsMe(UpdateSkillsRequest $request)
     {
         $this->getVolunteerIdentifier();
@@ -84,6 +94,12 @@ class VolunteerProfileController extends Controller
         return response()->json(null, 204);
     }
 
+    /**
+     * Update volunteer's own equipment
+     * 
+     * @param  UpdateEquipmentRequest $request
+     * @return Response
+     */
     public function updateEquipmentMe(UpdateEquipmentRequest $request)
     {
         $this->getVolunteerIdentifier();
@@ -107,6 +123,38 @@ class VolunteerProfileController extends Controller
             $this->volunteer->equipment()
                  ->firstOrCreate(['name' => $equipment]);
         }
+
+        return response()->json(null, 204);
+    }
+
+    public function storeEducationMe(EducationRequest $request)
+    {
+        $this->getVolunteerIdentifier();
+
+        $education = new Education($request->all());
+        $education = $this->volunteer->educations()->save($education);
+        $responseJson = [
+            'education_id' => $this->volunteer->username . '_' . $education->id
+        ];
+
+        return response()->json($responseJson, 201);
+    }
+
+    public function updateEducationMe(UpdateEducationRequest $request)
+    {
+        $this->getVolunteerIdentifier();
+        
+        $id = StringUtil::getLastId($request->input('education_id'));
+        $education = Education::findOrFail($id);
+        $educationVolunteer = $education->volunteer()->first();
+
+        // Check permission
+        if ($this->volunteer->id != $educationVolunteer->id) {
+            // Forbidden to update
+            throw new AccessDeniedException();
+        }
+
+        $education->update($request->except('education_id'));
 
         return response()->json(null, 204);
     }

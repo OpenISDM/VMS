@@ -165,6 +165,7 @@ class VolunteerProfileControllerTest extends TestCase
     public function testUpdateEquipmentMeExceedingIndexException()
     {
         $this->factoryModel();
+
         $volunteer = factory(App\Volunteer::class)->create();
         $volunteer->is_actived = true;
 
@@ -203,6 +204,32 @@ class VolunteerProfileControllerTest extends TestCase
                         ]]
                     ])
              ->assertResponseStatus(400);
+    }
+
+    public function testSuccessfullyStoreNewEduction()
+    {
+        $this->factoryModel();
+
+        $volunteer = factory(App\Volunteer::class)->create();
+        $volunteer->is_actived = true;
+
+        $token = JWTAuth::fromUser($volunteer);
+
+        $postData = [
+            'school' => 'NCKU',
+            'degree' => 5,
+            'field_of_study' => 'Computer Science',
+            'start_year' => 2012,
+            'end_year' => 2014
+        ];
+
+        $this->json('post', '/api/users/me/education', $postData,
+                    [
+                        'Authorization' => 'Bearer ' . $token,
+                        'X-VMS-API-Key' => $this->apiKey
+                    ])
+             ->seeJsonEquals(['education_id' => $volunteer->username . '_1'])
+             ->assertResponseStatus(201);
     }
 
     protected function factoryModel()
