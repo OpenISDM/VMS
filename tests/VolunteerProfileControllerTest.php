@@ -261,6 +261,57 @@ class VolunteerProfileControllerTest extends TestCase
              ->assertResponseStatus(204);
     }
 
+    public function testUpdateEducationMeAccessDeniedException()
+    {
+        $this->factoryModel();
+
+        // Create volunteer A 
+        $volunteerA = factory(App\Volunteer::class)->create();
+        $volunteerA->is_actived = true;
+
+        $educationA = factory(App\Education::class)->make();
+        $volunteerA->educations()->save($educationA);
+
+        // Create volunteer B
+        $volunteerB = factory(App\Volunteer::class)->create();
+        $volunteerB->is_actived = true;
+
+        $educationB = factory(App\Education::class)->make(
+                            [
+                                'school' => 'MIT',
+                                'degree' => 6,
+                                'field_of_study' => 'Artificial Intelligence',
+                                'start_year' => '2008',
+                                'end_year' => '2013'
+                            ]
+                        );
+        $volunteerB->educations()->save($educationB);
+
+        $token = JWTAuth::fromUser($volunteerA);
+        $putData = [
+            'education_id' => $volunteerA->username . '_' . $educationB->id,
+            'school' => 'MIT',
+            'degree' => 6,
+            'field_of_study' => 'Artificial Intelligence (AI)',
+            'start_year' => '2008',
+            'end_year' => '2013'
+        ];
+
+        $this->json('put', '/api/users/me/education', $putData,
+                    [
+                        'Authorization' => 'Bearer ' . $token,
+                        'X-VMS-API-Key' => $this->apiKey
+                    ])
+             ->seeJsonEquals([
+                    'message' => 'Not have right to access',
+                    'errors' => [[
+                        'code' => 'cannot_access'
+                    ]]
+                ])
+             ->assertResponseStatus(403);
+
+    }
+
     protected function factoryModel()
     {
         factory(App\ApiKey::class)->create([

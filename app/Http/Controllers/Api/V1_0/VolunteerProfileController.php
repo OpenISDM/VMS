@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use JWTAuth;
+use Gate;
 use App\Http\Requests\Api\V1_0\UpdateProfileRequest;
 use App\Http\Requests\Api\V1_0\UpdateSkillsRequest;
 use App\Http\Requests\Api\V1_0\UpdateEquipmentRequest;
@@ -149,7 +150,6 @@ class VolunteerProfileController extends Controller
 
     /**
      * Update volunteer's own education
-     * TODO: implement Laravel Policy to authorize volunteer to update education
      * 
      * @param  UpdateEducationRequest $request
      * @return Response
@@ -160,10 +160,10 @@ class VolunteerProfileController extends Controller
         
         $id = StringUtil::getLastId($request->input('education_id'));
         $education = Education::findOrFail($id);
-        $educationVolunteer = $education->volunteer()->first();
+        //$educationVolunteer = $education->volunteer()->first();
 
         // Check permission
-        if ($this->volunteer->id != $educationVolunteer->id) {
+        if (Gate::denies('update', $education)) {
             // Forbidden to update
             throw new AccessDeniedException();
         }
