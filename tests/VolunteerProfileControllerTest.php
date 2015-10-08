@@ -223,7 +223,7 @@ class VolunteerProfileControllerTest extends TestCase
             'end_year' => 2014
         ];
 
-        $this->json('post', '/api/users/me/education', $postData,
+        $this->json('post', '/api/users/me/educations', $postData,
                     [
                         'Authorization' => 'Bearer ' . $token,
                         'X-VMS-API-Key' => $this->apiKey
@@ -253,12 +253,14 @@ class VolunteerProfileControllerTest extends TestCase
             'end_year' => 2014
         ];
 
-        $this->json('put', '/api/users/me/education', $putData,
+        $this->json('put', '/api/users/me/educations', $putData,
                     [
                         'Authorization' => 'Bearer ' . $token,
                         'X-VMS-API-Key' => $this->apiKey
                     ])
              ->assertResponseStatus(204);
+
+        $this->seeInDatabase('educations', ['id' => $education->id, 'degree' => 4]);
     }
 
     public function testUpdateEducationMeAccessDeniedException()
@@ -297,7 +299,7 @@ class VolunteerProfileControllerTest extends TestCase
             'end_year' => '2013'
         ];
 
-        $this->json('put', '/api/users/me/education', $putData,
+        $this->json('put', '/api/users/me/educations', $putData,
                     [
                         'Authorization' => 'Bearer ' . $token,
                         'X-VMS-API-Key' => $this->apiKey
@@ -309,7 +311,29 @@ class VolunteerProfileControllerTest extends TestCase
                     ]]
                 ])
              ->assertResponseStatus(403);
+    }
 
+    public function testSuccessfullyDeleteEducationMe()
+    {
+        $this->factoryModel();
+
+        $volunteer = factory(App\Volunteer::class)->create();
+        $volunteer->is_actived = true;
+
+        $education = factory(App\Education::class)->make();
+        $volunteer->educations()->save($education);
+
+        $token = JWTAuth::fromUser($volunteer);
+
+        $this->json('delete',
+                    '/api/users/me/educations/' . $education->id
+                    ,[]
+                    ,[
+                        'Authorization' => 'Bearer ' . $token,
+                        'X-VMS-API-Key' => $this->apiKey
+                    ])
+             ->assertResponseStatus(204);
+        $this->notSeeInDatabase('educations', ['id' => $education->id]);
     }
 
     protected function factoryModel()
@@ -354,6 +378,6 @@ class VolunteerProfileControllerTest extends TestCase
                 $city->country()->associate($country);
                 $city->save();
             }
-        }        
+        }
     }
 }

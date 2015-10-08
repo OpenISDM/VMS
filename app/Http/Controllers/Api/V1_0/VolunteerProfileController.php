@@ -157,9 +157,11 @@ class VolunteerProfileController extends Controller
     {
         $this->getVolunteerIdentifier();
         
+        /*
+         * TODO: Need to check the id
+         */
         $id = StringUtil::getLastId($request->input('education_id'));
         $education = Education::findOrFail($id);
-        //$educationVolunteer = $education->volunteer()->first();
 
         // Check permission
         if (Gate::denies('update', $education)) {
@@ -168,6 +170,29 @@ class VolunteerProfileController extends Controller
         }
 
         $education->update($request->except('education_id'));
+
+        return response()->json(null, 204);
+    }
+
+    /**
+     * Delete volunteer's own education
+     * 
+     * @param  Integer $educationId
+     */
+    public function deleteEducationMe($educationId)
+    {
+        $this->getVolunteerIdentifier();
+
+        $id = StringUtil::getLastId($educationId);
+        $education = Education::findOrFail($id);
+
+        // Check permission
+        if (Gate::denies('delete', $education)) {
+            // Forbidden to delete the education record
+            throw new AccessDeniedException();
+        }
+
+        $education->delete();
 
         return response()->json(null, 204);
     }
