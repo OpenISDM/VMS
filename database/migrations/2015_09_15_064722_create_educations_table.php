@@ -15,9 +15,10 @@ class CreateEducationsTable extends Migration
         Schema::create('educations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('school');
-            $table->string('degree');
+            $table->integer('degree');
+            $table->string('field_of_study')->nullable();
             $table->integer('start_year');
-            $table->integer('end_year');
+            $table->integer('end_year')->nullable();
             $table->integer('volunteer_id')->index()->unsigned();    // foregin key
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
