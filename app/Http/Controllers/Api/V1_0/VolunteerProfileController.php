@@ -41,7 +41,6 @@ class VolunteerProfileController extends Controller
      */
     public function showMe()
     {
-
         return 'qqq';
     }
 
@@ -183,5 +182,4 @@ class VolunteerProfileController extends Controller
             throw new JWTTokenNotFoundException($e);
         }
     }
-
 }

@@ -41,7 +41,6 @@ class ApiErrorHandlerServiceProvider extends ServiceProvider
 
             return response()->apiJsonError($message, $error, $statusCode);
         });
-
     }
 
     /**

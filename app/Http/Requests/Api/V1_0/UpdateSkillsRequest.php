@@ -22,7 +22,7 @@ class UpdateSkillsRequest extends JsonRequest
      * @return array
      */
     public function rules()
-    {   
+    {
         // TODO: array validation
         return [
             'skills' => 'required',
