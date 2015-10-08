@@ -26,6 +26,10 @@ Route::get('/', function () {
 
 $api = app('Dingo\Api\Routing\Router');
 
+/**
+ * TODO: need to add jwt-auth middlewares
+ */
+
 // Version 1.0
 $api->version('v1.0', function ($api) {
     // Public routing group
