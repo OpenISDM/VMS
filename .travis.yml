@@ -1,11 +1,12 @@
 language: php
-
 php:
-  - 5.6
-  - hhvm
-
+- 5.6
+- hhvm
 sudo: false
-
 before_install: composer selfupdate
-install: travis_retry composer install --no-interaction --ignore-platform-reqs --no-scripts --prefer-source
+install: travis_retry composer install --no-interaction --ignore-platform-reqs --no-scripts
+  --prefer-source
 script: vendor/bin/phpunit
+notifications:
+  slack:
+    secure: oQqUCB+NLyJiHTpssmEMCrGNL25QnHMWg2IH77TS9DYsluPLoGq6lY4RYPTRQ6CeiV+hBV88m7NFpBjDrgjMF7EddW2BpS5Oefy7xelOj8sqlsFIj+LBDRZDO0P1rGXyZHiofoQWuC90iRVmj9QJ27fDl1HojoSeXIcMmjRoJZjqaS5IjlntVmZ2+bCjWRC5U/SfKbJu+jkhxYMQGKj2N79nKWN5IaaOvi/C7duItp4rDGlNrEb15rDDLLjLZkYSwRvIfWcnQ103g23c7O5maeXfGt7WMgVlZaidlSJ3vp4gPCqzp410RpsEsVuR+kSjpvj23ioFxqShBMltU5NJzqAnQUhaySCO8VMMgwwQW5/6VBWiU82Ya6lfcpR+YZllHntiV1DVzswR5+MyMe30bnRjUJBb1HckXDmL1aEddFoxMsqiOVGp6ehIa9L4NTrU8YmmdAfbtIUthyMHHP43LXcsJGKZ1SYn3r1VivRd+j/Rw3vKp3uqyJeahnd9Bd4IF22S8nC6gL5NTQx2wRfk/elOhF5q9AwBtp+KE/lTKS3OprOHgdWiSEPVP/RB2u0iIBSfauMydeKbdMo7D/mjcjEk5FU81lr1ewq+esNe/tQdqfDAZURB2zGgv2GDdKQT3sJtfJg7jEIyungBVosW1tc1z6JKFHdgB6kPu+1O6dY=
