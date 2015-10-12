@@ -128,6 +128,22 @@ class VolunteerProfileController extends Controller
         return response()->json(null, 204);
     }
 
+    public function showEducationMe()
+    {
+        $this->getVolunteerIdentifier();
+
+        $educations = $this->volunteer->educations()->get();
+
+
+        // Dingo API transformer
+
+        $educationList = [];
+
+        foreach ($educations as $education) {
+            
+        }
+    }
+
     /**
      * Store a new education
      * 
