@@ -19,7 +19,7 @@ class CreateVolunteersTable extends Migration
             $table->string('last_name');
             $table->integer('birth_year');
             $table->string('gender');
-            $table->integer('city_id');
+            $table->integer('city_id')->unsigned();
             $table->string('address')->nullable();
             $table->string('phone_number', 20)->nullable();
             $table->string('email')->unique();
