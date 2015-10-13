@@ -43,6 +43,7 @@ $api->version('v1.0', function ($api) {
         $api->post('/users/me/equipment', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@updateEquipmentMe');
         $api->post('/users/me/educations', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@storeEducationMe');
         $api->put('/users/me/educations', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@updateEducationMe');
+        $api->get('/users/me/educations', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@showEducationMe');
         $api->delete('/users/me/educations/{education_id}', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@deleteEducationMe');
         $api->get('email_verification/{email_address}/{verification_code}',
                   'App\Http\Controllers\Api\V1_0\VolunteerAuthController@emailVerification');

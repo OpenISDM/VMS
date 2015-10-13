@@ -336,6 +336,38 @@ class VolunteerProfileControllerTest extends TestCase
         $this->notSeeInDatabase('educations', ['id' => $education->id]);
     }
 
+    public function testSuccessfullyShowEducationMe()
+    {
+        $this->factoryModel();
+
+        $volunteer = factory(App\Volunteer::class)->create();
+        $volunteer->is_actived = true;
+
+        $education = factory(App\Education::class)->make();
+        $volunteer->educations()->save($education);
+
+        $token = JWTAuth::fromUser($volunteer);
+
+        $this->json('get',
+                    '/api/users/me/educations'
+                    ,[]
+                    ,[
+                        'Authorization' => 'Bearer ' . $token,
+                        'X-VMS-API-Key' => $this->apiKey
+                    ])
+             ->seeJsonEquals([
+                    'education' => [[
+                        'education_id' => $volunteer->username . '_' . $education->id,
+                        'school' => $education->school,
+                        'degree' => $education->degree,
+                        'field_of_study' => $education->field_of_study,
+                        'start_year' => $education->start_year,
+                        'end_year' => $education->end_year
+                    ]]
+                ])
+             ->assertResponseStatus(200);
+    }
+
     protected function factoryModel()
     {
         factory(App\ApiKey::class)->create([

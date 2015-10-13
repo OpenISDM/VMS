@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Dingo\Api\Routing\Helpers;
 use JWTAuth;
 use Gate;
 use App\Http\Requests\Api\V1_0\UpdateProfileRequest;
@@ -22,9 +23,12 @@ use App\Education;
 use App\Utils\ArrayUtil;
 use App\Http\Responses\Error;
 use App\Utils\StringUtil;
+use App\Transformers\VolunteerEducationTransformer;
 
 class VolunteerProfileController extends Controller
 {
+    use Helpers;
+
     protected $volunteer;
 
     public function __construct()
@@ -133,15 +137,14 @@ class VolunteerProfileController extends Controller
         $this->getVolunteerIdentifier();
 
         $educations = $this->volunteer->educations()->get();
+        
+        $manager = new \League\Fractal\Manager();
+        $manager->setSerializer(new \League\Fractal\Serializer\ArraySerializer());
 
+        $resource = new \League\Fractal\Resource\Collection($educations, new VolunteerEducationTransformer, 'education');
 
-        // Dingo API transformer
-
-        $educationList = [];
-
-        foreach ($educations as $education) {
-            
-        }
+        //return $this->response->collection($educations, new VolunteerEducationTransformer, ['key' => 'education']);
+        return response()->json($manager->createData($resource)->toArray(), 200);
     }
 
     /**
