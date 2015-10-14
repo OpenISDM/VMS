@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Api\V1_0;
 
-use App\Http\Requests\Request;
+use App\Http\Requests\JsonRequest;
 
-class CredentialRequest extends Request
+class CredentialRequest extends JsonRequest
 {
     /**
      * Determine if the user is authorized to make this request.
