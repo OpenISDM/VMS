@@ -21,7 +21,7 @@ class VolunteerEducationController extends BaseVolunteerController
     {
         $educations = $this->volunteer->educations()->get();
         
-        // Set serialzer for a transformer 
+        // Set serialzer for a transformer
         $manager = new \League\Fractal\Manager();
         $manager->setSerializer(new \League\Fractal\Serializer\ArraySerializer());
 

@@ -22,7 +22,7 @@ class VolunteerExperienceController extends BaseVolunteerController
     {
         $experiences = $this->volunteer->experiences()->get();
 
-        // Set serialzer for a transformer 
+        // Set serialzer for a transformer
         $manager = new \League\Fractal\Manager();
         $manager->setSerializer(new \League\Fractal\Serializer\ArraySerializer());
 
