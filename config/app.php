@@ -140,13 +140,13 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Dingo\Api\Provider\LaravelServiceProvider::class,
-        App\Providers\ErrorResponseMacroServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+        Dingo\Api\Provider\LaravelServiceProvider::class,
+        App\Providers\AppServiceProvider::class,
+        App\Providers\ErrorResponseMacroServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
         App\Providers\ApiErrorHandlerServiceProvider::class,
     ],
