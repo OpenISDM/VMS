@@ -55,6 +55,41 @@ class MiddlewareTest extends TestCase
              ->assertResponseStatus(201);
     }
 
+    public function testPassJWTMiddleware()
+    {
+        $this->factoryModel();
+
+        $volunteer = factory(App\Volunteer::class)->create();
+        $volunteer->is_actived = true;
+
+        $token = JWTAuth::fromUser($volunteer);
+
+        $this->json('delete',
+            '/api/auth',
+            [],
+            [
+                'Authorization' => 'Bearer ' . $token,
+                'X-VMS-API-Key' => $this->apiKey
+            ])
+            ->assertResponseStatus(204);
+    }
+
+    public function testFailedJWTMiddlware()
+    {
+        $this->factoryModel();
+
+        $volunteer = factory(App\Volunteer::class)->create();
+        $volunteer->is_actived = true;
+
+         $this->json('delete',
+            '/api/auth',
+            [],
+            [
+                'X-VMS-API-Key' => $this->apiKey
+            ])
+            ->assertResponseStatus(401);
+    }
+
     protected function factoryModel()
     {
         factory(App\ApiKey::class)->create([

@@ -13,7 +13,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        /*
+         * Add JSON Web Tokens (JWT)
+         * Reference: https://github.com/dingo/api/wiki/Authentication#json-web-tokens-jwt
+         */
+        app('Dingo\Api\Auth\Auth')->extend('jwt', function ($app) {
+           return new \Dingo\Api\Auth\Provider\JWT($app['Tymon\JWTAuth\JWTAuth']);
+        });
     }
 
     /**
