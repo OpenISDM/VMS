@@ -97,6 +97,6 @@ class MiddlewareTest extends TestCase
                 $city->country()->associate($country);
                 $city->save();
             }
-        }        
+        }
     }
 }

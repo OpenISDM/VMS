@@ -21,4 +21,9 @@ class VolunteerEducationPolicy
     {
         return $volunteer->id === $education->volunteer_id;
     }
+
+    public function delete(Volunteer $volunteer, Education $education)
+    {
+        return $volunteer->id === $education->volunteer_id;
+    }
 }
