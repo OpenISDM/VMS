@@ -39,12 +39,12 @@ $factory->define(App\City::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Volunteer::class ,function (Faker\Generator $faker) {
+$factory->define(App\Volunteer::class, function (Faker\Generator $faker) {
     return [
         'username' => $faker->userName,
         'password' => bcrypt('ThisIsMyPassW0Rd'),
         'first_name' => $faker->firstNameMale,
-        'last_name' => $faker->lastName, 
+        'last_name' => $faker->lastName,
         'birth_year' => 1991,
         'gender' => 'male',
         'city_id' => 1,
@@ -68,5 +68,14 @@ $factory->define(App\Education::class, function (Faker\Generator $faker) {
         'field_of_study' => 'Computer Science',
         'start_year' => 2012,
         'end_year' => 2014
+    ];
+});
+
+$factory->define(App\Experience::class, function (Faker\Generator $faker) {
+    return [
+        'company' => 'Academia Sinica',
+        'job_title' => 'Research Assistant',
+        'start_year' => 2014,
+        'end_year' => null
     ];
 });

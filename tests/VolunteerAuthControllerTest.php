@@ -40,7 +40,7 @@ class VolunteerAuthControllerTest extends TestCase
 
     public function testJsonRequestValidation()
     {
-        $validationErrorPostData = 
+        $validationErrorPostData =
             json_decode(file_get_contents(__DIR__ . '/examples/register_post_validation_error.json'), true);
         $expectedJsonResponseBody = [
                             'message' => 'Validation failed',
@@ -82,7 +82,7 @@ class VolunteerAuthControllerTest extends TestCase
 
         $token = JWTAuth::fromUser($volunteer);
 
-        $this->json('get', 
+        $this->json('get',
                     '/api/email_verification/' . $volunteer->email . '/' . $code . '?token=' . $token,
                     [],
                     [
@@ -135,7 +135,6 @@ class VolunteerAuthControllerTest extends TestCase
                         'X-VMS-API-Key' => $this->apiKey
                     ])
              ->assertResponseStatus(204);
-
     }
 
     protected function factoryModel()
@@ -180,6 +179,6 @@ class VolunteerAuthControllerTest extends TestCase
                 $city->country()->associate($country);
                 $city->save();
             }
-        }        
+        }
     }
 }

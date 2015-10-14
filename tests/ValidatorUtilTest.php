@@ -52,5 +52,5 @@ class ValidatorUtilTest extends TestCase
 
         $this->assertEquals('not_enough_password_strength', $actualNEPSFieldValidatorError->getCode());
         $this->assertContains('password', $actualNEPSFieldValidatorError->getFields());
-    }    
+    }
 }

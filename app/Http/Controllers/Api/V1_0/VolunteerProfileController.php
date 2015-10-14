@@ -2,37 +2,18 @@
 
 namespace App\Http\Controllers\Api\V1_0;
 
-use Illuminate\Http\Request;
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use JWTAuth;
-use Gate;
-use App\Http\Requests\Api\V1_0\UpdateProfileRequest;
-use App\Http\Requests\Api\V1_0\UpdateSkillsRequest;
+use App\Http\Controllers\Api\BaseVolunteerController;
+use Dingo\Api\Routing\Helpers;
 use App\Http\Requests\Api\V1_0\UpdateEquipmentRequest;
-use App\Http\Requests\Api\V1_0\EducationRequest;
-use App\Http\Requests\Api\V1_0\UpdateEducationRequest;
-use App\Exceptions\AuthenticatedUserNotFoundException;
-use App\Exceptions\JWTTokenNotFoundException;
+use App\Http\Requests\Api\V1_0\UpdateSkillsRequest;
+use App\Http\Requests\Api\V1_0\UpdateProfileRequest;
 use App\Exceptions\ExceedingIndexException;
-use App\Exceptions\AccessDeniedException;
 use App\City;
-use App\Education;
 use App\Utils\ArrayUtil;
-use App\Http\Responses\Error;
-use App\Utils\StringUtil;
 
-class VolunteerProfileController extends Controller
+class VolunteerProfileController extends BaseVolunteerController
 {
-    protected $volunteer;
-
-    public function __construct()
-    {
-        if (env('APP_ENV') == 'testing' && array_key_exists("HTTP_AUTHORIZATION", request()->server())) {
-            JWTAuth::setRequest(\Route::getCurrentRequest());
-        }
-    }
+    use Helpers;
 
     /**
      * Display the specified resource.
@@ -44,10 +25,13 @@ class VolunteerProfileController extends Controller
         return 'qqq';
     }
 
+    /**
+     * Update volunteer's own profile
+     * @param  App\Http\Requests\Api\V1_0\UpdateProfileRequest $request
+     * @return Illuminate\Http\JsonResponse
+     */
     public function updateMe(UpdateProfileRequest $request)
     {
-        $this->getVolunteerIdentifier();
-
         if ($request->has('city') && $request->has('city.id')) {
             $input = $request->expect(['city', 'city.id']);
             $cityInput = $request->only(['city.id']);
@@ -64,14 +48,11 @@ class VolunteerProfileController extends Controller
 
     /**
      * Update volunteer's own skills
-     * 
-     * @param  UpdateSkillsRequest $request
-     * @return Response
+     * @param  App\Http\Requests\Api\V1_0\UpdateSkillsRequest $request
+     * @return Illuminate\Http\JsonResponse
      */
     public function updateSkillsMe(UpdateSkillsRequest $request)
     {
-        $this->getVolunteerIdentifier();
-
         $skillsList = $request->input('skills');
         $existingSkillIndexes = $request->input('existing_skill_indexes');
 
@@ -98,13 +79,11 @@ class VolunteerProfileController extends Controller
     /**
      * Update volunteer's own equipment
      * 
-     * @param  UpdateEquipmentRequest $request
-     * @return Response
+     * @param  App\Http\Requests\Api\V1_0\UpdateEquipmentRequest $request
+     * @return Illuminate\Http\JsonResponse
      */
     public function updateEquipmentMe(UpdateEquipmentRequest $request)
     {
-        $this->getVolunteerIdentifier();
-
         $equipmentList = $request->input('equipment');
         $existingEquipmentIndexes = $request->input('existing_equipment_indexes');
 
@@ -126,60 +105,5 @@ class VolunteerProfileController extends Controller
         }
 
         return response()->json(null, 204);
-    }
-
-    /**
-     * Store a new education
-     * 
-     * @param  EducationRequest $request
-     * @return Response
-     */
-    public function storeEducationMe(EducationRequest $request)
-    {
-        $this->getVolunteerIdentifier();
-
-        $education = new Education($request->all());
-        $education = $this->volunteer->educations()->save($education);
-        $responseJson = [
-            'education_id' => $this->volunteer->username . '_' . $education->id
-        ];
-
-        return response()->json($responseJson, 201);
-    }
-
-    /**
-     * Update volunteer's own education
-     * 
-     * @param  UpdateEducationRequest $request
-     * @return Response
-     */
-    public function updateEducationMe(UpdateEducationRequest $request)
-    {
-        $this->getVolunteerIdentifier();
-        
-        $id = StringUtil::getLastId($request->input('education_id'));
-        $education = Education::findOrFail($id);
-        //$educationVolunteer = $education->volunteer()->first();
-
-        // Check permission
-        if (Gate::denies('update', $education)) {
-            // Forbidden to update
-            throw new AccessDeniedException();
-        }
-
-        $education->update($request->except('education_id'));
-
-        return response()->json(null, 204);
-    }
-
-    protected function getVolunteerIdentifier()
-    {
-        try {
-            if (! $this->volunteer = JWTAuth::parseToken()->authenticate()) {
-                throw new AuthenticatedUserNotFoundException();
-            }
-        } catch (JWTException $e) {
-            throw new JWTTokenNotFoundException($e);
-        }
     }
 }

@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Education extends Model
+class Experience extends Model
 {
-    protected $table = 'educations';
-    protected $fillable = ['school', 'degree', 'field_of_study', 'start_year', 'end_year'];
+    protected $table = 'experiences';
+    protected $fillable = ['company', 'job_title', 'start_year', 'end_year'];
 
     public function volunteer()
     {

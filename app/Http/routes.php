@@ -41,8 +41,17 @@ $api->version('v1.0', function ($api) {
         $api->get('/users/me', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@showMe');
         $api->post('/users/me/skills', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@updateSkillsMe');
         $api->post('/users/me/equipment', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@updateEquipmentMe');
-        $api->post('/users/me/education', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@storeEducationMe');
-        $api->put('/users/me/education', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@updateEducationMe');
+        
+        $api->get('/users/me/experiences', 'App\Http\Controllers\Api\V1_0\VolunteerExperienceController@show');
+        $api->post('/users/me/experiences', 'App\Http\Controllers\Api\V1_0\VolunteerExperienceController@store');
+        $api->put('/users/me/experiences', 'App\Http\Controllers\Api\V1_0\VolunteerExperienceController@update');
+        $api->delete('/users/me/experiences/{id}', 'App\Http\Controllers\Api\V1_0\VolunteerExperienceController@destroy');
+
+        $api->get('/users/me/educations', 'App\Http\Controllers\Api\V1_0\VolunteerEducationController@show');
+        $api->post('/users/me/educations', 'App\Http\Controllers\Api\V1_0\VolunteerEducationController@store');
+        $api->put('/users/me/educations', 'App\Http\Controllers\Api\V1_0\VolunteerEducationController@update');
+        $api->delete('/users/me/educations/{id}', 'App\Http\Controllers\Api\V1_0\VolunteerEducationController@destroy');
+        
         $api->get('email_verification/{email_address}/{verification_code}',
                   'App\Http\Controllers\Api\V1_0\VolunteerAuthController@emailVerification');
     });
