@@ -66,6 +66,9 @@ $api->version('v1.0', function ($api) {
 
         // Retrive volunteer's profile
         $api->get('/users/me', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@showMe');
+
+        // Update volunteer's profile
+        $api->put('/users/me', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@updateMe');
         
         // Update skills
         $api->post('/users/me/skills',

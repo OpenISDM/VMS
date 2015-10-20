@@ -28,6 +28,7 @@ class UpdateProfileRequest extends JsonRequest
             'last_name' => 'sometimes|required|max:255',
             'birth_year' => 'sometimes|required|date_format:Y',
             'gender' => 'sometimes|required|in:male,female,other',
+            'introduction' => 'sometimes|required|max:255',
             'city' => 'sometimes|required',
             'city.id' => 'sometimes|required|exists:cities,id',
             'address' => 'sometimes|required|string|max:255',

@@ -45,17 +45,31 @@ class VolunteerProfileController extends BaseVolunteerController
     public function updateMe(UpdateProfileRequest $request)
     {
         if ($request->has('city') && $request->has('city.id')) {
-            $input = $request->expect(['city', 'city.id']);
-            $cityInput = $request->only(['city.id']);
+            $input = $request->except(['city', 'city.id', 'username', 'password', 'is_actived', 'is_locked', 'updated_at', 'created_at']);
+            $cityInput = $request->input('city.id');
             $city = City::find($cityInput);
 
             $this->volunteer->city()->associate($city);
             $this->volunteer->save();
         }
+        else {
+            $input = $request->except(['username', 'password', 'is_actived', 'is_locked', 'updated_at', 'created_at']);
+        }
 
         $this->volunteer->update($input);
 
         // retrive volunteer's profile
+        // Set serialzer for a transformer
+        $manager = new \League\Fractal\Manager();
+        $manager->setSerializer(new \League\Fractal\Serializer\ArraySerializer());
+
+        // transform Experience model into array
+        $resource = new \League\Fractal\Resource\Item(
+            $this->volunteer,
+            new VolunteerProfileTransformer,
+            'volunteer');
+
+        return response()->json($manager->createData($resource)->toArray(), 200);
     }
 
     /**
