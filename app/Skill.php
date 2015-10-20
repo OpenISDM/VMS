@@ -10,6 +10,13 @@ class Skill extends Model
 
     protected $fillable = ['name'];
 
+    protected $visible = ['id', 'name'];
+
+    protected $casts = [
+        'id' => 'integer'
+    ];
+
+
     public function volunteers()
     {
         return $this->belongsToMany('App\Volunteer');

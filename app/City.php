@@ -8,6 +8,10 @@ class City extends Model
 {
     protected $table = 'cities';
 
+    protected $casts = [
+        'id' => 'integer'
+    ];
+
     public $timestamps = false;
 
     public function volunteers()

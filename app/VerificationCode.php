@@ -10,6 +10,11 @@ class VerificationCode extends Model
 
     protected $fillable = ['code'];
 
+    protected $casts = [
+        'id' => 'integer'
+    ];
+
+
     public function volunteer()
     {
         return $this->belongsTo('App\Volunteer');

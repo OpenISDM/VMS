@@ -9,7 +9,9 @@ use App\Http\Requests\Api\V1_0\UpdateSkillsRequest;
 use App\Http\Requests\Api\V1_0\UpdateProfileRequest;
 use App\Exceptions\ExceedingIndexException;
 use App\City;
+use App\Volunteer;
 use App\Utils\ArrayUtil;
+use App\Transformers\VolunteerProfileTransformer;
 
 class VolunteerProfileController extends BaseVolunteerController
 {
@@ -21,8 +23,18 @@ class VolunteerProfileController extends BaseVolunteerController
      * @return \Illuminate\Http\Response
      */
     public function showMe()
-    {
-        return 'qqq';
+    {        
+        // Set serialzer for a transformer
+        $manager = new \League\Fractal\Manager();
+        $manager->setSerializer(new \League\Fractal\Serializer\ArraySerializer());
+
+        // transform Experience model into array
+        $resource = new \League\Fractal\Resource\Item(
+            $this->volunteer,
+            new VolunteerProfileTransformer,
+            'volunteer');
+
+        return response()->json($manager->createData($resource)->toArray(), 200);
     }
 
     /**

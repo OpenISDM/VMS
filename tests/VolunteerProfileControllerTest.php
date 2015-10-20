@@ -522,6 +522,89 @@ class VolunteerProfileControllerTest extends TestCase
              ->assertResponseStatus(200);
     }
 
+    public function testShowMe()
+    {
+        $this->factoryModel();
+        $volunteer = factory(App\Volunteer::class)->create();
+        $volunteer->is_actived = true;
+        $volunteer->save();
+
+        $skills = ['Swimming', 'Programming'];
+        $equipment = ['Car', 'Scooter', 'Camera'];
+
+        foreach ($skills as $skill) {
+            $volunteer->skills()
+                 ->firstOrCreate(['name' => $skill]);
+        }
+
+        foreach ($equipment as $eq) {
+            $volunteer->equipment()
+                 ->firstOrCreate(['name' => $eq]);
+        }
+
+        $token = JWTAuth::fromUser($volunteer);
+
+        $this->json('get',
+                    '/api/users/me'
+                    ,[]
+                    ,[
+                        'Authorization' => 'Bearer ' . $token,
+                        'X-VMS-API-Key' => $this->apiKey
+                    ])
+             ->seeJson([
+                        'username' => $volunteer->username,
+                        'first_name' => $volunteer->first_name,
+                        'last_name' => $volunteer->last_name,
+                        'birth_year' => $volunteer->birth_year,
+                        'gender' => $volunteer->gender,
+                        'city' => ['id' => 1, 'name_en' => 'Taipei City'],
+                        'address' => $volunteer->address,
+                        'phone_number' => $volunteer->phone_number,
+                        'email' => $volunteer->email,
+                        'emergency_contact' => $volunteer->emergency_contact,
+                        'emergency_phone' => $volunteer->emergency_phone,
+                        'introduction' => 'Hi, my name is XXX',
+                        'experiences' => ['href' => env('APP_URL') . '/api/users/me/experiences'],
+                        'educations' => ['href' => env('APP_URL') . '/api/users/me/educations'],
+                        'skills' => [
+                            [
+                                'name' => 'Swimming',
+                                'id' => 1,
+                            ],
+                            [
+                                'name' => 'Programming',
+                                'id' => 2,
+                            ]
+                        ],
+                        'equipment' => [
+                            [
+                                'name' => 'Car',
+                                'id' => 1,
+                            ],
+                            [
+                                'name' => 'Scooter',
+                                'id' => 2,
+                            ],
+                            [
+                                'name' => 'Camera',
+                                'id' => 3,
+                            ]   
+                        ],
+                        'projects' => [
+                            'href' => env('APP_URL') . '/api/users/me/projects'
+                        ],
+                        'processes' => [
+                            'participating_number' => 0,
+                            'participated_number' => 0,
+                            'href' => env('APP_URL') . '/api/users/me/processes'
+                        ],
+                        'avatar_url' => env('APP_URL') . '/upload/image/avatar/' . $volunteer->avatar_path,
+                        'is_actived' => $volunteer->is_actived
+                    ])
+             ->assertResponseStatus(200);
+
+    }
+
     protected function factoryModel()
     {
         factory(App\ApiKey::class)->create([
