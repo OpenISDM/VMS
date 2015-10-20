@@ -23,7 +23,7 @@ class VolunteerProfileController extends BaseVolunteerController
      * @return \Illuminate\Http\Response
      */
     public function showMe()
-    {        
+    {
         // Set serialzer for a transformer
         $manager = new \League\Fractal\Manager();
         $manager->setSerializer(new \League\Fractal\Serializer\ArraySerializer());
@@ -51,8 +51,7 @@ class VolunteerProfileController extends BaseVolunteerController
 
             $this->volunteer->city()->associate($city);
             $this->volunteer->save();
-        }
-        else {
+        } else {
             $input = $request->except(['username', 'password', 'is_actived', 'is_locked', 'updated_at', 'created_at']);
         }
 

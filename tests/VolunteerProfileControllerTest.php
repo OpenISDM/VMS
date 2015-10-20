@@ -300,9 +300,7 @@ class VolunteerProfileControllerTest extends TestCase
         $token = JWTAuth::fromUser($volunteer);
 
         $this->json('delete',
-                    '/api/users/me/educations/' . $education->id
-                    ,[]
-                    ,[
+                    '/api/users/me/educations/' . $education->id, [], [
                         'Authorization' => 'Bearer ' . $token,
                         'X-VMS-API-Key' => $this->apiKey
                     ])
@@ -323,9 +321,7 @@ class VolunteerProfileControllerTest extends TestCase
         $token = JWTAuth::fromUser($volunteer);
 
         $this->json('get',
-                    '/api/users/me/educations'
-                    ,[]
-                    ,[
+                    '/api/users/me/educations', [], [
                         'Authorization' => 'Bearer ' . $token,
                         'X-VMS-API-Key' => $this->apiKey
                     ])
@@ -342,7 +338,7 @@ class VolunteerProfileControllerTest extends TestCase
              ->assertResponseStatus(200);
     }
 
-       public function testSuccessfullyStoreExperienceMe()
+    public function testSuccessfullyStoreExperienceMe()
     {
         $this->factoryModel();
 
@@ -456,9 +452,7 @@ class VolunteerProfileControllerTest extends TestCase
         $token = JWTAuth::fromUser($volunteer);
 
         $this->json('delete',
-                    '/api/users/me/experiences/' . $experience->id
-                    ,[]
-                    ,[
+                    '/api/users/me/experiences/' . $experience->id, [], [
                         'Authorization' => 'Bearer ' . $token,
                         'X-VMS-API-Key' => $this->apiKey
                     ])
@@ -479,9 +473,7 @@ class VolunteerProfileControllerTest extends TestCase
         $token = JWTAuth::fromUser($volunteer);
 
         $this->json('get',
-                    '/api/users/me/experiences'
-                    ,[]
-                    ,[
+                    '/api/users/me/experiences', [], [
                         'Authorization' => 'Bearer ' . $token,
                         'X-VMS-API-Key' => $this->apiKey
                     ])
@@ -519,9 +511,7 @@ class VolunteerProfileControllerTest extends TestCase
         $token = JWTAuth::fromUser($volunteer);
 
         $this->json('get',
-                    '/api/users/me'
-                    ,[]
-                    ,[
+                    '/api/users/me', [], [
                         'Authorization' => 'Bearer ' . $token,
                         'X-VMS-API-Key' => $this->apiKey
                     ])
@@ -562,7 +552,7 @@ class VolunteerProfileControllerTest extends TestCase
                             [
                                 'name' => 'Camera',
                                 'id' => 3,
-                            ]   
+                            ]
                         ],
                         'projects' => [
                             'href' => env('APP_URL') . '/api/users/me/projects'
@@ -576,7 +566,6 @@ class VolunteerProfileControllerTest extends TestCase
                         'is_actived' => $volunteer->is_actived
                     ])
              ->assertResponseStatus(200);
-
     }
 
     public function testUpdateMe()
@@ -606,9 +595,7 @@ class VolunteerProfileControllerTest extends TestCase
         ];
 
         $this->json('put',
-                    '/api/users/me'
-                    , $putData
-                    ,[
+                    '/api/users/me', $putData, [
                         'Authorization' => 'Bearer ' . $token,
                         'X-VMS-API-Key' => $this->apiKey
                     ])
@@ -649,7 +636,7 @@ class VolunteerProfileControllerTest extends TestCase
                             [
                                 'name' => 'Camera',
                                 'id' => 3,
-                            ]   
+                            ]
                         ],
                         'projects' => [
                             'href' => env('APP_URL') . '/api/users/me/projects'
@@ -663,7 +650,6 @@ class VolunteerProfileControllerTest extends TestCase
                         'is_actived' => $volunteer->is_actived
                     ])
              ->assertResponseStatus(200);
-
     }
 
     public function testFailedUpdateMe()
@@ -694,9 +680,7 @@ class VolunteerProfileControllerTest extends TestCase
         ];
 
         $this->json('put',
-                    '/api/users/me'
-                    , $putData
-                    ,[
+                    '/api/users/me', $putData, [
                         'Authorization' => 'Bearer ' . $token,
                         'X-VMS-API-Key' => $this->apiKey
                     ])

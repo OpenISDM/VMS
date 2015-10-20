@@ -81,5 +81,3 @@ $factory->define(App\Experience::class, function (Faker\Generator $faker) {
         'end_year' => null
     ];
 });
-
-

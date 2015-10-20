@@ -81,7 +81,7 @@ class MiddlewareTest extends TestCase
         $volunteer = factory(App\Volunteer::class)->create();
         $volunteer->is_actived = true;
 
-         $this->json('delete',
+        $this->json('delete',
             '/api/auth',
             [],
             [
