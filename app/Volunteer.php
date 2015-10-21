@@ -23,6 +23,13 @@ class Volunteer extends Model implements AuthenticatableContract,
                             'introduction'];
     protected $hidden = ['password', 'remember_token'];
 
+    protected $casts = [
+        'id' => 'integer',
+        'is_actived' => 'boolean',
+        'is_locked' => 'boolean'
+    ];
+
+
     public function city()
     {
         return $this->belongsTo('App\City');

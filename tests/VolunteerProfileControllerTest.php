@@ -24,32 +24,6 @@ class VolunteerProfileControllerTest extends TestCase
         //$this->postData = json_decode(file_get_contents(__DIR__ . '/examples/register_post.json'), true);
     }
 
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function DISABLEtestShowMe()
-    {
-        $this->factoryModel();
-        $volunteer = factory(App\Volunteer::class)->create();
-        $volunteer->is_actived = true;
-
-        $token = JWTAuth::fromUser($volunteer);
-
-        $this->json('get',
-                    '/api/users/me',
-                    [],
-                    [
-                        'Authorization' => 'Bearer ' . $token,
-                        'X-VMS-API-Key' => $this->apiKey
-                    ])
-             ->seeJson([
-                'username' => $this->postData['username']
-             ])
-             ->assertResponseStatus(204);
-    }
-
     public function testSuccessfullyUpdateSkillsMe()
     {
         $this->factoryModel();
@@ -326,9 +300,7 @@ class VolunteerProfileControllerTest extends TestCase
         $token = JWTAuth::fromUser($volunteer);
 
         $this->json('delete',
-                    '/api/users/me/educations/' . $education->id
-                    ,[]
-                    ,[
+                    '/api/users/me/educations/' . $education->id, [], [
                         'Authorization' => 'Bearer ' . $token,
                         'X-VMS-API-Key' => $this->apiKey
                     ])
@@ -349,9 +321,7 @@ class VolunteerProfileControllerTest extends TestCase
         $token = JWTAuth::fromUser($volunteer);
 
         $this->json('get',
-                    '/api/users/me/educations'
-                    ,[]
-                    ,[
+                    '/api/users/me/educations', [], [
                         'Authorization' => 'Bearer ' . $token,
                         'X-VMS-API-Key' => $this->apiKey
                     ])
@@ -368,7 +338,7 @@ class VolunteerProfileControllerTest extends TestCase
              ->assertResponseStatus(200);
     }
 
-       public function testSuccessfullyStoreExperienceMe()
+    public function testSuccessfullyStoreExperienceMe()
     {
         $this->factoryModel();
 
@@ -482,9 +452,7 @@ class VolunteerProfileControllerTest extends TestCase
         $token = JWTAuth::fromUser($volunteer);
 
         $this->json('delete',
-                    '/api/users/me/experiences/' . $experience->id
-                    ,[]
-                    ,[
+                    '/api/users/me/experiences/' . $experience->id, [], [
                         'Authorization' => 'Bearer ' . $token,
                         'X-VMS-API-Key' => $this->apiKey
                     ])
@@ -505,9 +473,7 @@ class VolunteerProfileControllerTest extends TestCase
         $token = JWTAuth::fromUser($volunteer);
 
         $this->json('get',
-                    '/api/users/me/experiences'
-                    ,[]
-                    ,[
+                    '/api/users/me/experiences', [], [
                         'Authorization' => 'Bearer ' . $token,
                         'X-VMS-API-Key' => $this->apiKey
                     ])
@@ -521,6 +487,207 @@ class VolunteerProfileControllerTest extends TestCase
                 ])
              ->assertResponseStatus(200);
     }
+
+    public function testShowMe()
+    {
+        $this->factoryModel();
+        $volunteer = factory(App\Volunteer::class)->create();
+        $volunteer->is_actived = true;
+        $volunteer->save();
+
+        $skills = ['Swimming', 'Programming'];
+        $equipment = ['Car', 'Scooter', 'Camera'];
+
+        foreach ($skills as $skill) {
+            $volunteer->skills()
+                 ->firstOrCreate(['name' => $skill]);
+        }
+
+        foreach ($equipment as $eq) {
+            $volunteer->equipment()
+                 ->firstOrCreate(['name' => $eq]);
+        }
+
+        $token = JWTAuth::fromUser($volunteer);
+
+        $this->json('get',
+                    '/api/users/me', [], [
+                        'Authorization' => 'Bearer ' . $token,
+                        'X-VMS-API-Key' => $this->apiKey
+                    ])
+             ->seeJson([
+                        'username' => $volunteer->username,
+                        'first_name' => $volunteer->first_name,
+                        'last_name' => $volunteer->last_name,
+                        'birth_year' => $volunteer->birth_year,
+                        'gender' => $volunteer->gender,
+                        'city' => ['id' => 1, 'name_en' => 'Taipei City'],
+                        'address' => $volunteer->address,
+                        'phone_number' => $volunteer->phone_number,
+                        'email' => $volunteer->email,
+                        'emergency_contact' => $volunteer->emergency_contact,
+                        'emergency_phone' => $volunteer->emergency_phone,
+                        'introduction' => 'Hi, my name is XXX',
+                        'experiences' => ['href' => env('APP_URL') . '/api/users/me/experiences'],
+                        'educations' => ['href' => env('APP_URL') . '/api/users/me/educations'],
+                        'skills' => [
+                            [
+                                'name' => 'Swimming',
+                                'id' => 1,
+                            ],
+                            [
+                                'name' => 'Programming',
+                                'id' => 2,
+                            ]
+                        ],
+                        'equipment' => [
+                            [
+                                'name' => 'Car',
+                                'id' => 1,
+                            ],
+                            [
+                                'name' => 'Scooter',
+                                'id' => 2,
+                            ],
+                            [
+                                'name' => 'Camera',
+                                'id' => 3,
+                            ]
+                        ],
+                        'projects' => [
+                            'href' => env('APP_URL') . '/api/users/me/projects'
+                        ],
+                        'processes' => [
+                            'participating_number' => 0,
+                            'participated_number' => 0,
+                            'href' => env('APP_URL') . '/api/users/me/processes'
+                        ],
+                        'avatar_url' => env('APP_URL') . '/upload/image/avatar/' . $volunteer->avatar_path,
+                        'is_actived' => $volunteer->is_actived
+                    ])
+             ->assertResponseStatus(200);
+    }
+
+    public function testUpdateMe()
+    {
+        $this->factoryModel();
+        $volunteer = factory(App\Volunteer::class)->create();
+        $volunteer->is_actived = true;
+        $volunteer->save();
+
+        $skills = ['Swimming', 'Programming'];
+        $equipment = ['Car', 'Scooter', 'Camera'];
+
+        foreach ($skills as $skill) {
+            $volunteer->skills()
+                 ->firstOrCreate(['name' => $skill]);
+        }
+
+        foreach ($equipment as $eq) {
+            $volunteer->equipment()
+                 ->firstOrCreate(['name' => $eq]);
+        }
+
+        $token = JWTAuth::fromUser($volunteer);
+        $putData = [
+            'city' => ['id' => 2],
+            'emergency_phone' => '0910123456'
+        ];
+
+        $this->json('put',
+                    '/api/users/me', $putData, [
+                        'Authorization' => 'Bearer ' . $token,
+                        'X-VMS-API-Key' => $this->apiKey
+                    ])
+             ->seeJson([
+                        'username' => $volunteer->username,
+                        'first_name' => $volunteer->first_name,
+                        'last_name' => $volunteer->last_name,
+                        'birth_year' => $volunteer->birth_year,
+                        'gender' => $volunteer->gender,
+                        'city' => ['id' => 2, 'name_en' => 'New Taipei City'],
+                        'address' => $volunteer->address,
+                        'phone_number' => $volunteer->phone_number,
+                        'email' => $volunteer->email,
+                        'emergency_contact' => $volunteer->emergency_contact,
+                        'emergency_phone' => '0910123456',
+                        'introduction' => 'Hi, my name is XXX',
+                        'experiences' => ['href' => env('APP_URL') . '/api/users/me/experiences'],
+                        'educations' => ['href' => env('APP_URL') . '/api/users/me/educations'],
+                        'skills' => [
+                            [
+                                'name' => 'Swimming',
+                                'id' => 1,
+                            ],
+                            [
+                                'name' => 'Programming',
+                                'id' => 2,
+                            ]
+                        ],
+                        'equipment' => [
+                            [
+                                'name' => 'Car',
+                                'id' => 1,
+                            ],
+                            [
+                                'name' => 'Scooter',
+                                'id' => 2,
+                            ],
+                            [
+                                'name' => 'Camera',
+                                'id' => 3,
+                            ]
+                        ],
+                        'projects' => [
+                            'href' => env('APP_URL') . '/api/users/me/projects'
+                        ],
+                        'processes' => [
+                            'participating_number' => 0,
+                            'participated_number' => 0,
+                            'href' => env('APP_URL') . '/api/users/me/processes'
+                        ],
+                        'avatar_url' => env('APP_URL') . '/upload/image/avatar/' . $volunteer->avatar_path,
+                        'is_actived' => $volunteer->is_actived
+                    ])
+             ->assertResponseStatus(200);
+    }
+
+    public function testFailedUpdateMe()
+    {
+        $this->factoryModel();
+        $volunteer = factory(App\Volunteer::class)->create();
+        $originalUsername = $volunteer->username;
+        $volunteer->is_actived = true;
+        $volunteer->save();
+
+        $skills = ['Swimming', 'Programming'];
+        $equipment = ['Car', 'Scooter', 'Camera'];
+
+        foreach ($skills as $skill) {
+            $volunteer->skills()
+                 ->firstOrCreate(['name' => $skill]);
+        }
+
+        foreach ($equipment as $eq) {
+            $volunteer->equipment()
+                 ->firstOrCreate(['name' => $eq]);
+        }
+
+        $token = JWTAuth::fromUser($volunteer);
+        $putData = [
+            'username' => 'qoo',
+            'emergency_phone' => '0910123456'
+        ];
+
+        $this->json('put',
+                    '/api/users/me', $putData, [
+                        'Authorization' => 'Bearer ' . $token,
+                        'X-VMS-API-Key' => $this->apiKey
+                    ])
+             ->assertResponseStatus(200);
+        $this->seeInDatabase('volunteers', ['username' => $originalUsername]);
+    }
+
 
     protected function factoryModel()
     {

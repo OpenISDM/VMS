@@ -53,6 +53,8 @@ $factory->define(App\Volunteer::class, function (Faker\Generator $faker) {
         'email' => $faker->email,
         'emergency_contact' => $faker->name(),
         'emergency_phone' => $faker->phoneNumber,
+        'avatar_path' => $faker->username . '001.png',
+        'introduction' => 'Hi, my name is XXX'
     ];
 });
 

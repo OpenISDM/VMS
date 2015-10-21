@@ -26,6 +26,7 @@ class CreateVolunteersTable extends Migration
             $table->string('emergency_contact')->nullable();
             $table->string('emergency_phone', 20)->nullable();
             $table->string('introduction')->nullable();
+            $table->string('avatar_path')->nullable();
             $table->boolean('is_actived')->default(false);
             $table->boolean('is_locked')->default(false);
             $table->rememberToken();
