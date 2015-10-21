@@ -15,6 +15,15 @@ class AvatarStorageService
     public function __construct()
     {
         $this->avatarLocalRootPath = public_path() . '/' . config('vms.avatarRootPath');
+
+        // check if directory exists
+        if (!is_dir($this->avatarLocalRootPath)) {
+            if(is_writable($this->avatarLocalRootPath)) {
+                mkdir($this->avatarFullLocalPath);
+            } else {
+                throw \App\Exceptions\FileSystemException();
+            }
+        }
     }
 
     public function save($avatarBase64File)
