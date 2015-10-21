@@ -562,7 +562,7 @@ class VolunteerProfileControllerTest extends TestCase
                             'participated_number' => 0,
                             'href' => env('APP_URL') . '/api/users/me/processes'
                         ],
-                        'avatar_url' => env('APP_URL') . '/upload/image/avatar/' . $volunteer->avatar_path,
+                        'avatar_url' => env('APP_URL') . '/upload/avatars/' . $volunteer->avatar_path,
                         'is_actived' => $volunteer->is_actived
                     ])
              ->assertResponseStatus(200);
@@ -646,7 +646,7 @@ class VolunteerProfileControllerTest extends TestCase
                             'participated_number' => 0,
                             'href' => env('APP_URL') . '/api/users/me/processes'
                         ],
-                        'avatar_url' => env('APP_URL') . '/upload/image/avatar/' . $volunteer->avatar_path,
+                        'avatar_url' => env('APP_URL') . '/' . config('vms.avatarRootPath') . '/' . $volunteer->avatar_path,
                         'is_actived' => $volunteer->is_actived
                     ])
              ->assertResponseStatus(200);
@@ -688,6 +688,84 @@ class VolunteerProfileControllerTest extends TestCase
         $this->seeInDatabase('volunteers', ['username' => $originalUsername]);
     }
 
+    public function testUploadAvatarMe()
+    {
+        $this->factoryModel();
+        $volunteer = factory(App\Volunteer::class)->create();
+        $originalUsername = $volunteer->username;
+        $volunteer->is_actived = true;
+        $volunteer->save();
+
+        $token = JWTAuth::fromUser($volunteer);
+
+        $avatarPath = __DIR__ . '/examples/default-photo.png';
+
+        $avatarType = pathinfo($avatarPath, PATHINFO_EXTENSION);
+        $putData = [
+            'avatar' => 'data:image/' . $avatarType . ';base64,' . base64_encode(file_get_contents($avatarPath)),
+            'skip_profile' => true
+        ];
+
+        $responseJson = $this->json('post',
+                    '/api/users/me/avatar', $putData, 
+                    [
+                        'Authorization' => 'Bearer ' . $token,
+                        'X-VMS-API-Key' => $this->apiKey
+                    ]);
+        $avartarDir = public_path() . '/' . config('vms.avatarRootPath');
+        $avatarFilesList = scandir($avartarDir);
+        $avatarFileName = '';
+
+        foreach ($avatarFilesList as $avatarFile) {
+            $avatarFileName = $avatarFile;
+        }
+
+        $localPath = public_path() . '/' . config('vms.avatarRootPath') . '/' . $avatarFileName;
+
+        unlink($localPath);
+
+        $responseJson->seeJsonEquals([
+                        'avatar_url' => env('APP_URL') . '/' . config('vms.avatarRootPath') . '/' . $avatarFileName,
+                        'avatar_name' => $avatarFileName
+                    ]
+                )
+             ->assertResponseStatus(200);
+    }
+
+    public function testUploadAvatar()
+    {
+        $this->factoryModel();
+        
+        $avatarPath = __DIR__ . '/examples/default-photo.png';
+        $avatarType = pathinfo($avatarPath, PATHINFO_EXTENSION);
+        $putData = [
+            'avatar' => 'data:image/' . $avatarType . ';base64,' . base64_encode(file_get_contents($avatarPath))
+        ];
+
+        $responseJson = $this->json('post',
+                    '/api/avatar', $putData, 
+                    [
+                        'X-VMS-API-Key' => $this->apiKey
+                    ]);
+        $avartarDir = public_path() . '/' . config('vms.avatarRootPath');
+        $avatarFilesList = scandir($avartarDir);
+        $avatarFileName = '';
+
+        foreach ($avatarFilesList as $avatarFile) {
+            $avatarFileName = $avatarFile;
+        }
+
+        $localPath = public_path() . '/' . config('vms.avatarRootPath') . '/' . $avatarFileName;
+
+        unlink($localPath);
+
+        $responseJson->seeJsonEquals([
+                        'avatar_url' => env('APP_URL') . '/' . config('vms.avatarRootPath') . '/' . $avatarFileName,
+                        'avatar_name' => $avatarFileName
+                    ]
+                )
+             ->assertResponseStatus(200);
+    }
 
     protected function factoryModel()
     {

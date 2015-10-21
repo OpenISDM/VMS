@@ -7,11 +7,13 @@ use Dingo\Api\Routing\Helpers;
 use App\Http\Requests\Api\V1_0\UpdateEquipmentRequest;
 use App\Http\Requests\Api\V1_0\UpdateSkillsRequest;
 use App\Http\Requests\Api\V1_0\UpdateProfileRequest;
+use App\Http\Requests\Api\V1_0\UploadAvatarRequest;
 use App\Exceptions\ExceedingIndexException;
 use App\City;
 use App\Volunteer;
 use App\Utils\ArrayUtil;
 use App\Transformers\VolunteerProfileTransformer;
+use App\Services\AvatarStorageService;
 
 class VolunteerProfileController extends BaseVolunteerController
 {
@@ -24,6 +26,8 @@ class VolunteerProfileController extends BaseVolunteerController
      */
     public function showMe()
     {
+        $this->getVolunteerIdentifier();
+
         // Set serialzer for a transformer
         $manager = new \League\Fractal\Manager();
         $manager->setSerializer(new \League\Fractal\Serializer\ArraySerializer());
@@ -44,6 +48,8 @@ class VolunteerProfileController extends BaseVolunteerController
      */
     public function updateMe(UpdateProfileRequest $request)
     {
+        $this->getVolunteerIdentifier();
+        
         if ($request->has('city') && $request->has('city.id')) {
             $input = $request->except(['city', 'city.id', 'username', 'password', 'is_actived', 'is_locked', 'updated_at', 'created_at']);
             $cityInput = $request->input('city.id');
@@ -71,6 +77,67 @@ class VolunteerProfileController extends BaseVolunteerController
         return response()->json($manager->createData($resource)->toArray(), 200);
     }
 
+    public function uploadAvatarMe(UploadAvatarRequest $request)
+    {
+        $this->getVolunteerIdentifier();
+
+        if ($request->has('avatar')) {
+            $avatarBase64File = $request->input('avatar');
+            $avatarStorageService = new AvatarStorageService();
+
+            $avatarStorageService->save($avatarBase64File);
+
+            $this->volunteer->avatar_path = $avatarStorageService->getFileName();
+            $this->volunteer->save();
+        }
+        
+        $skipProfile = $request->input('skip_profile', false);
+
+        if ($skipProfile) {
+            // Not response full profile
+            $rootUrl = request()->root();
+
+            $responseJson = [
+                'avatar_url' => env('APP_URL', $rootUrl) . '/' . config('vms.avatarRootPath') . '/' . $avatarStorageService->getFileName(),
+                'avatar_name' => $avatarStorageService->getFileName()
+            ];
+
+            return response()->json($responseJson, 200);
+        }
+
+        // Set serialzer for a transformer
+        $manager = new \League\Fractal\Manager();
+        $manager->setSerializer(new \League\Fractal\Serializer\ArraySerializer());
+
+        // transform Experience model into array
+        $resource = new \League\Fractal\Resource\Item(
+            $this->volunteer,
+            new VolunteerProfileTransformer,
+            'volunteer'
+        );
+
+        return response()->json($manager->createData($resource)->toArray(), 200);
+    }
+
+    public function uploadAvatar(UploadAvatarRequest $request)
+    {
+        if ($request->has('avatar')) {
+            $avatarBase64File = $request->input('avatar');
+            $avatarStorageService = new AvatarStorageService();
+
+            $avatarStorageService->save($avatarBase64File);
+        }
+
+        $rootUrl = request()->root();
+
+        $responseJson = [
+            'avatar_url' => env('APP_URL', $rootUrl) . '/' . config('vms.avatarRootPath') . '/' . $avatarStorageService->getFileName(),
+            'avatar_name' => $avatarStorageService->getFileName()
+        ];
+
+        return response()->json($responseJson, 200);
+    }
+
     /**
      * Update volunteer's own skills
      * @param  App\Http\Requests\Api\V1_0\UpdateSkillsRequest $request
@@ -78,6 +145,8 @@ class VolunteerProfileController extends BaseVolunteerController
      */
     public function updateSkillsMe(UpdateSkillsRequest $request)
     {
+        $this->getVolunteerIdentifier();
+
         $skillsList = $request->input('skills');
         $existingSkillIndexes = $request->input('existing_skill_indexes');
 
@@ -109,6 +178,8 @@ class VolunteerProfileController extends BaseVolunteerController
      */
     public function updateEquipmentMe(UpdateEquipmentRequest $request)
     {
+        $this->getVolunteerIdentifier();
+
         $equipmentList = $request->input('equipment');
         $existingEquipmentIndexes = $request->input('existing_equipment_indexes');
 

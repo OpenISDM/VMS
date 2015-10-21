@@ -19,6 +19,8 @@ class VolunteerEducationController extends BaseVolunteerController
      */
     public function show()
     {
+        $this->getVolunteerIdentifier();
+
         $educations = $this->volunteer->educations()->get();
         
         // Set serialzer for a transformer
@@ -41,6 +43,8 @@ class VolunteerEducationController extends BaseVolunteerController
      */
     public function store(EducationRequest $request)
     {
+        $this->getVolunteerIdentifier();
+        
         $education = new Education($request->all());
         $education = $this->volunteer->educations()->save($education);
         $responseJson = [

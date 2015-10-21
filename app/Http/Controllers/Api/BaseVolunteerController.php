@@ -18,7 +18,7 @@ abstract class BaseVolunteerController extends Controller
             JWTAuth::setRequest(\Route::getCurrentRequest());
         }
 
-        $this->getVolunteerIdentifier();
+        //$this->getVolunteerIdentifier();
     }
 
     /**
