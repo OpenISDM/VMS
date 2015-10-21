@@ -10,7 +10,7 @@ class AvatarStorageService
 {
     protected $avatarLocalRootPath = '';
     protected $avatarFileName = '';
-    protected $avatarFullLocalPath = ''; 
+    protected $avatarFullLocalPath = '';
 
     public function __construct()
     {
