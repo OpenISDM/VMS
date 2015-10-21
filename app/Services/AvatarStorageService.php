@@ -18,7 +18,7 @@ class AvatarStorageService
 
         // check if directory exists
         if (!is_dir($this->avatarLocalRootPath)) {
-            if(is_writable($this->avatarLocalRootPath)) {
+            if (is_writable($this->avatarLocalRootPath)) {
                 mkdir($this->avatarFullLocalPath);
             } else {
                 throw \App\Exceptions\FileSystemException();
