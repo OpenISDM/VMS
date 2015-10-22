@@ -63,6 +63,10 @@ $api->version('v1.0', function ($api) {
         $api->delete('auth',
             'App\Http\Controllers\Api\V1_0\VolunteerAuthController@logout');
 
+        // delete volunteer's own account
+        $api->post('/users/me/delete',
+            'App\Http\Controllers\Api\V1_0\VolunteerProfileController@deleteMe');
+
         // Email address validation
         $api->get('email_verification/{email_address}/{verification_code}',
             'App\Http\Controllers\Api\V1_0\VolunteerAuthController@emailVerification');
