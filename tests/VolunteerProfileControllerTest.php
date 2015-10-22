@@ -770,6 +770,64 @@ class VolunteerProfileControllerTest extends TestCase
              ->assertResponseStatus(200);
     }
 
+    public function testDeleteMe()
+    {
+        $this->factoryModel();
+
+        $volunteer = factory(App\Volunteer::class)->create();
+        $volunteer->is_actived = true;
+        $volunteer->avatar_path = 'avatar123.png';
+        $volunteer->save();
+
+        $token = JWTAuth::fromUser($volunteer);
+        $putData = [
+            'username' => $volunteer->username,
+            'password' => 'ThisIsMyPassW0Rd'
+        ];
+
+        $fileSystemMock = Mockery::mock('\Illuminate\Contracts\Filesystem\Filesystem');
+        $fileSystemMock->shouldReceive('delete')
+                       ->once()
+                       ->with('avatar123.png')
+                       ->andReturn(true);
+
+        Storage::shouldReceive('disk')
+                      ->once()
+                      ->with('avatar')
+                      ->andReturn($fileSystemMock);
+
+        $this->json('post',
+                    '/api/users/me/delete', $putData, [
+                        'Authorization' => 'Bearer ' . $token,
+                        'X-VMS-API-Key' => $this->apiKey
+                    ])
+             ->assertResponseStatus(204);
+        $this->missingFromDatabase('volunteers', ['username' => $volunteer->username]);
+    }
+
+    public function testFailedDeleteMe()
+    {
+        $this->factoryModel();
+
+        $volunteer = factory(App\Volunteer::class)->create();
+        $volunteer->is_actived = true;
+        $volunteer->save();
+
+        $token = JWTAuth::fromUser($volunteer);
+        $putData = [
+            'username' => $volunteer->username,
+            'password' => 'MyWrongPassword'
+        ];
+
+        $this->json('post',
+                    '/api/users/me/delete', $putData, [
+                        'Authorization' => 'Bearer ' . $token,
+                        'X-VMS-API-Key' => $this->apiKey
+                    ])
+             ->assertResponseStatus(401);
+        $this->seeInDatabase('volunteers', ['username' => $volunteer->username]);
+    }
+
     protected function factoryModel()
     {
         factory(App\ApiKey::class)->create([
