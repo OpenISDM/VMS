@@ -80,6 +80,11 @@ return [
             'url_type'  => 'publicURL',
         ],
 
+        'avatar' => [
+            'driver' => 'local',
+            'root'   => public_path() . '/' . env('AVATAR_ROOT_PATH', 'upload/avatars'),
+        ],
+
     ],
 
 ];

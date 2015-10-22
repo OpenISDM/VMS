@@ -20,6 +20,8 @@ class VolunteerExperienceController extends BaseVolunteerController
      */
     public function show()
     {
+        $this->getVolunteerIdentifier();
+
         $experiences = $this->volunteer->experiences()->get();
 
         // Set serialzer for a transformer
@@ -31,7 +33,7 @@ class VolunteerExperienceController extends BaseVolunteerController
             $experiences,
             new VolunteerExperienceTransformer,
             'experiences'
-            );
+        );
 
         return response()->json($manager->createData($resource)->toArray(), 200);
     }
@@ -43,6 +45,8 @@ class VolunteerExperienceController extends BaseVolunteerController
      */
     public function store(ExperienceRequest $request)
     {
+        $this->getVolunteerIdentifier();
+        
         $experience = new Experience($request->all());
         $experience = $this->volunteer->experiences()->save($experience);
         $responseJson = [

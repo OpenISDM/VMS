@@ -29,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        app()->bind('stringUtil', function () {
+            return new \App\Utils\StringUtil;
+        });
     }
 }

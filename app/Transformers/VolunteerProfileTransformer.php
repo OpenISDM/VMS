@@ -9,7 +9,7 @@ class VolunteerProfileTransformer extends TransformerAbstract
 {
     public function transform(Volunteer $volunteer)
     {
-        $rootUrl = $rootUrl = request()->root();
+        $rootUrl = request()->root();
         $city = $volunteer->city()->first();
         $skills = $volunteer->skills()->get();
         $equipment = $volunteer->equipment()->get();
@@ -37,7 +37,7 @@ class VolunteerProfileTransformer extends TransformerAbstract
                 'participated_number' => 0,
                 'href' => env('APP_URL', $rootUrl) . '/api/users/me/processes'
             ],
-            'avatar_url' => env('APP_URL', $rootUrl) . '/upload/image/avatar/' . $volunteer->avatar_path,
+            'avatar_url' => env('APP_URL', $rootUrl) . '/' . config('vms.avatarRootPath') . '/' . $volunteer->avatar_path,
             'is_actived' => $volunteer->is_actived,
             'updated_at' => $volunteer->updated_at,
             'created_at' => $volunteer->created_at

@@ -42,6 +42,9 @@ $api->version('v1.0', function ($api) {
         // Register
         $api->post('register', 'App\Http\Controllers\Api\V1_0\VolunteerAuthController@register');
 
+        // Upload new avatar
+        $api->post('avatar', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@uploadAvatar');
+
         // Login
         $api->post('auth', 'App\Http\Controllers\Api\V1_0\VolunteerAuthController@login');
     });
@@ -69,6 +72,9 @@ $api->version('v1.0', function ($api) {
 
         // Update volunteer's profile
         $api->put('/users/me', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@updateMe');
+
+        // Upload volunteer's avatar image
+        $api->post('/users/me/avatar', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@uploadAvatarMe');
         
         // Update skills
         $api->post('/users/me/skills',
