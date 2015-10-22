@@ -3,60 +3,41 @@
 namespace App\Services;
 
 use Intervention\Image\ImageManager;
-use Image;
-use App\Utils\StringUtil;
+use StringUtil;
+use Storage;
 
 class AvatarStorageService
 {
-    protected $avatarLocalRootPath = '';
     protected $avatarFileName = '';
-    protected $avatarFullLocalPath = '';
 
     public function __construct()
     {
-        $this->avatarLocalRootPath = public_path() . '/' . config('vms.avatarRootPath');
-
         // check if directory exists
-        if (!is_dir($this->avatarLocalRootPath)) {
-            if (is_writable($this->avatarLocalRootPath)) {
-                mkdir($this->avatarFullLocalPath);
+        $avatarFullLocalPath = config('filesystems.disks.avatar.root');
+
+        if (!is_dir($avatarFullLocalPath)) {
+            if (is_writable($avatarFullLocalPath)) {
+                mkdir($avatarFullLocalPath);
             } else {
-                throw \App\Exceptions\FileSystemException();
+                throw new \App\Exceptions\FileSystemException();
             }
         }
     }
 
     public function save($avatarBase64File)
     {
-        $defaultWidth = 400;
-        $image = Image::make($avatarBase64File);
-
-        // Check avatar width
-        if ($image->width() > $defaultWidth) {
-            $image->resize($defaultWidth, null);
-        }
+        //$defaultWidth = 400;
 
         // Avatar path
-        // TODO: Need to refactor into helper functions
-        $extension = \App\Utils\MimeUtil::getExtension($image->mime());
-        $this->avatarFileName = StringUtil::generateHashToken() . '.' . $extension;
-        $this->avatarFullLocalPath = $this->avatarLocalRootPath . '/' . $this->avatarFileName;
+        $extension = \App\Utils\MimeUtil::getExtensionByBase64($avatarBase64File);
+        $this->avatarFileName = substr(StringUtil::generateHashToken(), 0, 20) . '.' . $extension;
+        $image = base64_decode($avatarBase64File);
 
-        $image->save($this->avatarFullLocalPath, 100);
-    }
-
-    public function getLocalRootPath()
-    {
-        return $this->avatarLocalPath;
+        return Storage::disk('avatar')->put($this->avatarFileName, $image);
     }
 
     public function getFileName()
     {
         return $this->avatarFileName;
-    }
-
-    public function getFullLocalPath()
-    {
-        return $this->avatarFullLocalPath;
     }
 }

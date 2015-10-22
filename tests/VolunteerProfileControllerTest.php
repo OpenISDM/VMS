@@ -20,8 +20,6 @@ class VolunteerProfileControllerTest extends TestCase
         $this->headerArray = [
             'X-VMS-API-Key' => $this->apiKey
         ];
-
-        //$this->postData = json_decode(file_get_contents(__DIR__ . '/examples/register_post.json'), true);
     }
 
     public function testSuccessfullyUpdateSkillsMe()
@@ -699,30 +697,32 @@ class VolunteerProfileControllerTest extends TestCase
         $token = JWTAuth::fromUser($volunteer);
 
         $avatarPath = __DIR__ . '/examples/default-photo.png';
-
         $avatarType = pathinfo($avatarPath, PATHINFO_EXTENSION);
+        $avatarFileName = 'avatar123.' . $avatarType;
+
+        StringUtil::shouldReceive('generateHashToken')
+                        ->once()
+                        ->andReturn('avatar123');
+        
+        $fileSystemMock = Mockery::mock('\Illuminate\Contracts\Filesystem\Filesystem');
+        $fileSystemMock->shouldReceive('put')->once()->andReturn(true);
+        Storage::shouldReceive('disk')
+                      ->once()
+                      ->with('avatar')
+                      ->andReturn($fileSystemMock);
+
         $putData = [
             'avatar' => 'data:image/' . $avatarType . ';base64,' . base64_encode(file_get_contents($avatarPath)),
             'skip_profile' => true
         ];
 
+
         $responseJson = $this->json('post',
-                    '/api/users/me/avatar', $putData, 
+                    '/api/users/me/avatar', $putData,
                     [
                         'Authorization' => 'Bearer ' . $token,
                         'X-VMS-API-Key' => $this->apiKey
                     ]);
-        $avartarDir = public_path() . '/' . config('vms.avatarRootPath');
-        $avatarFilesList = scandir($avartarDir);
-        $avatarFileName = '';
-
-        foreach ($avatarFilesList as $avatarFile) {
-            $avatarFileName = $avatarFile;
-        }
-
-        $localPath = public_path() . '/' . config('vms.avatarRootPath') . '/' . $avatarFileName;
-
-        unlink($localPath);
 
         $responseJson->seeJsonEquals([
                         'avatar_url' => env('APP_URL') . '/' . config('vms.avatarRootPath') . '/' . $avatarFileName,
@@ -742,22 +742,25 @@ class VolunteerProfileControllerTest extends TestCase
             'avatar' => 'data:image/' . $avatarType . ';base64,' . base64_encode(file_get_contents($avatarPath))
         ];
 
+        $avatarFileName = 'avatar123.' . $avatarType;
+
+        StringUtil::shouldReceive('generateHashToken')
+                        ->once()
+                        ->andReturn('avatar123');
+        
+        $fileSystemMock = Mockery::mock('\Illuminate\Contracts\Filesystem\Filesystem');
+        $fileSystemMock->shouldReceive('put')->once()->andReturn(true);
+
+        Storage::shouldReceive('disk')
+                      ->once()
+                      ->with('avatar')
+                      ->andReturn($fileSystemMock);
+
         $responseJson = $this->json('post',
-                    '/api/avatar', $putData, 
+                    '/api/avatar', $putData,
                     [
                         'X-VMS-API-Key' => $this->apiKey
                     ]);
-        $avartarDir = public_path() . '/' . config('vms.avatarRootPath');
-        $avatarFilesList = scandir($avartarDir);
-        $avatarFileName = '';
-
-        foreach ($avatarFilesList as $avatarFile) {
-            $avatarFileName = $avatarFile;
-        }
-
-        $localPath = public_path() . '/' . config('vms.avatarRootPath') . '/' . $avatarFileName;
-
-        unlink($localPath);
 
         $responseJson->seeJsonEquals([
                         'avatar_url' => env('APP_URL') . '/' . config('vms.avatarRootPath') . '/' . $avatarFileName,

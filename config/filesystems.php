@@ -47,6 +47,7 @@ return [
             'driver' => 'local',
             'root'   => storage_path('app'),
         ],
+
         'ftp' => [
             'driver'   => 'ftp',
             'host'     => 'ftp.example.com',
@@ -77,6 +78,11 @@ return [
             'endpoint'  => 'https://identity.api.rackspacecloud.com/v2.0/',
             'region'    => 'IAD',
             'url_type'  => 'publicURL',
+        ],
+
+        'avatar' => [
+            'driver' => 'local',
+            'root'   => public_path() . '/' . env('AVATAR_ROOT_PATH', 'upload/avatars'),
         ],
 
     ],
