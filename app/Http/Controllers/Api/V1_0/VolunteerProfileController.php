@@ -235,6 +235,13 @@ class VolunteerProfileController extends BaseVolunteerController
             return response()->apiJsonError($message, $error, $statusCode);
         }
 
+        $avatarStorageService = new AvatarStorageService();
+        $avatarFileName = $this->volunteer->avatar_path;
+
+        if(!empty($avatarFileName)) {
+            $avatarStorageService->delete($avatarFileName);
+        }
+
         $this->volunteer->delete();
 
         return response()->json(null, 204);

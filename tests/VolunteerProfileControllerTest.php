@@ -776,6 +776,7 @@ class VolunteerProfileControllerTest extends TestCase
 
         $volunteer = factory(App\Volunteer::class)->create();
         $volunteer->is_actived = true;
+        $volunteer->avatar_path = 'avatar123.png';
         $volunteer->save();
 
         $token = JWTAuth::fromUser($volunteer);
@@ -783,6 +784,17 @@ class VolunteerProfileControllerTest extends TestCase
             'username' => $volunteer->username,
             'password' => 'ThisIsMyPassW0Rd'
         ];
+
+        $fileSystemMock = Mockery::mock('\Illuminate\Contracts\Filesystem\Filesystem');
+        $fileSystemMock->shouldReceive('delete')
+                       ->once()
+                       ->with('avatar123.png')
+                       ->andReturn(true);
+
+        Storage::shouldReceive('disk')
+                      ->once()
+                      ->with('avatar')
+                      ->andReturn($fileSystemMock);
 
         $this->json('post',
                     '/api/users/me/delete', $putData, [

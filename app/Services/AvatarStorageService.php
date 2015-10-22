@@ -36,6 +36,11 @@ class AvatarStorageService
         return Storage::disk('avatar')->put($this->avatarFileName, $image);
     }
 
+    public function delete($fileName)
+    {
+        return Storage::disk('avatar')->delete($fileName);
+    }
+
     protected function getBase64Data($data)
     {
         $divider = strpos($data, ',');
