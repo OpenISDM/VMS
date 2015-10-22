@@ -9,9 +9,9 @@ class TypeErrorException extends AbstractException
 {
     public function __construct()
     {
-        $message = 'Something wrong';
+        $message = 'Incorrect type';
         $error = new Error('incorrect_type');
-        $statusCode = 400;
+        $statusCode = 422;
 
         parent::__construct($statusCode, $error, $message);
     }

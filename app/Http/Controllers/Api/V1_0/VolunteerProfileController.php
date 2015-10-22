@@ -4,14 +4,10 @@ namespace App\Http\Controllers\Api\V1_0;
 
 use App\Http\Controllers\Api\BaseVolunteerController;
 use Dingo\Api\Routing\Helpers;
-use JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Requests\Api\V1_0\UpdateEquipmentRequest;
 use App\Http\Requests\Api\V1_0\UpdateSkillsRequest;
 use App\Http\Requests\Api\V1_0\UpdateProfileRequest;
 use App\Http\Requests\Api\V1_0\UploadAvatarRequest;
-use App\Http\Requests\Api\V1_0\CredentialRequest;
-use App\Http\Responses\Error;
 use App\Exceptions\ExceedingIndexException;
 use App\City;
 use App\Volunteer;
@@ -178,6 +174,7 @@ class VolunteerProfileController extends BaseVolunteerController
 
     /**
      * Update volunteer's own equipment
+     * 
      * @param  App\Http\Requests\Api\V1_0\UpdateEquipmentRequest $request
      * @return Illuminate\Http\JsonResponse
      */
@@ -204,38 +201,6 @@ class VolunteerProfileController extends BaseVolunteerController
             $this->volunteer->equipment()
                  ->firstOrCreate(['name' => $equipment]);
         }
-
-        return response()->json(null, 204);
-    }
-
-    /**
-     * Delete volunteer's own account
-     * @param  CredentialRequest $request
-     * @return JsonResonse
-     */
-    public function deleteMe(CredentialRequest $request)
-    {
-        $this->getVolunteerIdentifier();
-
-        $credentials = $request->only('username', 'password');
-
-        try {
-            if (! $token = JWTAuth::attempt($credentials)) {
-                $message = 'Authentication failed';
-                $error = new Error('incorrect_login_credentials');
-                $statusCode = 401;
-
-                return response()->apiJsonError($message, $error, $statusCode);
-            }
-        } catch (JWTException $e) {
-            $message = 'Server error';
-            $error = new Error('unable_to_authenticate');
-            $statusCode = 500;
-
-            return response()->apiJsonError($message, $error, $statusCode);
-        }
-
-        $this->volunteer->delete();
 
         return response()->json(null, 204);
     }
