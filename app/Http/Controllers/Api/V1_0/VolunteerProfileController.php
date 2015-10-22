@@ -238,7 +238,7 @@ class VolunteerProfileController extends BaseVolunteerController
         $avatarStorageService = new AvatarStorageService();
         $avatarFileName = $this->volunteer->avatar_path;
 
-        if(!empty($avatarFileName)) {
+        if (!empty($avatarFileName)) {
             $avatarStorageService->delete($avatarFileName);
         }
 
