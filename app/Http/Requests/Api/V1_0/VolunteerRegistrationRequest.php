@@ -40,7 +40,8 @@ class VolunteerRegistrationRequest extends JsonRequest
             'email' => 'required|email|unique:volunteers',
             'emergency_contact' => 'required|max:255',
             'emergency_phone' => 'required|string|max:255',
-            'introduction' => 'max:255'
+            'introduction' => 'max:255',
+            'avatar' => 'sometimes|required'
         ];
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Requests\Api\V1_0\VolunteerRegistrationRequest;
 use App\Http\Requests\Api\V1_0\CredentialRequest;
 use App\Http\Requests\Request;
 use App\Http\Controllers\Controller;
+use App\Services\AvatarStorageService;
 use Dingo\Api\Routing\Helpers;
 use App\Volunteer;
 use App\City;
@@ -31,8 +32,6 @@ class VolunteerAuthController extends Controller
      * Register a new volunteer. The request will be validated by
      * App\Http\Middleware\CheckHeaderFieldsMiddleware and
      * App\Http\Requests\Api\V1_0\VolunteerRegistrationRequest classes
-     * 
-     * 
      * @param  VolunteerRegistrationRequest $request
      * @return Response                             
      */
@@ -47,6 +46,15 @@ class VolunteerAuthController extends Controller
         // Create a new volunteer
         $volunteer = Volunteer::firstOrNew($volunteerInput);
         $city = City::find($cityId);
+
+        // Save avatar name
+        if ($request->has('avatar')) {
+            $avatarBase64File = $request->input('avatar');
+            $avatarStorageService = new AvatarStorageService();
+
+            $avatarStorageService->save($avatarBase64File);
+            $volunteer->avatar_path = $avatarStorageService->getFileName();
+        }
         
         $volunteer->password = bcrypt($request->password);
         $volunteer->city()->associate($city);
