@@ -30,6 +30,7 @@ class AvatarStorageService
 
         // Avatar path
         $extension = \App\Utils\MimeUtil::getExtensionByBase64($avatarBase64File);
+
         $this->avatarFileName = substr(StringUtil::generateHashToken(), 0, 20) . '.' . $extension;
         $image = base64_decode($this->getBase64Data($avatarBase64File));
 

@@ -4,7 +4,6 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use App\Utils\StringUtil;
 use App\Volunteer;
 use App\VerificationCode;
 
@@ -60,12 +59,25 @@ class VolunteerAuthControllerTest extends TestCase
     {
         $this->factoryModel();
         $this->expectsJobs(App\Jobs\SendVerificationEmail::class);
+
+        StringUtil::shouldReceive('generateHashToken')
+                        ->once()
+                        ->andReturn('avatar123');
+        
+        $fileSystemMock = Mockery::mock('\Illuminate\Contracts\Filesystem\Filesystem');
+        $fileSystemMock->shouldReceive('put')->once()->andReturn(true);
+
+        Storage::shouldReceive('disk')
+                      ->once()
+                      ->with('avatar')
+                      ->andReturn($fileSystemMock);
+
         $this->json('post', '/api/register', $this->postData, $this->headerArray)
              ->seeJson([
                 'username' => $this->postData['username']
              ])
              ->assertResponseStatus(201);
-        $this->seeInDatabase('volunteers', ['email' => $this->postData['email']]);
+        $this->seeInDatabase('volunteers', ['email' => $this->postData['email'], 'avatar_path' => 'avatar123.jpg']);
     }
 
     public function testSuccessfulEmailVerification()
@@ -73,7 +85,7 @@ class VolunteerAuthControllerTest extends TestCase
         $this->factoryModel();
         
         $volunteer = factory(App\Volunteer::class)->create();
-        $code = StringUtil::generateHashToken();
+        $code = \App\Utils\StringUtil::generateHashToken();
         $verificationCode = factory(App\VerificationCode::class)->make([
             'code' => $code
         ]);
