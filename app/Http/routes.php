@@ -57,7 +57,7 @@ $api->version('v1.0', function ($api) {
     | The request MUST contain API Key and JWT in header.
     |
     */
-    $api->group(['middleware' => ['check.header', 'api.auth']], function ($api) {
+    $api->group(['middleware' => ['check.header', 'api.auth', 'jwt.refresh']], function ($api) {
 
         // logout
         $api->delete('auth',
