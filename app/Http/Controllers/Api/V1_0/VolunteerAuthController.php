@@ -38,7 +38,7 @@ class VolunteerAuthController extends Controller
     public function register(VolunteerRegistrationRequest $request)
     {
         // Get volunteer data, except city object
-        $volunteerInput = $request->except(['city', 'password']);
+        $volunteerInput = $request->except(['city', 'password', 'avatar']);
         // Get city ID
         $cityId = $request->input('city.id');
         $verificationCodeString = StringUtil::generateHashToken();
