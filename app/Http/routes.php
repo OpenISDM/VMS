@@ -57,11 +57,15 @@ $api->version('v1.0', function ($api) {
     | The request MUST contain API Key and JWT in header.
     |
     */
-    $api->group(['middleware' => ['check.header', 'api.auth', 'jwt.refresh']], function ($api) {
+   
+    $api->group(['middleware' => ['check.header', 'api.auth']], function ($api) {
 
         // logout
         $api->delete('auth',
             'App\Http\Controllers\Api\V1_0\VolunteerAuthController@logout');
+    });
+
+    $api->group(['middleware' => ['check.header', 'api.auth', 'jwt.refresh']], function ($api) {
 
         // delete volunteer's own account
         $api->post('/users/me/delete',
