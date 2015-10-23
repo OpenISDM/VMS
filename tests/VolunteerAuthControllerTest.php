@@ -66,7 +66,6 @@ class VolunteerAuthControllerTest extends TestCase
         
         $fileSystemMock = Mockery::mock('\Illuminate\Contracts\Filesystem\Filesystem');
         $fileSystemMock->shouldReceive('put')->once()->andReturn(true);
-
         Storage::shouldReceive('disk')
                       ->once()
                       ->with('avatar')

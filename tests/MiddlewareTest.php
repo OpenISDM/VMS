@@ -51,6 +51,17 @@ class MiddlewareTest extends TestCase
             'X-VMS-API-Key' => $this->apiKey
         ];
 
+        StringUtil::shouldReceive('generateHashToken')
+                        ->once()
+                        ->andReturn('avatar123');
+        
+        $fileSystemMock = Mockery::mock('\Illuminate\Contracts\Filesystem\Filesystem');
+        $fileSystemMock->shouldReceive('put')->once()->andReturn(true);
+        Storage::shouldReceive('disk')
+                      ->once()
+                      ->with('avatar')
+                      ->andReturn($fileSystemMock);
+
         $this->json('post', '/api/register', $this->postData, $headerArray)
              ->assertResponseStatus(201);
     }
