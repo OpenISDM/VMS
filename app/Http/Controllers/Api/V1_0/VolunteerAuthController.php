@@ -204,7 +204,17 @@ class VolunteerAuthController extends Controller
 
         // Check verification code
         $volunteer = Volunteer::find($volunteerAuth->id);
-        $code = $volunteer->verificationCode->code;
+        $volunteerVerificationCode = $volunteer->verificationCode;
+
+        if (empty($volunteerVerificationCode)) {
+            $message = 'Not Found';
+            $error = new Error('volunteer_not_found');
+            $statusCode = 404;
+
+            return response()->apiJsonError($message, $error, $statusCode);
+        }
+
+        $code = $volunteerVerificationCode->code;
 
         if (strcmp($verificationCode, $code) !== 0) {
             $message = 'Unvalidated or expired verification token';
