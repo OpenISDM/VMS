@@ -66,7 +66,7 @@ class VolunteerAuthController extends Controller
         $verificationCode->save();
 
         // Send verification email to an queue
-        $this->dispatch(new SendVerificationEmail($volunteer, $verificationCodeString, 'Verification email'));
+        $this->dispatch(new SendVerificationEmail($volunteer, $verificationCodeString, 'VMS 電子郵件驗證'));
 
         // Generate JWT (JSON Web Token)
         $credentials = $request->only('username', 'password');
