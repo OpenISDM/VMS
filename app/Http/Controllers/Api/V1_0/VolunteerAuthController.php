@@ -183,6 +183,8 @@ class VolunteerAuthController extends Controller
     {
         // Get now time
         $nowDateTime = new \DateTime();
+        $emailAddress = rawurldecode($emailAddress);
+        $verificationCode = rawurldecode($verificationCode);
 
         // Get authenticated volunteer
         if (! $volunteerAuth = JWTAuth::parseToken()->authenticate()) {
