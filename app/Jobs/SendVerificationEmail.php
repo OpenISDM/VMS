@@ -40,7 +40,8 @@ class SendVerificationEmail extends Job implements SelfHandling, ShouldQueue
         if ($this->attempts() < 10) {
             $data = [
                     'name' => $this->volunteer->last_name,
-                    'verificationUrl' => config('vms.emailVerificationUrl') . '?email=' . $this->volunteer->email . '&verification_token=' . $this->verificationCode
+                    'verificationUrl' => config('vms.emailVerificationUrl') . '?email=' . urlencode($this->volunteer->email) .
+                    '&verification_token=' . urlencode($this->verificationCode)
                 ];
             $lastName = $this->volunteer->last_name;
             $emailAddress = $this->volunteer->email;
