@@ -25,6 +25,7 @@ class CountryCityTableSeeder extends Seeder
                 'New Taipei City',
                 'Taoyuan City',
                 'Taichung City',
+                'Kaohsiung City'
                 'Tainan City',
                 'Hsinchu City',
                 'Chiayi City',
@@ -33,7 +34,6 @@ class CountryCityTableSeeder extends Seeder
                 'Miaoli County',
                 'Changhua County',
                 'Nantou County',
-                'Changhua County',
                 'Yunlin County',
                 'Chiayi County',
                 'Pingtung County',
