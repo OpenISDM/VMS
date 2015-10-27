@@ -560,7 +560,7 @@ class VolunteerProfileControllerTest extends TestCase
                             'participated_number' => 0,
                             'href' => env('APP_URL') . '/api/users/me/processes'
                         ],
-                        'avatar_url' => env('APP_URL') . '/upload/avatars/' . $volunteer->avatar_path,
+                        'avatar_url' => config('vms.avatarHost') . '/upload/avatars/' . $volunteer->avatar_path,
                         'is_actived' => $volunteer->is_actived
                     ])
              ->assertResponseStatus(200);
@@ -644,7 +644,7 @@ class VolunteerProfileControllerTest extends TestCase
                             'participated_number' => 0,
                             'href' => env('APP_URL') . '/api/users/me/processes'
                         ],
-                        'avatar_url' => env('APP_URL') . '/' . config('vms.avatarRootPath') . '/' . $volunteer->avatar_path,
+                        'avatar_url' => config('vms.avatarHost') . '/' . config('vms.avatarRootPath') . '/' . $volunteer->avatar_path,
                         'is_actived' => $volunteer->is_actived
                     ])
              ->assertResponseStatus(200);
@@ -725,7 +725,7 @@ class VolunteerProfileControllerTest extends TestCase
                     ]);
 
         $responseJson->seeJsonEquals([
-                        'avatar_url' => env('APP_URL') . '/' . config('vms.avatarRootPath') . '/' . $avatarFileName,
+                        'avatar_url' => config('vms.avatarHost') . '/' . config('vms.avatarRootPath') . '/' . $avatarFileName,
                         'avatar_name' => $avatarFileName
                     ]
                 )
@@ -763,7 +763,7 @@ class VolunteerProfileControllerTest extends TestCase
                     ]);
 
         $responseJson->seeJsonEquals([
-                        'avatar_url' => env('APP_URL') . '/' . config('vms.avatarRootPath') . '/' . $avatarFileName,
+                        'avatar_url' => config('vms.avatarHost') . '/' . config('vms.avatarRootPath') . '/' . $avatarFileName,
                         'avatar_name' => $avatarFileName
                     ]
                 )
