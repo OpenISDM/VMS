@@ -9,17 +9,21 @@ use Storage;
 class AvatarStorageService
 {
     protected $avatarFileName = '';
+    protected $avatarFullLocalPath;
 
     public function __construct()
     {
         // check if directory exists
-        $avatarFullLocalPath = config('filesystems.disks.avatar.root');
+        $this->avatarFullLocalPath = config('filesystems.disks.avatar.root');
+        $driver = config('filesystems.disks.avatar.driver');
 
-        if (!is_dir($avatarFullLocalPath)) {
-            if (is_writable($avatarFullLocalPath)) {
-                mkdir($avatarFullLocalPath);
-            } else {
-                throw new \App\Exceptions\FileSystemException();
+        if ($driver == 'local') {
+            if (!is_dir($this->avatarFullLocalPath)) {
+                if (is_writable($this->avatarFullLocalPath)) {
+                    mkdir($this->avatarFullLocalPath);
+                } else {
+                    throw new \App\Exceptions\FileSystemException();
+                }
             }
         }
     }
@@ -34,7 +38,7 @@ class AvatarStorageService
         $this->avatarFileName = substr(StringUtil::generateHashToken(), 0, 20) . '.' . $extension;
         $image = base64_decode($this->getBase64Data($avatarBase64File));
 
-        return Storage::disk('avatar')->put($this->avatarFileName, $image);
+        return Storage::disk('avatar')->put($this->avatarFullLocalPath . '/' . $this->avatarFileName, $image);
     }
 
     public function delete($fileName)

@@ -102,7 +102,7 @@ class VolunteerProfileController extends BaseVolunteerController
             $rootUrl = request()->root();
 
             $responseJson = [
-                'avatar_url' => env('APP_URL', $rootUrl) . '/' . config('vms.avatarRootPath') . '/' . $avatarStorageService->getFileName(),
+                'avatar_url' => config('vms.avatarHost') . '/' . config('vms.avatarRootPath') . '/' . $avatarStorageService->getFileName(),
                 'avatar_name' => $avatarStorageService->getFileName()
             ];
 
@@ -135,7 +135,7 @@ class VolunteerProfileController extends BaseVolunteerController
         $rootUrl = request()->root();
 
         $responseJson = [
-            'avatar_url' => env('APP_URL', $rootUrl) .
+            'avatar_url' => config('vms.avatarHost') .
                             '/' . config('vms.avatarRootPath') .
                             '/' . $avatarStorageService->getFileName(),
             'avatar_name' => $avatarStorageService->getFileName()

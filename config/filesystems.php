@@ -81,8 +81,12 @@ return [
         ],
 
         'avatar' => [
-            'driver' => 'local',
-            'root'   => public_path() . '/' . env('AVATAR_ROOT_PATH', 'upload/avatars'),
+            'driver' => 's3',
+            'key'    => env('S3_KEY'),
+            'secret' => env('S3_SECRET'),
+            'region' => env('S3_REGION'),
+            'bucket' => env('S3_BUKET'),
+            'root'   => env('AVATAR_ROOT_PATH', 'upload/avatars'),
         ],
 
     ],
