@@ -13,4 +13,5 @@ return [
     'emailVerificationExpired' => env('VMS_EMAIL_VERIFICATION_EXPIRED', 8),
     'avatarRootPath' => env('AVATAR_ROOT_PATH', 'upload/avatars'),
     'avatarHost' => env('AVATAR_HOST'),
+    'emailVerificationUrl' => env('EMAIL_VERIFICATION_URL'),
 ];
