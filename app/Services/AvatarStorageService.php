@@ -38,7 +38,7 @@ class AvatarStorageService
         $this->avatarFileName = substr(StringUtil::generateHashToken(), 0, 20) . '.' . $extension;
         $image = base64_decode($this->getBase64Data($avatarBase64File));
 
-        return Storage::disk('avatar')->put($this->avatarFullLocalPath . '/' . $this->avatarFileName, $image);
+        return Storage::disk('avatar')->put($this->avatarFileName, $image);
     }
 
     public function delete($fileName)
