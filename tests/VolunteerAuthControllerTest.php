@@ -148,6 +148,29 @@ class VolunteerAuthControllerTest extends TestCase
              ->assertResponseStatus(204);
     }
 
+    public function testResendEmailVerification()
+    {
+        $this->factoryModel();
+        $this->expectsJobs(App\Jobs\SendVerificationEmail::class);
+        
+        $volunteer = factory(App\Volunteer::class)->create();
+        $verificationCode = new VerificationCode(['code' => 'ABC123456']);
+        $verificationCode->volunteer()->associate($volunteer);
+        $verificationCode->save();
+
+        $token = JWTAuth::fromUser($volunteer);
+        $this->json('post',
+                    '/api/resend_email_verification',
+                    [],
+                    [
+                        'Authorization' => 'Bearer ' . $token,
+                        'X-VMS-API-Key' => $this->apiKey
+                    ])
+             ->assertResponseStatus(204);
+
+        $this->notSeeInDatabase('verification_codes', ['code' => 'ABC123456']);
+    }
+
     protected function factoryModel()
     {
         factory(App\ApiKey::class)->create([
