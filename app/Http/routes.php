@@ -111,11 +111,11 @@ $api->version('v1.0', function ($api) {
             'App\Http\Controllers\Api\V1_0\VolunteerEducationController@update');
         $api->delete('/users/me/educations/{id}',
             'App\Http\Controllers\Api\V1_0\VolunteerEducationController@destroy');
+        
+    });
 
     $api->group(['middleware' => ['jwt.refresh']], function ($api) {
         // For refresh token
         $api->post('auth/refresh_token', function () { return response(null, 204); });
-    });
-        
     });
 });
