@@ -75,6 +75,9 @@ $api->version('v1.0', function ($api) {
         $api->get('email_verification/{email_address}/{verification_code}',
             'App\Http\Controllers\Api\V1_0\VolunteerAuthController@emailVerification');
 
+        $api->post('/resend_email_verification',
+                   'App\Http\Controllers\Api\V1_0\VolunteerAuthController@resendEmailVerification');
+
         // Retrive volunteer's profile
         $api->get('/users/me', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@showMe');
 

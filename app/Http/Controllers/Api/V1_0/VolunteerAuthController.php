@@ -259,4 +259,28 @@ class VolunteerAuthController extends Controller
 
         return response()->json($responseJson, 200);
     }
+
+    public function resendEmailVerification()
+    {
+        try {
+            if (! $volunteer = JWTAuth::parseToken()->authenticate()) {
+                throw new AuthenticatedUserNotFoundException();
+            }
+        } catch (JWTException $e) {
+            throw new JWTTokenNotFoundException($e);
+        }
+
+        $volunteer->verificationCode()->delete();
+
+        $verificationCodeString = StringUtil::generateHashToken();
+        // Save verification code into the volunteer
+        $verificationCode = new VerificationCode(['code' => $verificationCodeString]);
+        $verificationCode->volunteer()->associate($volunteer);
+        $verificationCode->save();
+
+        // Send verification email to an queue
+        $this->dispatch(new SendVerificationEmail($volunteer, $verificationCodeString, 'VMS 電子郵件驗證'));
+
+        return response(null, 204);
+    }
 }
