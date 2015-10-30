@@ -25,7 +25,7 @@ class CountryCityTableSeeder extends Seeder
                 'New Taipei City',
                 'Taoyuan City',
                 'Taichung City',
-                'Kaohsiung City'
+                'Kaohsiung City',
                 'Tainan City',
                 'Hsinchu City',
                 'Chiayi City',
