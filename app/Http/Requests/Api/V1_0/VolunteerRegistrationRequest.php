@@ -35,7 +35,7 @@ class VolunteerRegistrationRequest extends JsonRequest
             'gender' => 'required|in:male,female,other',
             'city' => 'required',
             'city.id' => 'required|exists:cities,id',
-            'address' => 'required|string|max:255',
+            'address' => 'sometimes|required|string|max:255',
             'phone_number' => 'sometimes|required|max:255',
             'email' => 'required|email|unique:volunteers',
             'emergency_contact' => 'sometimes|required|max:255',
