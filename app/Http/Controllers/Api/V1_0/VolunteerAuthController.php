@@ -16,6 +16,15 @@ use App\Utils\StringUtil;
 use App\Http\Responses\Error;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use App\Repositories\VolunteerRepository;
+use App\Repositories\CityRepository;
+use App\Repositories\VerificationCodeRepository;
+use App\Services\JwtService;
+use App\Services\VerifyEmailService;
+use App\Commands\VerifyEmailCommand;
+use App\Exceptions\UnauthorizedException;
+use App\Exceptions\AuthenticatedUserNotFoundException;
+use App\Exceptions\NotFoundException;
 
 class VolunteerAuthController extends Controller
 {
@@ -38,14 +47,9 @@ class VolunteerAuthController extends Controller
     public function register(VolunteerRegistrationRequest $request)
     {
         // Get volunteer data, except city object
-        $volunteerInput = $request->except(['city', 'password', 'avatar']);
+        $volunteerInput = $request->except(['city', 'avatar']);
         // Get city ID
         $cityId = $request->input('city.id');
-        $verificationCodeString = StringUtil::generateHashToken();
-        
-        // Create a new volunteer
-        $volunteer = Volunteer::firstOrNew($volunteerInput);
-        $city = City::find($cityId);
 
         // Save avatar name
         if ($request->has('avatar')) {
@@ -53,45 +57,32 @@ class VolunteerAuthController extends Controller
             $avatarStorageService = new AvatarStorageService();
 
             $avatarStorageService->save($avatarBase64File);
-            $volunteer->avatar_path = $avatarStorageService->getFileName();
+            $volunteerInput['avatar_path'] = $avatarStorageService->getFileName();
         }
-        
-        $volunteer->password = bcrypt($request->password);
-        $volunteer->city()->associate($city);
-        $volunteer->save();
-        
-        // Save verification code into the volunteer
-        $verificationCode = new VerificationCode(['code' => $verificationCodeString]);
-        $verificationCode->volunteer()->associate($volunteer);
-        $verificationCode->save();
+
+        // Find city entity
+        $cityRepository = new CityRepository();
+        $volunteerInput['city'] = $cityRepository->findById($cityId);
+
+        // Create a volunteer entity
+        $volunteerRepository = new VolunteerRepository();
+        $volunteer = $volunteerRepository->create($volunteerInput);
+                
+        // Save verification code
+        $verificationCodeString = StringUtil::generateHashToken();
+        $verificationCodeRepository = new VerificationCodeRepository();
+        $verificationCodeRepository->create(['code' => $verificationCodeString], $volunteer);
 
         // Send verification email to an queue
         $this->dispatch(new SendVerificationEmail($volunteer, $verificationCodeString, 'VMS 電子郵件驗證'));
-
-        // Generate JWT (JSON Web Token)
+        
         $credentials = $request->only('username', 'password');
 
-        try {
-            // Authenticate
-            if (! $token = JWTAuth::attempt($credentials)) {
-                $message = 'Authentication failed';
-                $error = new Error('incorrect_login_credentials');
-                $statusCode = 401;
-
-                return response()->apiJsonError($message, $error, $statusCode);
-            }
-        } catch (JWTException $e) {
-            $message = 'Server error';
-            $error = new Error('could_not_create_token');
-            $statusCode = 500;
-
-            // TODO: Log error issue
-
-            return response()->apiJsonError($message, $error, $statusCode);
-        }
+        // Generate JWT (JSON Web Token)
+        $jwtSerivce = new JwtService();
+        $token = $jwtSerivce->getToken($credentials);
         
         $rootUrl = request()->root();
-
         $responseJson = [
             'href' => env('APP_URL', $rootUrl) . '/api/users/me',
             'username' => $volunteer->username,
@@ -112,33 +103,19 @@ class VolunteerAuthController extends Controller
     {
         $credentials = $request->only('username', 'password');
 
-        try {
-            if (! $token = JWTAuth::attempt($credentials)) {
-                $message = 'Authentication failed';
-                $error = new Error('incorrect_login_credentials');
-                $statusCode = 401;
-
-                return response()->apiJsonError($message, $error, $statusCode);
-            }
-        } catch (JWTException $e) {
-            $message = 'Server error';
-            $error = new Error('could_not_create_token');
-            $statusCode = 500;
-
-            return response()->apiJsonError($message, $error, $statusCode);
-        }
+        // Generate JWT (JSON Web Token)
+        $jwtSerivce = new JwtService();
+        $token = $jwtSerivce->getToken($credentials);
 
         // Check if the volunteer was locked
         $volunteer = Volunteer::where('username', '=', $credentials['username'])->first();
 
         if ($volunteer->is_locked == 1 || $volunteer->is_locked == true) {
             $token = null;
-
             $message = 'Authentication failed';
             $error = new Error('account_was_locked');
-            $statusCode = 401;
 
-            return response()->apiJsonError($message, $error, $statusCode);
+            throw new UnauthorizedException($message, $error);
         }
 
         $rootUrl = request()->root();
@@ -181,70 +158,12 @@ class VolunteerAuthController extends Controller
      */
     public function emailVerification($emailAddress, $verificationCode)
     {
-        // Get now time
-        $nowDateTime = new \DateTime();
-        $emailAddress = rawurldecode($emailAddress);
-        $verificationCode = rawurldecode($verificationCode);
-
-        // Get authenticated volunteer
-        if (! $volunteerAuth = JWTAuth::parseToken()->authenticate()) {
-            $message = 'Not Found';
-            $error = new Error('volunteer_not_found');
-            $statusCode = 404;
-
-            return response()->apiJsonError($message, $error, $statusCode);
-        }
-
-        // Check email address
-        if (strcmp($emailAddress, $volunteerAuth->email) !== 0) {
-            $message = 'Not Found';
-            $error = new Error('volunteer_not_found');
-            $statusCode = 404;
-
-            return response()->apiJsonError($message, $error, $statusCode);
-        }
-
-        // Check verification code
-        $volunteer = Volunteer::find($volunteerAuth->id);
-        $volunteerVerificationCode = $volunteer->verificationCode;
-
-        if (empty($volunteerVerificationCode)) {
-            $message = 'Not Found';
-            $error = new Error('volunteer_not_found');
-            $statusCode = 404;
-
-            return response()->apiJsonError($message, $error, $statusCode);
-        }
-
-        $code = $volunteerVerificationCode->code;
-
-        if (strcmp($verificationCode, $code) !== 0) {
-            $message = 'Unvalidated or expired verification token';
-            $error = new Error('unvalidated_expired_verification_token');
-            $statusCode = 404;
-
-            return response()->apiJsonError($message, $error, $statusCode);
-        }
+        $service = new VerifyEmailService($emailAddress, $verificationCode);
         
-        /**
-         * Check if verification is expired
-         */
-        // Get expired time in configuration file
-        $expiredTime = config('vms.emailVerificationExpired', 8);   // hours
-        $codeCreatedTime = $volunteer->verificationCode->created_at;
+        $command = new VerifyEmailCommand($service);
+        $command->execute();
 
-        $codeCreatedDateTime = new \DateTime($codeCreatedTime);
-        $interval = new \DateInterval('PT' . $expiredTime . 'H');
-
-        $expiredDateTime = $codeCreatedTime->add($interval);
-
-        if ($nowDateTime > $expiredDateTime) {
-            $message = 'Unvalidated or expired verification token';
-            $error = new Error('unvalidated_expired_verification_token');
-            $statusCode = 404;
-
-            return response()->apiJsonError($message, $error, $statusCode);
-        }
+        $volunteer = $service->getAuthenticatedVolunteer();
 
         // Delete the verification code
         $volunteer->verificationCode->delete();
