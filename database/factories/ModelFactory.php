@@ -39,6 +39,19 @@ $factory->define(App\City::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->defineAs(App\City::class, 'testCity', function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->city
+    ];
+});
+
+
+$factory->defineAs(App\Country::class, 'testCountry', function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->country
+    ];
+});
+
 $factory->define(App\Volunteer::class, function (Faker\Generator $faker) {
     return [
         'username' => $faker->userName,
