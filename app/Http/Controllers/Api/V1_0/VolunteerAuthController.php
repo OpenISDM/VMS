@@ -152,25 +152,17 @@ class VolunteerAuthController extends Controller
     /**
      * Verify volunteer's email address with verification code.
      * It will check the volunteer's verification code and the expired time
-     * 
      * @param  EmailVerificationRequest $reuqest 
      * @return Response
      */
     public function emailVerification($emailAddress, $verificationCode)
     {
-        $service = new VerifyEmailService($emailAddress, $verificationCode);
-        
+        $jwtSerivce = new JwtService();
+        $volunteer = $jwtSerivce->getVolunteer();
+
+        $service = new VerifyEmailService($volunteer, $emailAddress, $verificationCode);
         $command = new VerifyEmailCommand($service);
         $command->execute();
-
-        $volunteer = $service->getAuthenticatedVolunteer();
-
-        // Delete the verification code
-        $volunteer->verificationCode->delete();
-        
-        // Set the volunteer into active
-        $volunteer->is_actived = true;
-        $volunteer->save();
 
         $responseJson = [
             'message' => 'Successful email verification'
@@ -179,15 +171,14 @@ class VolunteerAuthController extends Controller
         return response()->json($responseJson, 200);
     }
 
+    /**
+     * Resend a new email verification
+     * @return [type] [description]
+     */
     public function resendEmailVerification()
     {
-        try {
-            if (! $volunteer = JWTAuth::parseToken()->authenticate()) {
-                throw new AuthenticatedUserNotFoundException();
-            }
-        } catch (JWTException $e) {
-            throw new JWTTokenNotFoundException($e);
-        }
+        $jwtSerivce = new JwtService();
+        $volunteer = $jwtSerivce->getVolunteer();
 
         $volunteer->verificationCode()->delete();
 

@@ -4,6 +4,9 @@ namespace App\Commands;
 
 use App\Services\VerifyEmailService;
 
+/**
+ * Use \App\Services\VerifyEmailService to check the parameters and so on
+ */
 class VerifyEmailCommand implements CommandInterface
 {
     protected $service;
@@ -17,9 +20,9 @@ class VerifyEmailCommand implements CommandInterface
 
     public function execute()
     {
-        $this->service->getAuthenticatedVolunteer();
         $this->service->emailCompare();
         $this->service->verificationCodeCompare();
         $this->service->isExpeired($this->nowDateTime);
+        $this->service->activeVolunteer();
     }
 }

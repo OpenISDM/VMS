@@ -16,4 +16,17 @@ class JwtService
 
         return $token;
     }
+
+    public function getVolunteer()
+    {
+        try {
+            if (! $volunteer = JWTAuth::parseToken()->authenticate()) {
+                throw new AuthenticatedUserNotFoundException();
+            }
+        } catch (JWTException $e) {
+            throw new JWTTokenNotFoundException($e);
+        }
+
+        return $volunteer;
+    }
 }

@@ -4,21 +4,40 @@ namespace App\Services;
 
 use JWTAuth;
 use App\Exceptions\NotFoundException;
+use App\Exceptions\AuthenticatedUserNotFoundException;
 
+/**
+ * The class is responsible for verifying email address.
+ */
 class VerifyEmailService
 {
+    // Authenticated volunteer
     protected $volunteer;
 
+    // Inputed email address
     protected $realEmailAddress;
 
+    // Inputed verification code
     protected $realVerificationCode;
 
-    public function __construct($emailAddress, $verificationCode)
+    /**
+     * Set inouted email and verification code
+     * @param String $emailAddress     
+     * @param String $verificationCode
+     */
+    public function __construct($volunteer, $emailAddress, $verificationCode)
     {
+        $this->volunteer = $volunteer;
         $this->realEmailAddress = rawurldecode($emailAddress);
         $this->realVerificationCode = rawurldecode($verificationCode);
     }
 
+    /**
+     * Check if the verification code is expired.
+     * If the verification token is expired, it will throw an exception
+     * @param  \DateTime  $nowDateTime
+     * @return boolean
+     */
     public function isExpeired($nowDateTime)
     {
         $createdTime = $this->volunteer->verificationCode->created_at;
@@ -38,6 +57,12 @@ class VerifyEmailService
         return false;
     }
 
+    /**
+     * Compare the verification code.
+     * If the verification code is not equal with real one, it
+     * will throw an exception
+     * @return boolean
+     */
     public function verificationCodeCompare()
     {
         $real = $this->realVerificationCode;
@@ -62,6 +87,11 @@ class VerifyEmailService
         return true;
     }
 
+    /**
+     * Compare the email address.
+     * If the email is not correct , it will throw an exception
+     * @return boolean [description]
+     */
     public function emailCompare()
     {
         $real = $this->realEmailAddress;
@@ -74,13 +104,13 @@ class VerifyEmailService
         return true;
     }
 
-    public function getAuthenticatedVolunteer()
+    /**
+     * Activeate a volunteer and delete existing verification code
+     */
+    public function activeVolunteer()
     {
-        // Get authenticated volunteer
-        if (! $this->volunteer = JWTAuth::parseToken()->authenticate()) {
-            throw new AuthenticatedUserNotFoundException();
-        }
-
-        return $this->volunteer;
+        $this->volunteer->verificationCode->delete();
+        $this->volunteer->is_actived = true;
+        $this->volunteer->save();
     }
 }

@@ -7,6 +7,7 @@ use App\Exceptions\AbstractException;
 use App\Http\Responses\Responses;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class ApiErrorHandlerServiceProvider extends ServiceProvider
 {
@@ -38,6 +39,16 @@ class ApiErrorHandlerServiceProvider extends ServiceProvider
             $message = 'Token invalid';
             $error = new Error('token_invalid');
             $statusCode = $e->getStatusCode();
+
+            return response()->apiJsonError($message, $error, $statusCode);
+        });
+
+        app('Dingo\Api\Exception\Handler')->register(function (JWTException $e) {
+            $message = 'Server error';
+            $error = new Error('could_not_create_token');
+            $statusCode = 500;
+
+            // TODO: Log error issue
 
             return response()->apiJsonError($message, $error, $statusCode);
         });
