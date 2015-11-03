@@ -7,8 +7,8 @@ use App\Exceptions\UnauthorizedException;
 
 class JwtService
 {
-    public function getToken($credentials) 
-    {    
+    public function getToken($credentials)
+    {
         // Authenticate
         if (!$token = JWTAuth::attempt($credentials)) {
             throw new UnauthorizedException('Unauthorized', 'unauthorized');

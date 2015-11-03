@@ -13,7 +13,7 @@ class VolunteerRepository
      * @param  array $data
      * @return App\Volunteer
      */
-    public function create(array $data) 
+    public function create(array $data)
     {
         if (array_key_exists('city', $data)) {
             $city = $data['city'];
