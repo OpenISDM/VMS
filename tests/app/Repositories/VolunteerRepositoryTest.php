@@ -30,21 +30,21 @@ class VolunteerRepositoryTest extends TestCase
             'emergency_contact' => 'Qoo',
             'emergency_phone' => '0988123456',
             'avatar_path' => 'abc.png'
-        ); 
+        );
 
         $volunteerRepository = new VolunteerRepository();
         $volunteer = $volunteerRepository->create($data);
 
         $this->assertEquals(1, $volunteer->city_id);
         $this->assertEquals('abc.png', $volunteer->avatar_path);
-        $this->seeInDatabase('volunteers', ['username' => 'user1','avatar_path' => 'abc.png']);
+        $this->seeInDatabase('volunteers', ['username' => 'user1', 'avatar_path' => 'abc.png']);
     }
 
     protected function factoryCities()
     {
         factory(App\City::class, 'testCity', 3)
             ->make()
-            ->each(function($u) {
+            ->each(function ($u) {
                 $u->country()->associate(factory(App\Country::class)->create());
                 $u->save();
             });

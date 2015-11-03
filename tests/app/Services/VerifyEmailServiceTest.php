@@ -10,13 +10,13 @@ class VerifyEmailServiceTest extends TestCase
 
     protected $volunteer;
     
-    public function setUp() 
+    public function setUp()
     {
         parent::setUp();
         $this->volunteer = $this->factoryVolunteer();
     }
     
-    public function testEmailCompareSuccess() 
+    public function testEmailCompareSuccess()
     {
         $service = new VerifyEmailService($this->volunteer, 'abc@abc.com', 'MY_VERIFICATION_CODE');
 
@@ -101,19 +101,19 @@ class VerifyEmailServiceTest extends TestCase
     {
         return factory(App\Volunteer::class)
             ->make([
-                'username' => 'user01', 
-                'password' => bcrypt('PASSW0RD01'), 
-                'first_name' => 'Huang', 
-                'last_name' => 'AMing', 
-                'birth_year' => 1991, 
-                'gender' => 'male', 
-                'city_id' => 1, 
-                'address' => 'MY Address', 
-                'phone_number' => '0910123456', 
-                'email' => 'abc@abc.com', 
-                'emergency_contact' => 'Huang PAPA', 
-                'emergency_phone' => '0988123456', 
-                'avatar_path' => 'avatar.png', 
+                'username' => 'user01',
+                'password' => bcrypt('PASSW0RD01'),
+                'first_name' => 'Huang',
+                'last_name' => 'AMing',
+                'birth_year' => 1991,
+                'gender' => 'male',
+                'city_id' => 1,
+                'address' => 'MY Address',
+                'phone_number' => '0910123456',
+                'email' => 'abc@abc.com',
+                'emergency_contact' => 'Huang PAPA',
+                'emergency_phone' => '0988123456',
+                'avatar_path' => 'avatar.png',
                 'introduction' => 'Hi, my name is XXX'
         ]);
     }
