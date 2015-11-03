@@ -184,9 +184,8 @@ class VolunteerAuthController extends Controller
 
         $verificationCodeString = StringUtil::generateHashToken();
         // Save verification code into the volunteer
-        $verificationCode = new VerificationCode(['code' => $verificationCodeString]);
-        $verificationCode->volunteer()->associate($volunteer);
-        $verificationCode->save();
+        $verificationCodeRepository = new VerificationCodeRepository();
+        $verificationCodeRepository->create(['code' => $verificationCodeString], $volunteer);
 
         // Send verification email to an queue
         $this->dispatch(new SendVerificationEmail($volunteer, $verificationCodeString, 'VMS 電子郵件驗證'));
