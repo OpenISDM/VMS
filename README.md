@@ -14,3 +14,6 @@ After pushing to VMS repository, the StyleCI is triggered to check the repositor
 ### HTML & CSS
 
 HTML & CSS in VMS follows the [Code Guide](http://codeguide.co/)   
+
+## Contribution
+Please see [Contribution](https://github.com/OpenISDM/VMS/wiki/Contribution) link on wiki
