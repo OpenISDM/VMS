@@ -11,18 +11,27 @@ use App\Exceptions\AccessDeniedException;
 use App\Experience;
 use App\Transformers\VolunteerExperienceTransformer;
 use App\Http\Controllers\Api\BaseVolunteerController;
+use App\Services\JwtService;
 
 class VolunteerExperienceController extends BaseVolunteerController
 {
+    protected $jwtService;
+
+    public function __construct(JwtService $jwtService)
+    {
+        parent::__construct();
+
+        $this->jwtService = $jwtService;
+    }
+
     /**
      * Show volunteer's own experiences
      * @return Illuminate\Http\JsonResponse
      */
     public function show()
     {
-        $this->getVolunteerIdentifier();
-
-        $experiences = $this->volunteer->experiences()->get();
+        $volunteer = $this->jwtService->getVolunteer();
+        $experiences = $volunteer->experiences()->get();
 
         // Set serialzer for a transformer
         $manager = new \League\Fractal\Manager();
@@ -45,10 +54,10 @@ class VolunteerExperienceController extends BaseVolunteerController
      */
     public function store(ExperienceRequest $request)
     {
-        $this->getVolunteerIdentifier();
+        $volunteer = $this->jwtService->getVolunteer();
         
         $experience = new Experience($request->all());
-        $experience = $this->volunteer->experiences()->save($experience);
+        $experience = $volunteer->experiences()->save($experience);
         $responseJson = [
             'experience' => [
                 'id' => $experience->id

@@ -12,35 +12,43 @@ use App\Http\Requests\Api\V1_0\UpdateProfileRequest;
 use App\Http\Requests\Api\V1_0\UploadAvatarRequest;
 use App\Http\Requests\Api\V1_0\CredentialRequest;
 use App\Http\Responses\Error;
+use App\Http\Responses\Avatar;
 use App\Exceptions\ExceedingIndexException;
 use App\City;
 use App\Volunteer;
 use App\Utils\ArrayUtil;
 use App\Transformers\VolunteerProfileTransformer;
+use App\Transformers\VolunteerAvatarTransformer;
 use App\Services\AvatarStorageService;
+use App\Services\JwtService;
+use App\Services\TransformerService;
+use App\Repositories\CityRepository;
+use App\Repositories\VolunteerRepository;
 
 class VolunteerProfileController extends BaseVolunteerController
 {
     use Helpers;
 
+    protected $jwtService;
+
+    public function __construct(JwtService $jwtService)
+    {
+        parent::__construct();
+
+        $this->jwtService = $jwtService;
+    }
+
     /**
      * Display the specified resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function showMe()
     {
-        $this->getVolunteerIdentifier();
-
-        // Set serialzer for a transformer
-        $manager = new \League\Fractal\Manager();
-        $manager->setSerializer(new \League\Fractal\Serializer\ArraySerializer());
-
-        // transform Experience model into array
-        $resource = new \League\Fractal\Resource\Item(
-            $this->volunteer,
-            new VolunteerProfileTransformer,
-            'volunteer');
+        $volunteer = $this->jwtService->getVolunteer();
+        
+        $manager = TransformerService::getManager();
+        $resource = TransformerService::getResourceItem($volunteer,
+            'App\Transformers\VolunteerProfileTransformer', 'volunteer');
 
         return response()->json($manager->createData($resource)->toArray(), 200);
     }
@@ -48,128 +56,124 @@ class VolunteerProfileController extends BaseVolunteerController
     /**
      * Update volunteer's own profile
      * @param  App\Http\Requests\Api\V1_0\UpdateProfileRequest $request
-     * @return Illuminate\Http\JsonResponse
+     * @param  App\Repositories\CityRepository                 $cityRepository
+     * @param  App\Repositories\volunteerRepository            $volunteerRepository
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function updateMe(UpdateProfileRequest $request)
+    public function updateMe(UpdateProfileRequest $request, CityRepository $cityRepository,
+        VolunteerRepository $volunteerRepository)
     {
-        $this->getVolunteerIdentifier();
+        $volunteer = $this->jwtService->getVolunteer();
         
         if ($request->has('city') && $request->has('city.id')) {
-            $input = $request->except(['city', 'city.id', 'username', 'password', 'is_actived', 'is_locked', 'updated_at', 'created_at']);
-            $cityInput = $request->input('city.id');
-            $city = City::find($cityInput);
+            // Filter some unnecessary fields
+            $input = $request->except(['city', 'city.id', 'username', 'password',
+                'is_actived', 'is_locked', 'updated_at', 'created_at']);
 
-            $this->volunteer->city()->associate($city);
-            $this->volunteer->save();
+            $cityInput = $request->input('city.id');
+            $city = $cityRepository->findById($cityInput);
+
+            // Update volunteer city
+            $volunteerRepository->updateCity($city, $volunteer);
         } else {
+            // Filter some unnecessary fields
             $input = $request->except(['username', 'password', 'is_actived', 'is_locked', 'updated_at', 'created_at']);
         }
 
-        $this->volunteer->update($input);
-
-        // retrive volunteer's profile
-        // Set serialzer for a transformer
-        $manager = new \League\Fractal\Manager();
-        $manager->setSerializer(new \League\Fractal\Serializer\ArraySerializer());
-
-        // transform Experience model into array
-        $resource = new \League\Fractal\Resource\Item(
-            $this->volunteer,
-            new VolunteerProfileTransformer,
-            'volunteer');
+        // Update volunteer profile
+        $volunteer->update($input);
+        
+        $manager = TransformerService::getManager();
+        $resource = TransformerService::getResourceItem($volunteer,
+            'App\Transformers\VolunteerProfileTransformer', 'volunteer');
 
         return response()->json($manager->createData($resource)->toArray(), 200);
     }
 
-    public function uploadAvatarMe(UploadAvatarRequest $request)
+    /**
+     * Upload volunteer's avatar
+     * @param  UploadAvatarRequest  $request
+     * @param  AvatarStorageService $avatarStorageService
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function uploadAvatarMe(UploadAvatarRequest $request, AvatarStorageService $avatarStorageService, Avatar $avatar)
     {
-        $this->getVolunteerIdentifier();
+        $volunteer = $this->jwtService->getVolunteer();
 
         if ($request->has('avatar')) {
+            // Get avatar data in base64 format
             $avatarBase64File = $request->input('avatar');
-            $avatarStorageService = new AvatarStorageService();
-
+            // Save the avatar data
             $avatarStorageService->save($avatarBase64File);
-
-            $this->volunteer->avatar_path = $avatarStorageService->getFileName();
-            $this->volunteer->save();
+            $volunteer->avatar_path = $avatarStorageService->getFileName();
+            $volunteer->save();
         }
+
+        $manager = TransformerService::getManager();
         
         $skipProfile = $request->input('skip_profile', false);
 
         if ($skipProfile) {
             // Not response full profile
-            $rootUrl = request()->root();
+            $avatar->avatar_name = $avatarStorageService->getFileName();
+            $resource = TransformerService::getResourceItem($avatar, 'App\Transformers\VolunteerAvatarTransformer', 'avatar');
 
-            $responseJson = [
-                'avatar_url' => config('vms.avatarHost') . '/' . config('vms.avatarRootPath') . '/' . $avatarStorageService->getFileName(),
-                'avatar_name' => $avatarStorageService->getFileName()
-            ];
-
-            return response()->json($responseJson, 200);
+            return response()->json($manager->createData($resource)->toArray(), 200);
         }
 
-        // Set serialzer for a transformer
-        $manager = new \League\Fractal\Manager();
-        $manager->setSerializer(new \League\Fractal\Serializer\ArraySerializer());
-
-        // transform Experience model into array
-        $resource = new \League\Fractal\Resource\Item(
-            $this->volunteer,
-            new VolunteerProfileTransformer,
-            'volunteer'
-        );
+        $resource = TransformerService::getResourceItem($avatar,
+            'App\Transformers\VolunteerProfileTransformer', 'volunteer');
 
         return response()->json($manager->createData($resource)->toArray(), 200);
     }
 
-    public function uploadAvatar(UploadAvatarRequest $request)
+    /**
+     * Upload avatar without authorization
+     * @param  App\Http\Requests\Api\V1_0\UploadAvatarRequest  $request
+     * @param  App\Services\AvatarStorageService               $avatarStorageService
+     * @return \Illuminate\Http\JsonResponse                       
+     */
+    public function uploadAvatar(UploadAvatarRequest $request, AvatarStorageService $avatarStorageService, Avatar $avatar)
     {
         if ($request->has('avatar')) {
             $avatarBase64File = $request->input('avatar');
-            $avatarStorageService = new AvatarStorageService();
 
             $avatarStorageService->save($avatarBase64File);
+            $avatar->avatar_name = $avatarStorageService->getFileName();
         }
+        $resource = TransformerService::getResourceItem($avatar, 'App\Transformers\VolunteerAvatarTransformer', 'avatar');
+        $manager = TransformerService::getManager();
 
-        $rootUrl = request()->root();
-
-        $responseJson = [
-            'avatar_url' => config('vms.avatarHost') .
-                            '/' . config('vms.avatarRootPath') .
-                            '/' . $avatarStorageService->getFileName(),
-            'avatar_name' => $avatarStorageService->getFileName()
-        ];
-
-        return response()->json($responseJson, 200);
+        return response()->json($manager->createData($resource)->toArray(), 200);
     }
 
     /**
      * Update volunteer's own skills
      * @param  App\Http\Requests\Api\V1_0\UpdateSkillsRequest $request
-     * @return Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function updateSkillsMe(UpdateSkillsRequest $request)
     {
-        $this->getVolunteerIdentifier();
+        $volunteer = $this->jwtService->getVolunteer();
 
         $skillsList = $request->input('skills');
         $existingSkillIndexes = $request->input('existing_skill_indexes');
 
+        // Check if the skill array is empty
         if (count($existingSkillIndexes) != 0) {
             $maxIndex = max($existingSkillIndexes);
-            
+
             if (ArrayUtil::isIndexExceed($skillsList, $maxIndex)) {
                 // Index exceeds $skillsList size
                 throw new ExceedingIndexException();
             }
         }
+        // Get nonexistent skills
+        $nonexistentSkills = ArrayUtil::getNonexistent($skillsList, $existingSkillIndexes);
 
-        $unexistingSkills = ArrayUtil::getUnexisting($skillsList, $existingSkillIndexes);
-
-        // Update volunteer's skills
-        foreach ($unexistingSkills as $skill) {
-            $this->volunteer->skills()
+        // Update volunteer's nonexistant skills
+        foreach ($nonexistentSkills as $skill) {
+            $volunteer->skills()
                  ->firstOrCreate(['name' => $skill]);
         }
 
@@ -179,11 +183,11 @@ class VolunteerProfileController extends BaseVolunteerController
     /**
      * Update volunteer's own equipment
      * @param  App\Http\Requests\Api\V1_0\UpdateEquipmentRequest $request
-     * @return Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function updateEquipmentMe(UpdateEquipmentRequest $request)
     {
-        $this->getVolunteerIdentifier();
+        $volunteer = $this->jwtService->getVolunteer();
 
         $equipmentList = $request->input('equipment');
         $existingEquipmentIndexes = $request->input('existing_equipment_indexes');
@@ -197,11 +201,12 @@ class VolunteerProfileController extends BaseVolunteerController
             }
         }
 
-        $unexistingEquipment = ArrayUtil::getUnexisting($equipmentList, $existingEquipmentIndexes);
+        // Get nonexistent equipment
+        $nonexistentEquipment = ArrayUtil::getNonexistent($equipmentList, $existingEquipmentIndexes);
 
         // Update volunteer's skills
-        foreach ($unexistingEquipment as $equipment) {
-            $this->volunteer->equipment()
+        foreach ($nonexistentEquipment as $equipment) {
+            $volunteer->equipment()
                  ->firstOrCreate(['name' => $equipment]);
         }
 
@@ -210,39 +215,30 @@ class VolunteerProfileController extends BaseVolunteerController
 
     /**
      * Delete volunteer's own account
-     * @param  CredentialRequest $request
-     * @return JsonResonse
+     * @param  App\Http\Requests\Api\V1_0\CredentialRequest    $request
+     * @param  App\Services\AvatarStorageService               $avatarStorageService
+     * @param  App\Services\JwtService                         $jwtService
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function deleteMe(CredentialRequest $request)
+    public function deleteMe(CredentialRequest $request, AvatarStorageService $avatarStorageService,
+        JwtService $jwtService)
     {
-        $this->getVolunteerIdentifier();
-
+        $volunteer = $this->jwtService->getVolunteer();
         $credentials = $request->only('username', 'password');
 
-        try {
-            if (! $token = JWTAuth::attempt($credentials)) {
-                $message = 'Authentication failed';
-                $error = new Error('incorrect_login_credentials');
-                $statusCode = 401;
+        // Check the credentials
+        // If it fails, it will throw an exception
+        $jwtService->getToken($credentials);
 
-                return response()->apiJsonError($message, $error, $statusCode);
-            }
-        } catch (JWTException $e) {
-            $message = 'Server error';
-            $error = new Error('unable_to_authenticate');
-            $statusCode = 500;
+        $avatarFileName = $volunteer->avatar_path;
 
-            return response()->apiJsonError($message, $error, $statusCode);
-        }
-
-        $avatarStorageService = new AvatarStorageService();
-        $avatarFileName = $this->volunteer->avatar_path;
-
+        // Check if the volunteer has avatar
         if (!empty($avatarFileName)) {
+            // Delete the volunteer's avatar
             $avatarStorageService->delete($avatarFileName);
         }
 
-        $this->volunteer->delete();
+        $volunteer->delete();
 
         return response()->json(null, 204);
     }

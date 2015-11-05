@@ -37,4 +37,15 @@ class VolunteerRepository
 
         return $volunteer;
     }
+
+    public function updateCity($city, $volunteer)
+    {
+        if (is_int($volunteer)) {
+            $volunteerId = $volunteer;
+            $volunteer = Volunteer::find($volunteerId);
+        }
+
+        $volunteer->city()->associate($city);
+        $volunteer->save();
+    }
 }

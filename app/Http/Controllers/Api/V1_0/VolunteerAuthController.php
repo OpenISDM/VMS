@@ -44,7 +44,9 @@ class VolunteerAuthController extends Controller
      * @param  VolunteerRegistrationRequest $request
      * @return Response                             
      */
-    public function register(VolunteerRegistrationRequest $request)
+    public function register(VolunteerRegistrationRequest $request, VolunteerRepository $volunteerRepository,
+        VerificationCodeRepository $verificationCodeRepository, CityRepository $cityRepository,
+        JwtService $jwtSerivce, AvatarStorageService $avatarStorageService)
     {
         // Get volunteer data, except city object
         $volunteerInput = $request->except(['city', 'avatar']);
@@ -54,23 +56,19 @@ class VolunteerAuthController extends Controller
         // Save avatar name
         if ($request->has('avatar')) {
             $avatarBase64File = $request->input('avatar');
-            $avatarStorageService = new AvatarStorageService();
 
             $avatarStorageService->save($avatarBase64File);
             $volunteerInput['avatar_path'] = $avatarStorageService->getFileName();
         }
 
         // Find city entity
-        $cityRepository = new CityRepository();
         $volunteerInput['city'] = $cityRepository->findById($cityId);
 
         // Create a volunteer entity
-        $volunteerRepository = new VolunteerRepository();
         $volunteer = $volunteerRepository->create($volunteerInput);
                 
         // Save verification code
         $verificationCodeString = StringUtil::generateHashToken();
-        $verificationCodeRepository = new VerificationCodeRepository();
         $verificationCodeRepository->create(['code' => $verificationCodeString], $volunteer);
 
         // Send verification email to an queue
@@ -79,7 +77,6 @@ class VolunteerAuthController extends Controller
         $credentials = $request->only('username', 'password');
 
         // Generate JWT (JSON Web Token)
-        $jwtSerivce = new JwtService();
         $token = $jwtSerivce->getToken($credentials);
         
         $rootUrl = request()->root();
@@ -99,12 +96,11 @@ class VolunteerAuthController extends Controller
      * @param  CredentialRequest $request
      * @return Response
      */
-    public function login(CredentialRequest $request)
+    public function login(CredentialRequest $request, JwtService $jwtSerivce)
     {
         $credentials = $request->only('username', 'password');
 
         // Generate JWT (JSON Web Token)
-        $jwtSerivce = new JwtService();
         $token = $jwtSerivce->getToken($credentials);
 
         // Check if the volunteer was locked
@@ -155,9 +151,8 @@ class VolunteerAuthController extends Controller
      * @param  EmailVerificationRequest $reuqest 
      * @return Response
      */
-    public function emailVerification($emailAddress, $verificationCode)
+    public function emailVerification($emailAddress, $verificationCode, JwtService $jwtSerivce)
     {
-        $jwtSerivce = new JwtService();
         $volunteer = $jwtSerivce->getVolunteer();
 
         $service = new VerifyEmailService($volunteer, $emailAddress, $verificationCode);
@@ -175,18 +170,15 @@ class VolunteerAuthController extends Controller
      * Resend a new email verification
      * @return [type] [description]
      */
-    public function resendEmailVerification()
+    public function resendEmailVerification(VerificationCodeRepository $verificationCodeRepository, JwtService $jwtSerivce)
     {
-        $jwtSerivce = new JwtService();
         $volunteer = $jwtSerivce->getVolunteer();
 
         $volunteer->verificationCode()->delete();
 
         $verificationCodeString = StringUtil::generateHashToken();
         // Save verification code into the volunteer
-        $verificationCode = new VerificationCode(['code' => $verificationCodeString]);
-        $verificationCode->volunteer()->associate($volunteer);
-        $verificationCode->save();
+        $verificationCodeRepository->create(['code' => $verificationCodeString], $volunteer);
 
         // Send verification email to an queue
         $this->dispatch(new SendVerificationEmail($volunteer, $verificationCodeString, 'VMS 電子郵件驗證'));

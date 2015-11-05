@@ -13,7 +13,7 @@ class ArrayUtil
         return false;
     }
 
-    public static function getUnexisting($list, $existingIndexes)
+    public static function getNonexistent($list, $existingIndexes)
     {
         foreach ($existingIndexes as $index) {
             unset($list[$index]);

@@ -45,7 +45,7 @@ class ApiErrorHandlerServiceProvider extends ServiceProvider
 
         app('Dingo\Api\Exception\Handler')->register(function (JWTException $e) {
             $message = 'Server error';
-            $error = new Error('could_not_create_token');
+            $error = new Error('unable_to_authenticate');
             $statusCode = 500;
 
             // TODO: Log error issue
