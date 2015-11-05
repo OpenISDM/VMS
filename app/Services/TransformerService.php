@@ -1,8 +1,16 @@
 <?php
 namespace App\Services;
 
+/**
+ * TransformerSerivce class is responsible for Tansformer object 
+ * creation in controller
+ */
 class TransformerService
 {
+    /**
+     * Get Fractal Manager
+     * @return \League\Fractal\Manager
+     */
     public static function getManager()
     {
         // Set serialzer for a transformer
@@ -12,6 +20,13 @@ class TransformerService
         return $manager;
     }
 
+    /**
+     * Get resource item object
+     * @param  \Illuminate\Database\Eloquent\Model $object
+     * @param  String $transformer
+     * @param  String $key
+     * @return \League\Fractal\Resource\Item
+     */
     public static function getResourceItem($object, $transformer, $key)
     {
         // transform Experience model into array
@@ -20,6 +35,13 @@ class TransformerService
         return $resource;
     }
 
+    /**
+     * Get resource collection
+     * @param  \Illuminate\Database\Eloquent\Model $object
+     * @param  String $transformer
+     * @param  String $key
+     * @return \League\Fractal\Resource\Collection
+     */
     public static function getResourceCollection($object, $transformer, $key)
     {
         $resource = new \League\Fractal\Resource\Collection($object, new $transformer, $key);
