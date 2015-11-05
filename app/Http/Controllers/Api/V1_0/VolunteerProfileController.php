@@ -44,10 +44,10 @@ class VolunteerProfileController extends BaseVolunteerController
      */
     public function showMe()
     {
-        $volunteer = $this->jwtService->getVolunteer();       
+        $volunteer = $this->jwtService->getVolunteer();
         
         $manager = TransformerService::getManager();
-        $resource = TransformerService::getResourceItem($volunteer, 
+        $resource = TransformerService::getResourceItem($volunteer,
             'App\Transformers\VolunteerProfileTransformer', 'volunteer');
 
         return response()->json($manager->createData($resource)->toArray(), 200);
@@ -81,7 +81,7 @@ class VolunteerProfileController extends BaseVolunteerController
         }
 
         // Update volunteer profile
-        $volunteer->update($input);   
+        $volunteer->update($input);
         
         $manager = TransformerService::getManager();
         $resource = TransformerService::getResourceItem($volunteer,
@@ -116,7 +116,7 @@ class VolunteerProfileController extends BaseVolunteerController
         if ($skipProfile) {
             // Not response full profile
             $avatar->avatar_name = $avatarStorageService->getFileName();
-            $resource = TransformerService::getResourceItem($avatar, 'App\Transformers\VolunteerAvatarTransformer', 'avatar');           
+            $resource = TransformerService::getResourceItem($avatar, 'App\Transformers\VolunteerAvatarTransformer', 'avatar');
 
             return response()->json($manager->createData($resource)->toArray(), 200);
         }
@@ -141,7 +141,7 @@ class VolunteerProfileController extends BaseVolunteerController
             $avatarStorageService->save($avatarBase64File);
             $avatar->avatar_name = $avatarStorageService->getFileName();
         }
-        $resource = TransformerService::getResourceItem($avatar, 'App\Transformers\VolunteerAvatarTransformer', 'avatar');            
+        $resource = TransformerService::getResourceItem($avatar, 'App\Transformers\VolunteerAvatarTransformer', 'avatar');
         $manager = TransformerService::getManager();
 
         return response()->json($manager->createData($resource)->toArray(), 200);

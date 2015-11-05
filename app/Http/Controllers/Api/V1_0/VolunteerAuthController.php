@@ -45,7 +45,7 @@ class VolunteerAuthController extends Controller
      * @return Response                             
      */
     public function register(VolunteerRegistrationRequest $request, VolunteerRepository $volunteerRepository,
-        VerificationCodeRepository $verificationCodeRepository, CityRepository $cityRepository, 
+        VerificationCodeRepository $verificationCodeRepository, CityRepository $cityRepository,
         JwtService $jwtSerivce, AvatarStorageService $avatarStorageService)
     {
         // Get volunteer data, except city object

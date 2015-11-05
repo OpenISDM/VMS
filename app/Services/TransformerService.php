@@ -12,8 +12,8 @@ class TransformerService
         return $manager;
     }
 
-    public static function getResourceItem($object, $transformer, $key) 
-    {   
+    public static function getResourceItem($object, $transformer, $key)
+    {
         // transform Experience model into array
         $resource = new \League\Fractal\Resource\Item($object, new $transformer, $key);
 

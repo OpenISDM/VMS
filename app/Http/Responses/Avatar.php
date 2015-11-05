@@ -30,7 +30,7 @@ class Avatar
     {
         if ($name == "avatar_name") {
             return $this->avatarName;
-        } else if ($name == "avatar_url") {
+        } elseif ($name == "avatar_url") {
             $avatarUrl = $this->avatarHost . '/' . $this->avatarRootPath . '/' . $this->avatarName;
 
             return $avatarUrl;
