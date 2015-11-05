@@ -10,18 +10,28 @@ use App\Http\Controllers\Api\BaseVolunteerController;
 use App\Exceptions\AccessDeniedException;
 use App\Transformers\VolunteerEducationTransformer;
 use App\Education;
+use App\Services\JwtService;
 
 class VolunteerEducationController extends BaseVolunteerController
 {
+    protected $jwtService;
+
+    public function __construct(JwtService $jwtService)
+    {
+        parent::__construct();
+
+        $this->jwtService = $jwtService;
+    }
+
     /**
      * Show volunteer's own existing educations
      * @return Illuminate\Http\JsonResponse
      */
     public function show()
     {
-        $this->getVolunteerIdentifier();
+        $volunteer = $this->jwtService->getVolunteer();
 
-        $educations = $this->volunteer->educations()->get();
+        $educations = $volunteer->educations()->get();
         
         // Set serialzer for a transformer
         $manager = new \League\Fractal\Manager();
@@ -43,10 +53,10 @@ class VolunteerEducationController extends BaseVolunteerController
      */
     public function store(EducationRequest $request)
     {
-        $this->getVolunteerIdentifier();
+        $volunteer = $this->jwtService->getVolunteer();
         
         $education = new Education($request->all());
-        $education = $this->volunteer->educations()->save($education);
+        $education = $volunteer->educations()->save($education);
         $responseJson = [
             'education' => [
                 'id' => (int) $education->id
