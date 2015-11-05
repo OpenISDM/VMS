@@ -12,6 +12,7 @@ use App\Experience;
 use App\Transformers\VolunteerExperienceTransformer;
 use App\Http\Controllers\Api\BaseVolunteerController;
 use App\Services\JwtService;
+use App\Services\TransformerService;
 
 class VolunteerExperienceController extends BaseVolunteerController
 {
@@ -33,16 +34,9 @@ class VolunteerExperienceController extends BaseVolunteerController
         $volunteer = $this->jwtService->getVolunteer();
         $experiences = $volunteer->experiences()->get();
 
-        // Set serialzer for a transformer
-        $manager = new \League\Fractal\Manager();
-        $manager->setSerializer(new \League\Fractal\Serializer\ArraySerializer());
-
-        // transform Experience model into array
-        $resource = new \League\Fractal\Resource\Collection(
-            $experiences,
-            new VolunteerExperienceTransformer,
-            'experiences'
-        );
+        $manager = TransformerService::getManager();
+        $resource = TransformerService::getResourceCollection($experiences,
+            'App\Transformers\VolunteerExperienceTransformer', 'experiences');
 
         return response()->json($manager->createData($resource)->toArray(), 200);
     }

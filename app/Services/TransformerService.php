@@ -19,4 +19,11 @@ class TransformerService
 
         return $resource;
     }
+
+    public static function getResourceCollection($object, $transformer, $key)
+    {
+        $resource = new \League\Fractal\Resource\Collection($object, new $transformer, $key);
+
+        return $resource;
+    }
 }
