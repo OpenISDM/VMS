@@ -36,7 +36,6 @@ class UpdateProfileRequest extends JsonRequest
             'email' => 'sometimes|required|email|unique:volunteers',
             'emergency_contact' => 'sometimes|required|max:255',
             'emergency_phone' => 'sometimes|required|string|max:255',
-            'introduction' => 'sometimes|required|max:255'
         ];
     }
 }
