@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api\V1_0;
 
 use App\Http\Requests\AbstractJsonRequest;
 
-class UploadAvatarRequest extends AbstractJsonRequest
+class CreatePasswordResetRequest extends AbstractJsonRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,7 @@ class UploadAvatarRequest extends AbstractJsonRequest
     public function rules()
     {
         return [
-            'avatar' => 'required',
-            'skip_profile' => 'sometimes|required'
+            'email' => 'required|email',
         ];
     }
 }

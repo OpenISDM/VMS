@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests\Api\V1_0;
 
-use App\Http\Requests\JsonRequest;
+use App\Http\Requests\AbstractJsonRequest;
 
 /**
  * The class is responsible for validating the volunteer data on registration
  */
-class VolunteerRegistrationRequest extends JsonRequest
+class VolunteerRegistrationRequest extends AbstractJsonRequest
 {
     /**
      * Determine if the user is authorized to make this request.
