@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Api\V1_0;
 
-use App\Http\Requests\JsonRequest;
+use App\Http\Requests\AbstractJsonRequest;
 
-class UpdateExperienceRequest extends JsonRequest
+class UpdateExperienceRequest extends AbstractJsonRequest
 {
     /**
      * Determine if the user is authorized to make this request.

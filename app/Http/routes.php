@@ -37,7 +37,7 @@ $api->version('v1.0', function ($api) {
     | The request MUST contain API key in header.
     |
     */
-    $api->group(['middleware' => 'check.header'], function ($api) {
+    $api->group(['middleware' => ['check.header']], function ($api) {
         
         // Register
         $api->post('register', 'App\Http\Controllers\Api\V1_0\VolunteerAuthController@register');
@@ -47,6 +47,14 @@ $api->version('v1.0', function ($api) {
 
         // Login
         $api->post('auth', 'App\Http\Controllers\Api\V1_0\VolunteerAuthController@login');
+
+        // Create a password reset request
+        $api->post('users/password_reset',
+            'App\Http\Controllers\Api\V1_0\VolunteerPasswordController@createPasswordReset');
+
+        // Reset password
+        $api->put('users/password_reset/{email_address}/{reset_password_token}',
+            'App\Http\Controllers\Api\V1_0\VolunteerPasswordController@postPasswordReset');
     });
     
     /*
@@ -57,7 +65,6 @@ $api->version('v1.0', function ($api) {
     | The request MUST contain API Key and JWT in header.
     |
     */
-   
     $api->group(['middleware' => ['check.header', 'api.auth']], function ($api) {
 
         // logout
@@ -68,55 +75,63 @@ $api->version('v1.0', function ($api) {
     $api->group(['middleware' => ['check.header', 'api.auth']], function ($api) {
 
         // delete volunteer's own account
-        $api->post('/users/me/delete',
+        $api->post('users/me/delete',
             'App\Http\Controllers\Api\V1_0\VolunteerProfileController@deleteMe');
 
         // Email address validation
         $api->get('email_verification/{email_address}/{verification_code}',
             'App\Http\Controllers\Api\V1_0\VolunteerAuthController@emailVerification');
 
-        $api->post('/resend_email_verification',
-                   'App\Http\Controllers\Api\V1_0\VolunteerAuthController@resendEmailVerification');
+        $api->post('resend_email_verification',
+            'App\Http\Controllers\Api\V1_0\VolunteerAuthController@resendEmailVerification');
 
         // Retrive volunteer's profile
-        $api->get('/users/me', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@showMe');
+        $api->get('users/me', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@showMe');
 
         // Update volunteer's profile
-        $api->put('/users/me', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@updateMe');
+        $api->put('users/me', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@updateMe');
 
         // Upload volunteer's avatar image
-        $api->post('/users/me/avatar', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@uploadAvatarMe');
+        $api->post('users/me/avatar', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@uploadAvatarMe');
         
         // Update skills
-        $api->post('/users/me/skills',
+        $api->post('users/me/skills',
             'App\Http\Controllers\Api\V1_0\VolunteerProfileController@updateSkillsMe');
         
         // Update equipment
-        $api->post('/users/me/equipment',
+        $api->post('users/me/equipment',
             'App\Http\Controllers\Api\V1_0\VolunteerProfileController@updateEquipmentMe');
         
         // Experience CRUD
-        $api->get('/users/me/experiences',
+        $api->get('users/me/experiences',
             'App\Http\Controllers\Api\V1_0\VolunteerExperienceController@show');
-        $api->post('/users/me/experiences',
+        $api->post('users/me/experiences',
             'App\Http\Controllers\Api\V1_0\VolunteerExperienceController@store');
-        $api->put('/users/me/experiences',
+        $api->put('users/me/experiences',
             'App\Http\Controllers\Api\V1_0\VolunteerExperienceController@update');
-        $api->delete('/users/me/experiences/{id}',
+        $api->delete('users/me/experiences/{id}',
             'App\Http\Controllers\Api\V1_0\VolunteerExperienceController@destroy');
 
         // Educations CRUD
-        $api->get('/users/me/educations',
+        $api->get('users/me/educations',
             'App\Http\Controllers\Api\V1_0\VolunteerEducationController@show');
-        $api->post('/users/me/educations',
+        $api->post('users/me/educations',
             'App\Http\Controllers\Api\V1_0\VolunteerEducationController@store');
-        $api->put('/users/me/educations',
+        $api->put('users/me/educations',
             'App\Http\Controllers\Api\V1_0\VolunteerEducationController@update');
-        $api->delete('/users/me/educations/{id}',
+        $api->delete('users/me/educations/{id}',
             'App\Http\Controllers\Api\V1_0\VolunteerEducationController@destroy');
         
     });
 
+    /*
+    |--------------------------------------------------------------------------
+    | Refresh token endpoint
+    |--------------------------------------------------------------------------
+    | 
+    | Refresh a new JWT
+    |
+    */
     $api->group(['middleware' => ['jwt.refresh']], function ($api) {
         // For refresh token
         $api->post('auth/refresh_token', function () { return response(null, 204); });

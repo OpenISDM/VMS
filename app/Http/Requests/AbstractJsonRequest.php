@@ -9,7 +9,7 @@ use App\Utils\ValidatorUtil;
  * Reference from: 
  * https://laracasts.com/discuss/channels/laravel/how-to-validate-json-input-using-requests
  */
-abstract class JsonRequest extends Request
+abstract class AbstractJsonRequest extends Request
 {
     /**
      * Get the validator instanct
