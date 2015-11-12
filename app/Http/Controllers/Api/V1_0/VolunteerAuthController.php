@@ -41,8 +41,9 @@ class VolunteerAuthController extends Controller
      * Register a new volunteer. The request will be validated by
      * App\Http\Middleware\CheckHeaderFieldsMiddleware and
      * App\Http\Requests\Api\V1_0\VolunteerRegistrationRequest classes
+     *
      * @param  VolunteerRegistrationRequest $request
-     * @return Response                             
+     * @return Illuminate\Http\JsonResponse                            
      */
     public function register(VolunteerRegistrationRequest $request, VolunteerRepository $volunteerRepository,
         VerificationCodeRepository $verificationCodeRepository, CityRepository $cityRepository,
@@ -90,11 +91,11 @@ class VolunteerAuthController extends Controller
     }
 
     /**
-     * Volunteer logs in the system. 
+     * Volunteer logs in the system.
      * It will response the JSON Web token.
-     * 
+     *
      * @param  CredentialRequest $request
-     * @return Response
+     * @return Illuminate\Http\JsonResponse
      */
     public function login(CredentialRequest $request, JwtService $jwtSerivce)
     {
@@ -127,8 +128,7 @@ class VolunteerAuthController extends Controller
     /**
      * Volunteer logs out the system.
      * The JWT token will be in blacklist.
-     * 
-     * @return Response
+     * @return Illuminate\Http\JsonResponse
      */
     public function logout()
     {
@@ -148,8 +148,8 @@ class VolunteerAuthController extends Controller
     /**
      * Verify volunteer's email address with verification code.
      * It will check the volunteer's verification code and the expired time
-     * @param  EmailVerificationRequest $reuqest 
-     * @return Response
+     * @param  EmailVerificationRequest $reuqest
+     * @return Illuminate\Http\JsonResponse
      */
     public function emailVerification($emailAddress, $verificationCode, JwtService $jwtSerivce)
     {
@@ -168,7 +168,7 @@ class VolunteerAuthController extends Controller
 
     /**
      * Resend a new email verification
-     * @return [type] [description]
+     * @return Illuminate\Http\JsonResponse
      */
     public function resendEmailVerification(VerificationCodeRepository $verificationCodeRepository, JwtService $jwtSerivce)
     {

@@ -3,16 +3,24 @@
 namespace App\Http\Controllers\Api\V1_0;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\BaseVolunteerController;
 use App\Http\Requests\Api\V1_0\CreatePasswordResetRequest;
 use App\Http\Requests\Api\V1_0\PasswordResetRequest;
+use App\Http\Requests\Api\V1_0\ChangePasswordRequest;
 use Password;
 use Auth;
 use Illuminate\Mail\Message;
 use App\Exceptions\InvalidUserException;
 use App\Exceptions\GeneralException;
+use App\Services\JwtService;
 
-class VolunteerPasswordController extends Controller
+class VolunteerPasswordController extends BaseVolunteerController
 {
+    /**
+     * Create a password reset request
+     * @param  App\Http\Requests\Api\V1_0\CreatePasswordResetRequest $request [description]
+     * @return                               [description]
+     */
     public function createPasswordReset(CreatePasswordResetRequest $request)
     {
         $response = Password::sendResetLink($request->only('email'), function (Message $message) {
@@ -47,6 +55,31 @@ class VolunteerPasswordController extends Controller
                 throw new GeneralException('Unable to reset password', 'cannot_reset_password', 400);
         }
     }
+
+    /**
+     * Volunteer changes his/her own password
+     * It will validate the new_password by ChangePasswordRequest
+     * @param  App\Http\Requests\Api\V1_0\ChangePasswordRequest $request
+     * @param  App\Services\JwtService                          $jwtService
+     * @return [type]                            [description]
+     */
+public function postChangePassword(ChangePasswordRequest $request, JwtService $jwtService)
+{
+    $volunteer = $jwtService->getVolunteer();
+    $credentials = [
+            'username' => $volunteer->username,
+            'password' => $request->input('existing_password')
+        ];
+
+        // Check credentials
+        $jwtService->getToken($credentials);
+    $newPassword = $request->input('new_password');
+
+    $volunteer->password = bcrypt($newPassword);
+    $volunteer->save();
+
+    return response(null, 204);
+}
 
     /**
      * Reset the given user's password.

@@ -9,8 +9,6 @@ use App\Exceptions\JWTTokenNotFoundException;
 
 abstract class BaseVolunteerController extends Controller
 {
-    protected $volunteer;
-    
     public function __construct()
     {
         // For testing usage
