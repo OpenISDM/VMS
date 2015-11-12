@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Exceptions\AbstractException;
 use App\Http\Responses\Responses;
+use App\Http\Responses\Error;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -48,6 +49,7 @@ class ApiErrorHandlerServiceProvider extends ServiceProvider
             $error = new Error('unable_to_authenticate');
             $statusCode = 500;
 
+            echo 'message = ' . $e->getMessage();
             // TODO: Log error issue
 
             return response()->apiJsonError($message, $error, $statusCode);

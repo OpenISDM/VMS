@@ -78,6 +78,10 @@ $api->version('v1.0', function ($api) {
         $api->post('users/me/delete',
             'App\Http\Controllers\Api\V1_0\VolunteerProfileController@deleteMe');
 
+        // Change password
+        $api->put('users/me/password',
+            'App\Http\Controllers\Api\V1_0\VolunteerPasswordController@postChangePassword');
+
         // Email address validation
         $api->get('email_verification/{email_address}/{verification_code}',
             'App\Http\Controllers\Api\V1_0\VolunteerAuthController@emailVerification');

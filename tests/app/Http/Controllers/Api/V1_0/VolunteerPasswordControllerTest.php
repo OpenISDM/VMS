@@ -3,7 +3,7 @@
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tymon\JWTAuth\Facades\JWTAuth;
+
 
 class VolunteerPasswordControllerTest extends AbstractTestCase
 {
@@ -33,7 +33,6 @@ class VolunteerPasswordControllerTest extends AbstractTestCase
         $this->factoryModel();
         $volunteer = factory(App\Volunteer::class)->create();
         
-
         $headerArray = [
             'X-VMS-API-Key' => $this->getApiKey()
         ];
@@ -56,7 +55,32 @@ class VolunteerPasswordControllerTest extends AbstractTestCase
             ['password' => 'VMSReSetPassw0Rd'],
             $headerArray
         )
-        //->seeJsonEquals(['a' => 'a'])
+        ->assertResponseStatus(204);
+    }
+
+    public function testPostChangePassword()
+    {
+        $this->factoryModel();
+        $volunteer = factory(App\Volunteer::class)->create();
+        $volunteer->is_actived = true;
+
+        $token = JWTAuth::fromUser($volunteer);
+
+        $headerArray = [
+            'Authorization' => 'Bearer ' . $token,
+            'X-VMS-API-Key' => $this->getApiKey()
+        ];
+
+        $data = [
+            'existing_password' => 'ThisIsMyPassW0Rd',
+            'new_password' => 'MyNew1PASSWoRd'
+        ];
+
+        $this->json('put',
+            '/api/users/me/password',
+            $data,
+            $headerArray
+        )
         ->assertResponseStatus(204);
     }
 }
