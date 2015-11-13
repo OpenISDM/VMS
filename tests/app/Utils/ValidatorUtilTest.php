@@ -18,8 +18,6 @@ class ValidatorUtilTest extends TestCase
 
         $actualValidatorError = $actualResult[0];
 
-        //var_dump($actualResult);
-
         $this->assertEquals('missing_field', $actualValidatorError->getCode());
         $this->assertContains('email', $actualValidatorError->getFields());
         $this->assertContains('phone_number', $actualValidatorError->getFields());
@@ -41,8 +39,6 @@ class ValidatorUtilTest extends TestCase
 
         $actualMissingFieldValidatorError = $actualResult[0];
         $actualNEPSFieldValidatorError = $actualResult[1];
-
-        //var_dump($actualResult);
 
         $this->assertEquals('missing_field', $actualMissingFieldValidatorError->getCode());
         $this->assertContains('email', $actualMissingFieldValidatorError->getFields());

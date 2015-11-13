@@ -2,6 +2,15 @@
 
 abstract class AbstractTestCase extends TestCase
 {
+    protected $unauthoirzedHeader;
+
+    public function __construct()
+    {
+        $this->unauthoirzedHeader = [
+            'X-VMS-API-Key' => $this->getApiKey()
+        ];
+    }
+
     protected function getApiKey()
     {
         return '581dba93a4dbafa42a682d36b015d8484622f8e3543623bec5a291f67f5ddff1';
