@@ -94,3 +94,15 @@ $factory->define(App\Experience::class, function (Faker\Generator $faker) {
         'end_year' => null
     ];
 });
+
+$factory->define(App\Skill::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word
+    ];
+});
+
+$factory->define(App\Equipment::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word
+    ];
+});
