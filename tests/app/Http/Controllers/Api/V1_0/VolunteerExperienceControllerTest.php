@@ -145,7 +145,7 @@ class VolunteerExperienceControllerTest extends AbstractTestCase
     {
         $this->factoryModel();
 
-        // Create volunteer A 
+        // Create volunteer A
         $volunteerA = factory(App\Volunteer::class)->create();
         $volunteerA->is_actived = true;
 
