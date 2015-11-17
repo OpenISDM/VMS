@@ -3,6 +3,7 @@
 abstract class AbstractTestCase extends TestCase
 {
     protected $unauthoirzedHeader;
+    protected $cities;
 
     public function __construct()
     {
@@ -22,42 +23,37 @@ abstract class AbstractTestCase extends TestCase
             'api_key' => $this->getApiKey()
         ]);
 
-        $countriesCitiesSeedData = [
-            'Taiwan' => [
-                'Taipei City',
-                'New Taipei City',
-                'Taoyuan City',
-                'Taichung City',
-                'Tainan City',
-                'Hsinchu City',
-                'Chiayi City',
-                'Keelung City',
-                'Hsinchu County',
-                'Miaoli County',
-                'Changhua County',
-                'Nantou County',
-                'Changhua County',
-                'Yunlin County',
-                'Chiayi County',
-                'Pingtung County',
-                'Yilan County',
-                'Hualien County',
-                'Taitung County',
-                'Kinmen County',
-                'Lienchiang County',
-                'Penghu County',
-            ]
-        ];
-
-        foreach ($countriesCitiesSeedData as $countryName => $cityList) {
-            $country = factory(App\Country::class)
-                        ->create(['name' => $countryName]);
-
-            foreach ($cityList as $cityName) {
-                $city = factory(App\City::class)->make(['name' => $cityName]);
-                $city->country()->associate($country);
+        $this->cities = factory(App\City::class, 'testCity', 20)
+            ->make()
+            ->each(function ($city) {
+                $city->country()->associate(factory(App\Country::class, 'testCountry')->create());
                 $city->save();
-            }
-        }
+            });
+    }
+
+    protected function beActiveVolunteer()
+    {
+        $this->volunteer = factory(App\Volunteer::class)->create(
+            [
+                'is_actived' => true
+            ]
+        );
+    }
+
+    protected function getHeaderWithAuthorization()
+    {
+        $token = JWTAuth::fromUser($this->volunteer);
+        
+        return [
+            'Authorization' => 'Bearer ' . $token,
+            'X-VMS-API-Key' => $this->getApiKey()
+        ];
+    }
+
+    protected function getHeaderOnlyWithApiKey()
+    {
+        return [
+            'X-VMS-API-Key' => $this->getApiKey()
+        ];
     }
 }
