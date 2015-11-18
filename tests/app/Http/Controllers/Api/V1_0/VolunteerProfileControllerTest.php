@@ -291,6 +291,78 @@ class VolunteerProfileControllerTest extends AbstractTestCase
         $this->seeInDatabase('volunteers', ['username' => $this->volunteer->username]);
     }
 
+    public function testGetSkillCandidatedKeywords()
+    {
+        $this->factoryModel();
+        $example = [
+            'Car',
+            'Bike',
+            'Camera',
+            'Tent'
+        ];
+
+        foreach ($example as $equipment) {
+            factory(App\Equipment::class)
+                ->create(['name' => $equipment]);
+        }
+
+        $this->json('get',
+                    '/api/equipment_candidates/Ca',
+                    [],
+                    $this->getHeaderOnlyWithApiKey())
+             ->seeJsonEquals([
+                'result' => [
+                    [
+                        'name' => 'Car',
+                        'id' => 1,
+                        'head_line' => '<strong>Ca</strong>r'
+                    ],
+                    [
+                        'name' => 'Camera',
+                        'id' => 3,
+                        'head_line' => '<strong>Ca</strong>mera'
+                    ]
+                ]
+             ])
+             ->assertResponseStatus(200);
+    }
+
+    public function testGetEquipmentCandidatedKeywords()
+    {
+        $this->factoryModel();
+        $example = [
+            'Rope rescue',
+            'Disaster Survellience',
+            'Disaster Recovery',
+            'Water rescue'
+        ];
+
+        foreach ($example as $skill) {
+            factory(App\Skill::class)
+                ->create(['name' => $skill]);
+        }
+
+        $this->json('get',
+                    '/api/skill_candidates/Dis',
+                    [],
+                    $this->getHeaderOnlyWithApiKey())
+             ->seeJsonEquals([
+                'result' => [
+                    [
+                        'name' => 'Disaster Survellience',
+                        'id' => 2,
+                        'head_line' => '<strong>Dis</strong>aster Survellience'
+                    ],
+                    [
+                        'name' => 'Disaster Recovery',
+                        'id' => 3,
+                        'head_line' => '<strong>Dis</strong>aster Recovery'
+                    ]
+                ]
+             ])
+             ->assertResponseStatus(200);
+    }
+
     private function getProfileDetail()
     {
         $equipment = $this->volunteer->equipment()->get();

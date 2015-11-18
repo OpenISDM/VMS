@@ -55,6 +55,14 @@ $api->version('v1.0', function ($api) {
         // Reset password
         $api->put('users/password_reset/{email_address}/{reset_password_token}',
             'App\Http\Controllers\Api\V1_0\VolunteerPasswordController@postPasswordReset');
+
+        // Get skill candidiates
+        $api->get('skill_candidates/{keyword}',
+            'App\Http\Controllers\Api\V1_0\VolunteerProfileController@getSkillCandidatedKeywords');
+
+        // Get equipment candidates
+        $api->get('equipment_candidates/{keyword}',
+            'App\Http\Controllers\Api\V1_0\VolunteerProfileController@getEquipmentCandidatedKeywords');
     });
     
     /*
