@@ -16,6 +16,8 @@ use App\Http\Responses\Avatar;
 use App\Exceptions\ExceedingIndexException;
 use App\City;
 use App\Volunteer;
+use App\Skill;
+use App\Equipment;
 use App\Utils\ArrayUtil;
 use App\Transformers\VolunteerProfileTransformer;
 use App\Transformers\VolunteerAvatarTransformer;
@@ -178,6 +180,34 @@ class VolunteerProfileController extends BaseVolunteerController
         }
 
         return response()->json(null, 204);
+    }
+
+    public function getSkillCandidatedKeywords($keyword)
+    {
+        $candidateSkill = SKill::keywordName($keyword);
+
+        $resource = TransformerService::getResourceCollection(
+            $candidateSkill,
+            'App\Transformers\CandidateKeywordsTransformer',
+            'result'
+        );
+        $manager = TransformerService::getManager();
+
+        return response()->json($manager->createData($resource)->toArray(), 200);
+    }
+
+    public function getEquipmentCandidatedKeywords($keyword)
+    {
+        $candidateEquipment = Equipment::keywordName($keyword);
+
+        $resource = TransformerService::getResourceCollection(
+            $candidateEquipment,
+            'App\Transformers\CandidateKeywordsTransformer',
+            'result'
+        );
+        $manager = TransformerService::getManager();
+
+        return response()->json($manager->createData($resource)->toArray(), 200);
     }
 
     /**

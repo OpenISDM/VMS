@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Transformers\CandidateKeywordsTrait;
 
 class Skill extends Model
 {
+    use CandidateKeywordsTrait;
+    
     protected $table = 'skills';
 
     protected $fillable = ['name'];
@@ -15,7 +18,6 @@ class Skill extends Model
     protected $casts = [
         'id' => 'integer'
     ];
-
 
     public function volunteers()
     {
