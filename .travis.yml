@@ -2,7 +2,7 @@ language: php
 php:
 - 5.6
 - hhvm
-sudo: true
+sudo: false
 before_install: composer selfupdate
 install: travis_retry composer install --no-interaction --ignore-platform-reqs --no-scripts
   --prefer-source
