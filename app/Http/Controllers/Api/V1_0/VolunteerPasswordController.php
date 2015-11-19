@@ -18,13 +18,13 @@ class VolunteerPasswordController extends BaseVolunteerController
 {
     /**
      * Create a password reset request
-     * @param  App\Http\Requests\Api\V1_0\CreatePasswordResetRequest $request [description]
-     * @return                               [description]
+     * @param  App\Http\Requests\Api\V1_0\CreatePasswordResetRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function createPasswordReset(CreatePasswordResetRequest $request)
     {
         $response = Password::sendResetLink($request->only('email'), function (Message $message) {
-            $message->subject($this->getEmailSubject());
+            $message->subject($this->getPasswordResetEmailSubject());
         });
 
         switch ($response) {
@@ -35,6 +35,15 @@ class VolunteerPasswordController extends BaseVolunteerController
         }
     }
 
+    /**
+     * Reset password
+     * It will check the token. If the token is correct,
+     * volunteer is able to reset his/her password
+     * @param  String               $email
+     * @param  String               $token
+     * @param  App\Http\Requests\Api\V1_0\PasswordResetRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function postPasswordReset($email, $token, PasswordResetRequest $request)
     {
         $credentials = [
@@ -61,29 +70,28 @@ class VolunteerPasswordController extends BaseVolunteerController
      * It will validate the new_password by ChangePasswordRequest
      * @param  App\Http\Requests\Api\V1_0\ChangePasswordRequest $request
      * @param  App\Services\JwtService                          $jwtService
-     * @return [type]                            [description]
+     * @return \Illuminate\Http\JsonResponse
      */
-public function postChangePassword(ChangePasswordRequest $request, JwtService $jwtService)
-{
-    $volunteer = $jwtService->getVolunteer();
-    $credentials = [
-            'username' => $volunteer->username,
-            'password' => $request->input('existing_password')
-        ];
+    public function postChangePassword(ChangePasswordRequest $request, JwtService $jwtService)
+    {
+        $volunteer = $jwtService->getVolunteer();
+        $credentials = [
+                'username' => $volunteer->username,
+                'password' => $request->input('existing_password')
+            ];
 
-        // Check credentials
-        $jwtService->getToken($credentials);
-    $newPassword = $request->input('new_password');
+            // Check credentials
+            $jwtService->getToken($credentials);
+        $newPassword = $request->input('new_password');
 
-    $volunteer->password = bcrypt($newPassword);
-    $volunteer->save();
+        $volunteer->password = bcrypt($newPassword);
+        $volunteer->save();
 
-    return response(null, 204);
-}
+        return response(null, 204);
+    }
 
     /**
      * Reset the given user's password.
-     *
      * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
      * @param  string  $password
      * @return void
@@ -97,7 +105,11 @@ public function postChangePassword(ChangePasswordRequest $request, JwtService $j
         Auth::login($user);
     }
 
-    protected function getEmailSubject()
+    /**
+     * Get the subject of password reset email
+     * @return String
+     */
+    protected function getPasswordResetEmailSubject()
     {
         return 'Password reset';
     }

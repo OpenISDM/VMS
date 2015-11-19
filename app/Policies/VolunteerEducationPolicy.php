@@ -19,11 +19,13 @@ class VolunteerEducationPolicy
 
     public function update(Volunteer $volunteer, Education $education)
     {
+        // Make sure update action is able to be executed by owner
         return $volunteer->id === $education->volunteer_id;
     }
 
     public function delete(Volunteer $volunteer, Education $education)
     {
+        // Make sure delete action is able to be executed by owner
         return $volunteer->id === $education->volunteer_id;
     }
 }

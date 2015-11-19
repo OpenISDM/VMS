@@ -38,20 +38,38 @@ class SendVerificationEmail extends Job implements SelfHandling, ShouldQueue
     public function handle(Mailer $mailer)
     {
         if ($this->attempts() < 10) {
+            $verificationUrl = $this->verificationUrlStringBuilder($this->volunteer->email);
             $data = [
-                    'name' => $this->volunteer->last_name,
-                    'verificationUrl' => config('vms.emailVerificationUrl') . '?email=' . rawurlencode($this->volunteer->email) .
-                    '&verification_token=' . rawurlencode($this->verificationCode)
-                ];
+                'name' => $this->volunteer->last_name,  // the volunteer's name
+                'verificationUrl' => $verificationUrl   // the URL for email verification
+            ];
+
             $lastName = $this->volunteer->last_name;
             $emailAddress = $this->volunteer->email;
             $subject = $this->subject;
 
-            $mailer->send(['html' => 'emails.verify'],
-                            $data,
-                            function ($message) use ($lastName, $emailAddress, $subject) {
-                                $message->to($emailAddress, $lastName)->subject($subject);
-                        });
+            $mailer->send(
+                ['html' => 'emails.verify'],
+                $data,
+                function ($message) use ($lastName, $emailAddress, $subject) {
+                    $message->to($emailAddress, $lastName)->subject($subject);
+                }
+            );
         }
+    }
+
+    /**
+     * For verification url string builder
+     * @param  String $email
+     * @param  String $verificationCode
+     * @return String
+     */
+    private function verificationUrlStringBuilder($email, $verificationCode)
+    {
+        $url = config('vms.emailVerificationUrl');
+        $url .= '?email=' . rawurlencode($email);
+        $url .= '&verification_token=' . rawurlencode($this->verificationCode);
+
+        return $url;
     }
 }

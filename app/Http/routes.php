@@ -78,9 +78,6 @@ $api->version('v1.0', function ($api) {
         // logout
         $api->delete('auth',
             'App\Http\Controllers\Api\V1_0\VolunteerAuthController@logout');
-    });
-
-    $api->group(['middleware' => ['check.header', 'api.auth']], function ($api) {
 
         // delete volunteer's own account
         $api->post('users/me/delete',
@@ -133,7 +130,6 @@ $api->version('v1.0', function ($api) {
             'App\Http\Controllers\Api\V1_0\VolunteerEducationController@update');
         $api->delete('users/me/educations/{id}',
             'App\Http\Controllers\Api\V1_0\VolunteerEducationController@destroy');
-        
     });
 
     /*

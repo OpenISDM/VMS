@@ -19,11 +19,13 @@ class VolunteerExperiencePolicy
 
     public function update(Volunteer $volunteer, Experience $experience)
     {
+        // Make sure update action is able to be executed by owner
         return $volunteer->id === $experience->volunteer_id;
     }
 
     public function delete(Volunteer $volunteer, Experience $experience)
     {
+        // Make sure delete action is able to be executed by owner
         return $volunteer->id === $experience->volunteer_id;
     }
 }

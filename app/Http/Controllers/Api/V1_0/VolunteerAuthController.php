@@ -43,11 +43,14 @@ class VolunteerAuthController extends Controller
      * App\Http\Requests\Api\V1_0\VolunteerRegistrationRequest classes
      *
      * @param  VolunteerRegistrationRequest $request
-     * @return Illuminate\Http\JsonResponse                            
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function register(VolunteerRegistrationRequest $request, VolunteerRepository $volunteerRepository,
-        VerificationCodeRepository $verificationCodeRepository, CityRepository $cityRepository,
-        JwtService $jwtSerivce, AvatarStorageService $avatarStorageService)
+    public function register(VolunteerRegistrationRequest $request,
+        VolunteerRepository $volunteerRepository,
+        VerificationCodeRepository $verificationCodeRepository,
+        CityRepository $cityRepository,
+        JwtService $jwtSerivce,
+        AvatarStorageService $avatarStorageService)
     {
         // Get volunteer data, except city object
         $volunteerInput = $request->except(['city', 'avatar']);
@@ -95,7 +98,7 @@ class VolunteerAuthController extends Controller
      * It will response the JSON Web token.
      *
      * @param  CredentialRequest $request
-     * @return Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function login(CredentialRequest $request, JwtService $jwtSerivce)
     {
@@ -128,7 +131,7 @@ class VolunteerAuthController extends Controller
     /**
      * Volunteer logs out the system.
      * The JWT token will be in blacklist.
-     * @return Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function logout()
     {
@@ -149,7 +152,7 @@ class VolunteerAuthController extends Controller
      * Verify volunteer's email address with verification code.
      * It will check the volunteer's verification code and the expired time
      * @param  EmailVerificationRequest $reuqest
-     * @return Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function emailVerification($emailAddress, $verificationCode, JwtService $jwtSerivce)
     {
@@ -168,7 +171,7 @@ class VolunteerAuthController extends Controller
 
     /**
      * Resend a new email verification
-     * @return Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function resendEmailVerification(VerificationCodeRepository $verificationCodeRepository, JwtService $jwtSerivce)
     {

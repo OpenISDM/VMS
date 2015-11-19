@@ -16,19 +16,6 @@ class CheckHeaderFieldsMiddleware
      */
     public function handle($request, Closure $next)
     {
-        // Get header fields
-        //$contentType = $request->header('Content-Type');
-
-        // Check Content-Type
-        /*if (!$request->matchesType($contentType, 'application/json')) {
-            // Check API key
-            $message = 'Content-Type is unmatched';
-            $errorArray = ['code' => 'unmatched_content_type'];
-            $statusCode = 400;
-
-            return response()->apiJsonError($message, $errorArray, $statusCode);
-        }*/
-        
         // Get API key header fields
         $apiKey = $request->header('X-VMS-API-Key');
         // Query the API key

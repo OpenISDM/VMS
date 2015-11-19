@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\V1_0;
 
 use App\Http\Controllers\Api\BaseVolunteerController;
-use Dingo\Api\Routing\Helpers;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Requests\Api\V1_0\UpdateEquipmentRequest;
@@ -11,13 +10,10 @@ use App\Http\Requests\Api\V1_0\UpdateSkillsRequest;
 use App\Http\Requests\Api\V1_0\UpdateProfileRequest;
 use App\Http\Requests\Api\V1_0\UploadAvatarRequest;
 use App\Http\Requests\Api\V1_0\CredentialRequest;
-use App\Http\Responses\Error;
 use App\Http\Responses\Avatar;
 use App\Exceptions\ExceedingIndexException;
 use App\City;
 use App\Volunteer;
-use App\Skill;
-use App\Equipment;
 use App\Utils\ArrayUtil;
 use App\Transformers\VolunteerProfileTransformer;
 use App\Transformers\VolunteerAvatarTransformer;
@@ -29,8 +25,9 @@ use App\Repositories\VolunteerRepository;
 
 class VolunteerProfileController extends BaseVolunteerController
 {
-    use Helpers;
-
+    /*
+     * For JSON Web Token service, App\Services\JwtService
+     */
     protected $jwtService;
 
     public function __construct(JwtService $jwtService)
@@ -182,32 +179,24 @@ class VolunteerProfileController extends BaseVolunteerController
         return response()->json(null, 204);
     }
 
+    /**
+     * Get skill candidated keywords
+     * @param  String $keyword 
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getSkillCandidatedKeywords($keyword)
     {
-        $candidateSkill = SKill::keywordName($keyword);
-
-        $resource = TransformerService::getResourceCollection(
-            $candidateSkill,
-            'App\Transformers\CandidateKeywordsTransformer',
-            'result'
-        );
-        $manager = TransformerService::getManager();
-
-        return response()->json($manager->createData($resource)->toArray(), 200);
+        return $this->getCandidatedKeywordsResult('App\Skill', $keyword);
     }
 
+    /**
+     * Get equipment candidated keywords
+     * @param  String $keyword 
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getEquipmentCandidatedKeywords($keyword)
     {
-        $candidateEquipment = Equipment::keywordName($keyword);
-
-        $resource = TransformerService::getResourceCollection(
-            $candidateEquipment,
-            'App\Transformers\CandidateKeywordsTransformer',
-            'result'
-        );
-        $manager = TransformerService::getManager();
-
-        return response()->json($manager->createData($resource)->toArray(), 200);
+        return $this->getCandidatedKeywordsResult('App\Equipment', $keyword);
     }
 
     /**
@@ -271,5 +260,25 @@ class VolunteerProfileController extends BaseVolunteerController
         $volunteer->delete();
 
         return response()->json(null, 204);
+    }
+
+    /**
+     * Get candidated keywords from models
+     * @param  String                           $model
+     * @param  String                           $keyword
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function getCandidatedKeywordsResult($model, $keyword)
+    {
+        $candidate = $model::keywordName($keyword);
+
+        $resource = TransformerService::getResourceCollection(
+            $candidate,
+            'App\Transformers\CandidateKeywordsTransformer',
+            'result'
+        );
+        $manager = TransformerService::getManager();
+
+        return response()->json($manager->createData($resource)->toArray(), 200);
     }
 }
