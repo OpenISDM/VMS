@@ -7,6 +7,9 @@ use App\Transformers\CandidateKeywordsTrait;
 
 class Skill extends Model
 {
+    /*
+     * For store candidiated keyword
+     */
     use CandidateKeywordsTrait;
     
     protected $table = 'skills';

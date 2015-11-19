@@ -16,6 +16,9 @@ use App\Services\TransformerService;
 
 class VolunteerExperienceController extends BaseVolunteerController
 {
+    /*
+     * For JSON Web Token service, App\Services\JwtService
+     */
     protected $jwtService;
 
     public function __construct(JwtService $jwtService)
@@ -27,7 +30,7 @@ class VolunteerExperienceController extends BaseVolunteerController
 
     /**
      * Show volunteer's own experiences
-     * @return Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show()
     {
@@ -44,7 +47,7 @@ class VolunteerExperienceController extends BaseVolunteerController
     /**
      * Store a new volunteer's experience
      * @param  ExperienceRequest $request
-     * @return Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(ExperienceRequest $request)
     {
@@ -63,8 +66,8 @@ class VolunteerExperienceController extends BaseVolunteerController
 
     /**
      * Update an existing volunteer's own experience
-     * @param  App\Http\Requests\Api\V1_0\UpdateExperienceRequest $request [description]
-     * @return Illuminate\Http\JsonResponse
+     * @param  App\Http\Requests\Api\V1_0\UpdateExperienceRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateExperienceRequest $request)
     {
@@ -83,8 +86,8 @@ class VolunteerExperienceController extends BaseVolunteerController
 
     /**
      * Destroy an existing volunteer's own experience
-     * @param  integer $id [description]
-     * @return Illuminate\Http\JsonResponse
+     * @param  integer $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
