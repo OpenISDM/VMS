@@ -15,7 +15,7 @@ class CheckHeaderFieldsMiddleware
      * @return mixed
      */
     public function handle($request, Closure $next)
-    {        
+    {
         // Get API key header fields
         $apiKey = $request->header('X-VMS-API-Key');
         // Query the API key

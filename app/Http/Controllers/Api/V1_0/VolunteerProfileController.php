@@ -26,7 +26,7 @@ use App\Repositories\VolunteerRepository;
 class VolunteerProfileController extends BaseVolunteerController
 {
     /*
-     * For JSON Web Token service
+     * For JSON Web Token service, App\Services\JwtService
      */
     protected $jwtService;
 
@@ -280,6 +280,5 @@ class VolunteerProfileController extends BaseVolunteerController
         $manager = TransformerService::getManager();
 
         return response()->json($manager->createData($resource)->toArray(), 200);
-
     }
 }
