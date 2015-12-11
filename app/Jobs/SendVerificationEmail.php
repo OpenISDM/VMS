@@ -38,7 +38,7 @@ class SendVerificationEmail extends Job implements SelfHandling, ShouldQueue
     public function handle(Mailer $mailer)
     {
         if ($this->attempts() < 10) {
-            $verificationUrl = $this->verificationUrlStringBuilder($this->volunteer->email);
+            $verificationUrl = $this->verificationUrlStringBuilder($this->volunteer->email, $this->verificationCode);
             $data = [
                 'name' => $this->volunteer->last_name,  // the volunteer's name
                 'verificationUrl' => $verificationUrl   // the URL for email verification
