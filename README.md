@@ -2,6 +2,7 @@
 
 [![StyleCI](https://styleci.io/repos/38728555/shield)](https://styleci.io/repos/38728555)
 [![Build Status](https://travis-ci.org/OpenISDM/VMS.svg)](https://travis-ci.org/OpenISDM/VMS)
+[![Coverage Status](https://coveralls.io/repos/OpenISDM/VMS/badge.svg?branch=develop&service=github)](https://coveralls.io/github/OpenISDM/VMS?branch=develop)
 
 ## Coding style
 
