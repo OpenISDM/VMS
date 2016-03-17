@@ -19,8 +19,8 @@ class ErrorResponseMacroServiceProvider extends ServiceProvider
     public function boot(ResponseFactory $factory)
     {
         /**
-         * Factory an response()->apiJsonError() for error response 
-         * 
+         * Factory an response()->apiJsonError() for error response
+         *
          * @param   String  $message       response message
          * @param   Array   $errors   errors content
          * @param   int     $statusCode    HTTP response code

@@ -2,7 +2,7 @@
 namespace App\Services;
 
 /**
- * TransformerSerivce class is responsible for Tansformer object 
+ * TransformerSerivce class is responsible for Tansformer object
  * creation in controller
  */
 class TransformerService
