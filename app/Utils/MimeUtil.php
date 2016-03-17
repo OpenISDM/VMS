@@ -11,7 +11,7 @@ class MimeUtil
         switch ($mime) {
             case 'image/png':
                 return 'png';
-            case 'image/jpg';
+            case 'image/jpg':
                 return 'jpg';
             case 'image/jpeg':
                 return 'jpeg';

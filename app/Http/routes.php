@@ -13,7 +13,6 @@
 
 // empty
 
-
 /*
 |--------------------------------------------------------------------------
 | Dingo API Routes
@@ -28,17 +27,17 @@ $api = app('Dingo\Api\Routing\Router');
 
 // Version 1.0
 $api->version('v1.0', function ($api) {
-    
+
     /*
     |--------------------------------------------------------------------------
-    | Public endpoints 
+    | Public endpoints
     |--------------------------------------------------------------------------
-    | 
+    |
     | The request MUST contain API key in header.
     |
     */
     $api->group(['middleware' => ['check.header']], function ($api) {
-        
+
         // Register
         $api->post('register', 'App\Http\Controllers\Api\V1_0\VolunteerAuthController@register');
 
@@ -64,12 +63,12 @@ $api->version('v1.0', function ($api) {
         $api->get('equipment_candidates/{keyword}',
             'App\Http\Controllers\Api\V1_0\VolunteerProfileController@getEquipmentCandidatedKeywords');
     });
-    
+
     /*
     |--------------------------------------------------------------------------
-    | Protected endpoints 
+    | Protected endpoints
     |--------------------------------------------------------------------------
-    | 
+    |
     | The request MUST contain API Key and JWT in header.
     |
     */
@@ -102,15 +101,21 @@ $api->version('v1.0', function ($api) {
 
         // Upload volunteer's avatar image
         $api->post('users/me/avatar', 'App\Http\Controllers\Api\V1_0\VolunteerProfileController@uploadAvatarMe');
-        
+
         // Update skills
         $api->post('users/me/skills',
             'App\Http\Controllers\Api\V1_0\VolunteerProfileController@updateSkillsMe');
-        
+        // Get skills
+        $api->get('users/me/skills',
+            'App\Http\Controllers\Api\V1_0\VolunteerProfileController@getSkillsMe');
+
         // Update equipment
         $api->post('users/me/equipment',
             'App\Http\Controllers\Api\V1_0\VolunteerProfileController@updateEquipmentMe');
-        
+        // Get skills
+        $api->get('users/me/equipment',
+            'App\Http\Controllers\Api\V1_0\VolunteerProfileController@getEquipmentMe');
+
         // Experience CRUD
         $api->get('users/me/experiences',
             'App\Http\Controllers\Api\V1_0\VolunteerExperienceController@show');
@@ -136,7 +141,7 @@ $api->version('v1.0', function ($api) {
     |--------------------------------------------------------------------------
     | Refresh token endpoint
     |--------------------------------------------------------------------------
-    | 
+    |
     | Refresh a new JWT
     |
     */

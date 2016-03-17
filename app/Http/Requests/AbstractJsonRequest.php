@@ -6,14 +6,14 @@ use Illuminate\Contracts\Validation\Validator;
 use App\Utils\ValidatorUtil;
 
 /**
- * Reference from: 
+ * Reference from:
  * https://laracasts.com/discuss/channels/laravel/how-to-validate-json-input-using-requests
  */
 abstract class AbstractJsonRequest extends Request
 {
     /**
      * Get the validator instanct
-     * 
+     *
      * @return \Illuminate\Foundation\Validation\Validator
      */
     protected function getValidatorInstance()
@@ -23,7 +23,7 @@ abstract class AbstractJsonRequest extends Request
         if (method_exists($this, 'validator')) {
             return $this->container->call([$this, 'validator'], compact('factory'));
         }
-        
+
         return $factory->make($this->json()->all(),
                               $this->container->call([$this, 'rules']),
                               $this->messages(), $this->attributes()
@@ -55,7 +55,7 @@ abstract class AbstractJsonRequest extends Request
         ];
     }
 
-    
+
     protected function formatErrors(Validator $validator)
     {
         $errorArray = $validator->errors()->toArray();

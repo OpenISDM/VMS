@@ -22,7 +22,7 @@ class VerifyEmailService
 
     /**
      * Set inouted email and verification code
-     * @param String $emailAddress     
+     * @param String $emailAddress
      * @param String $verificationCode
      */
     public function __construct($volunteer, $emailAddress, $verificationCode)
@@ -50,7 +50,7 @@ class VerifyEmailService
         if ($nowDateTime > $expiredDateTime) {
             $message = 'Unvalidated or expired verification token';
             $error = 'unvalidated_expired_verification_token';
-            
+
             throw new NotFoundException($message, $error);
         }
 
@@ -71,7 +71,7 @@ class VerifyEmailService
         if (empty($verificationCode)) {
             $message = 'Unvalidated or expired verification token';
             $error = 'unvalidated_expired_verification_token';
-            
+
             throw new NotFoundException($message, $error);
         }
 
@@ -80,7 +80,7 @@ class VerifyEmailService
         if (strcmp($expected, $real) !== 0) {
             $message = 'Unvalidated or expired verification token';
             $error = 'unvalidated_expired_verification_token';
-            
+
             throw new NotFoundException($message, $error);
         }
 
