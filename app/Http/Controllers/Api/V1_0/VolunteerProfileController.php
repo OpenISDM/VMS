@@ -44,7 +44,7 @@ class VolunteerProfileController extends BaseVolunteerController
     public function showMe()
     {
         $volunteer = $this->jwtService->getVolunteer();
-        
+
         $manager = TransformerService::getManager();
         $resource = TransformerService::getResourceItem($volunteer,
             'App\Transformers\VolunteerProfileTransformer', 'volunteer');
@@ -63,7 +63,7 @@ class VolunteerProfileController extends BaseVolunteerController
         VolunteerRepository $volunteerRepository)
     {
         $volunteer = $this->jwtService->getVolunteer();
-        
+
         if ($request->has('city') && $request->has('city.id')) {
             // Filter some unnecessary fields
             $input = $request->except(['city', 'city.id', 'username', 'password',
@@ -81,7 +81,7 @@ class VolunteerProfileController extends BaseVolunteerController
 
         // Update volunteer profile
         $volunteer->update($input);
-        
+
         $manager = TransformerService::getManager();
         $resource = TransformerService::getResourceItem($volunteer,
             'App\Transformers\VolunteerProfileTransformer', 'volunteer');
@@ -109,7 +109,7 @@ class VolunteerProfileController extends BaseVolunteerController
         }
 
         $manager = TransformerService::getManager();
-        
+
         $skipProfile = $request->input('skip_profile', false);
 
         if ($skipProfile) {
@@ -130,7 +130,7 @@ class VolunteerProfileController extends BaseVolunteerController
      * Upload avatar without authorization
      * @param  App\Http\Requests\Api\V1_0\UploadAvatarRequest  $request
      * @param  App\Services\AvatarStorageService               $avatarStorageService
-     * @return \Illuminate\Http\JsonResponse                       
+     * @return \Illuminate\Http\JsonResponse
      */
     public function uploadAvatar(UploadAvatarRequest $request, AvatarStorageService $avatarStorageService, Avatar $avatar)
     {
@@ -179,9 +179,21 @@ class VolunteerProfileController extends BaseVolunteerController
         return response()->json(null, 204);
     }
 
+    public function getSkillsMe()
+    {
+        $volunteer = $this->jwtService->getVolunteer();
+        $skills = $volunteer->skills()->get();
+
+        $manager = TransformerService::getManager();
+        $resource = TransformerService::getResourceCollection($skills,
+            'App\Transformers\VolunteerSkillTransformer', 'skills');
+
+        return response()->json($manager->createData($resource)->toArray(), 200);
+    }
+
     /**
      * Get skill candidated keywords
-     * @param  String $keyword 
+     * @param  String $keyword
      * @return \Illuminate\Http\JsonResponse
      */
     public function getSkillCandidatedKeywords($keyword)
@@ -191,7 +203,7 @@ class VolunteerProfileController extends BaseVolunteerController
 
     /**
      * Get equipment candidated keywords
-     * @param  String $keyword 
+     * @param  String $keyword
      * @return \Illuminate\Http\JsonResponse
      */
     public function getEquipmentCandidatedKeywords($keyword)
@@ -213,7 +225,7 @@ class VolunteerProfileController extends BaseVolunteerController
 
         if (count($existingEquipmentIndexes) != 0) {
             $maxIndex = max($existingEquipmentIndexes);
-            
+
             if (ArrayUtil::isIndexExceed($equipmentList, $maxIndex)) {
                 // Index exceeds $equipmentList size
                 throw new ExceedingIndexException();
@@ -230,6 +242,18 @@ class VolunteerProfileController extends BaseVolunteerController
         }
 
         return response()->json(null, 204);
+    }
+
+    public function getEquipmentMe()
+    {
+        $volunteer = $this->jwtService->getVolunteer();
+        $equipment = $volunteer->equipment()->get();
+
+        $manager = TransformerService::getManager();
+        $resource = TransformerService::getResourceCollection($equipment,
+            'App\Transformers\VolunteerEquipmentTransformer', 'equipment');
+
+        return response()->json($manager->createData($resource)->toArray(), 200);
     }
 
     /**

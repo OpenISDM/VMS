@@ -82,6 +82,84 @@ class VolunteerProfileControllerTest extends AbstractTestCase
         ])->assertResponseStatus(400);
     }
 
+    public function testGetSkillsMe()
+    {
+        $this->factoryModel();
+        $this->beActiveVolunteer();
+
+        $skills = [
+            'Swimming',
+            'Programming',
+            'Repo rescue'
+        ];
+
+        foreach ($skills as $skill) {
+            $this->volunteer->skills()->create(['name' => $skill]);
+        }
+
+        $this->json(
+            'get',
+            '/api/users/me/skills',
+            [],
+            $this->getHeaderWithAuthorization()
+        )->seeJsonEquals(
+            [
+                'skills' => [
+                    [
+                        'name' => 'Swimming'
+                    ],
+                    [
+                        'name' => 'Programming'
+                    ],
+                    [
+                        'name' => 'Repo rescue'
+                    ]
+                ]
+            ]
+        );
+    }
+
+    public function testGetEquipmentMe()
+    {
+        $this->factoryModel();
+        $this->beActiveVolunteer();
+
+        $equipment = [
+            'Car',
+            'Bike',
+            'Camera',
+            'Tent'
+        ];
+
+        foreach ($equipment as $eq) {
+            $this->volunteer->equipment()->create(['name' => $eq]);
+        }
+
+        $this->json(
+            'get',
+            '/api/users/me/equipment',
+            [],
+            $this->getHeaderWithAuthorization()
+        )->seeJsonEquals(
+            [
+                'equipment' => [
+                    [
+                        'name' => 'Car'
+                    ],
+                    [
+                        'name' => 'Bike'
+                    ],
+                    [
+                        'name' => 'Camera'
+                    ],
+                    [
+                        'name' => 'Tent'
+                    ]
+                ]
+            ]
+        );
+    }
+
     public function testShowMe()
     {
         $this->factoryModel();
