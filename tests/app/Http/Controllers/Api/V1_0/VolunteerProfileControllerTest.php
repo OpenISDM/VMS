@@ -373,32 +373,26 @@ class VolunteerProfileControllerTest extends AbstractTestCase
     {
         $this->factoryModel();
         $example = [
-            'Car',
-            'Bike',
-            'Camera',
-            'Tent'
+            'Swimming',
+            'Programming',
+            'Repo rescue'
         ];
 
-        foreach ($example as $equipment) {
-            factory(App\Equipment::class)
-                ->create(['name' => $equipment]);
+        foreach ($example as $skill) {
+            factory(App\Skill::class)
+                ->create(['name' => $skill]);
         }
 
         $this->json('get',
-                    '/api/equipment_candidates/Ca',
+                    '/api/skill_candidates/Re',
                     [],
                     $this->getHeaderOnlyWithApiKey())
              ->seeJsonEquals([
                 'result' => [
                     [
-                        'name' => 'Car',
-                        'id' => 1,
-                        'head_line' => '<strong>Ca</strong>r'
-                    ],
-                    [
-                        'name' => 'Camera',
+                        'name' => 'Repo rescue',
                         'id' => 3,
-                        'head_line' => '<strong>Ca</strong>mera'
+                        'head_line' => '<strong>Re</strong>po rescue'
                     ]
                 ]
              ])
