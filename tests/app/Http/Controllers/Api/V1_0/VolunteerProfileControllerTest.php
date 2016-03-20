@@ -46,6 +46,58 @@ class VolunteerProfileControllerTest extends AbstractTestCase
         }
     }
 
+    public function testSuccessfullyUpdateSkillsMeWithDeletion()
+    {
+        $this->factoryModel();
+        $this->beActiveVolunteer();
+
+        // Insert fake skills
+        $fakeSkills = [
+            'WoWoWo',
+            'QoQoQo',
+            'Swimming'
+        ];
+        $deleteSkills = [
+            'WoWoWo',
+            'QoQoQo'
+        ];
+        $testVolunter = App\Volunteer::find($this->volunteer->id);
+
+        foreach ($fakeSkills as $skill) {
+            $testVolunter->skills()->firstOrCreate(['name' => $skill]);
+        }
+
+        $postData = [
+            'skills' => [
+                'Swimming',
+                'Programming',
+                'Repo rescue',
+            ],
+            'existing_skill_indexes' => [
+                0
+            ],
+        ];
+
+        $this->json(
+            'post',
+            '/api/users/me/skills',
+            $postData,
+            $this->getHeaderWithAuthorization()
+        )->assertResponseStatus(204);
+
+        // Test for deleted skills
+        foreach ($deleteSkills as $skill) {
+            $count = $testVolunter->skills()->where('name', $skill)->count();
+            $this->assertEquals(0, $count);
+        }
+
+        // Test for existing skills
+        foreach ($postData['skills'] as $skill) {
+            $testSkill = $testVolunter->skills()->where('name', $skill)->first();
+            $this->assertEquals($skill, $testSkill->name);
+        }
+    }
+
     public function testUpdateSkillsMeExceedingIndexException()
     {
         $this->factoryModel();
@@ -117,6 +169,60 @@ class VolunteerProfileControllerTest extends AbstractTestCase
                 ]
             ]
         );
+    }
+
+    public function testSuccessfullyUpdateEquipmentMeWithDeletion()
+    {
+        $this->factoryModel();
+        $this->beActiveVolunteer();
+
+        // Insert fake equipment
+        $fakeEquipment = [
+            'WoWoWo',
+            'QoQoQo',
+            'Tent'
+        ];
+        $deleteEquipment = [
+            'WoWoWo',
+            'QoQoQo'
+        ];
+        $testVolunter = App\Volunteer::find($this->volunteer->id);
+
+        foreach ($fakeEquipment as $equipment) {
+            $testVolunter->equipment()->firstOrCreate(['name' => $equipment]);
+        }
+
+        $postData = [
+            'equipment' => [
+                'Car',
+                'Bike',
+                'Camera',
+                'Tent'
+            ],
+            'existing_equipment_indexes' => [
+                3
+            ],
+        ];
+
+        $this->json(
+            'post',
+            '/api/users/me/equipment',
+            $postData,
+            $this->getHeaderWithAuthorization()
+        )
+        ->assertResponseStatus(204);
+
+        // Test for deleted equipment
+        foreach ($deleteEquipment as $equipment) {
+            $count = $testVolunter->equipment()->where('name', $equipment)->count();
+            $this->assertEquals(0, $count);
+        }
+
+        // Test for existing equipment
+        foreach ($postData['equipment'] as $equipment) {
+            $testSkill = $testVolunter->equipment()->where('name', $equipment)->first();
+            $this->assertEquals($equipment, $testSkill->name);
+        }
     }
 
     public function testGetEquipmentMe()
