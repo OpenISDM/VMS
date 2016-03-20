@@ -318,12 +318,13 @@ class VolunteerProfileController extends BaseVolunteerController
      * @param Array                             $nonExistenceList
      */
     private function deleteNonUpdatedSkillEquipment($model, $originalList,
-        $nonExistenceList) {
+        $nonExistenceList)
+    {
         $existent = array_diff($originalList, $nonExistenceList);
 
-        if(!empty($existent)) {
+        if (!empty($existent)) {
             foreach ($model->get() as $value) {
-                if(! in_array($value->name, $existent)) {
+                if (! in_array($value->name, $existent)) {
                     $model->detach($value->id);
                 }
             }
