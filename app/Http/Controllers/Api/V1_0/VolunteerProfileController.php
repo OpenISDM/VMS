@@ -169,6 +169,9 @@ class VolunteerProfileController extends BaseVolunteerController
         }
         // Get nonexistent skills
         $nonexistentSkills = ArrayUtil::getNonexistent($skillsList, $existingSkillIndexes);
+        // var_dump($nonexistentSkills);
+
+        $this->deleteNonUpdatedSkillEquipment($volunteer->skills(), $skillsList, $nonexistentSkills);
 
         // Update volunteer's nonexistant skills
         foreach ($nonexistentSkills as $skill) {
@@ -234,6 +237,8 @@ class VolunteerProfileController extends BaseVolunteerController
 
         // Get nonexistent equipment
         $nonexistentEquipment = ArrayUtil::getNonexistent($equipmentList, $existingEquipmentIndexes);
+
+        $this->deleteNonUpdatedSkillEquipment($volunteer->equipment(), $equipmentList, $nonexistentEquipment);
 
         // Update volunteer's skills
         foreach ($nonexistentEquipment as $equipment) {
@@ -304,5 +309,24 @@ class VolunteerProfileController extends BaseVolunteerController
         $manager = TransformerService::getManager();
 
         return response()->json($manager->createData($resource)->toArray(), 200);
+    }
+
+    /**
+     * Delete non-updated skills or equipment
+     * @param Object                            $model
+     * @param Array                             $originalList
+     * @param Array                             $nonExistenceList
+     */
+    private function deleteNonUpdatedSkillEquipment($model, $originalList,
+        $nonExistenceList) {
+        $existent = array_diff($originalList, $nonExistenceList);
+
+        if(!empty($existent)) {
+            foreach ($model->get() as $value) {
+                if(! in_array($value->name, $existent)) {
+                    $model->detach($value->id);
+                }
+            }
+        }
     }
 }
