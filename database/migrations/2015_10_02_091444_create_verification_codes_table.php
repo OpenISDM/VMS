@@ -15,9 +15,14 @@ class CreateVerificationCodesTable extends Migration
         Schema::create('verification_codes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code')->unique();
-            $table->integer('volunteer_id')->unique();
+            $table->integer('volunteer_id')->unique()->unsigned();
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
+
+            // foreign constraint
+            $table->foreign('volunteer_id')->references('id')
+                  ->on('volunteers')->onDelete('cascade')
+                  ->onUpdate('cascade');
         });
     }
 
