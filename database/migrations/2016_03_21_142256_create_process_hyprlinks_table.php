@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class CreateProcessHyprlinksTable extends Migration
@@ -9,10 +10,10 @@ class CreateProcessHyprlinksTable extends Migration
      */
     public function up()
     {
-        Schema::create('process_hyperlinks', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('process_hyperlinks', function(Blueprint $table) {
+            $table->bigIncrements('id');
             $table->integer('process_id')->unsigned();
-            $table->integer('hyperlink_id')->unsigned();
+            $table->bigInteger('hyperlink_id')->unsigned();
 
             $table->foreign('process_id')->references('id')
                 ->on('processes')->onDelete('cascade')

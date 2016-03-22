@@ -13,7 +13,7 @@ class CreateProjectVolunteersTable extends Migration
     public function up()
     {
         Schema::create('project_volunteers', function(Blueprint $table) {
-            $table->increments(id);
+            $table->increments('id');
             $table->integer('project_id')->unsigned();
             $table->integer('volunteer_id')->unsigned();
             $table->smallInteger('status');
