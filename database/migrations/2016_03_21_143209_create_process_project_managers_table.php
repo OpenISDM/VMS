@@ -12,7 +12,7 @@ class CreateProcessProjectManagersTable extends Migration
      */
     public function up()
     {
-        Schema::create('process_project_manager', function(Blueprint $table) {
+        Schema::create('process_project_manager', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('process_id')->unsigned();
             $table->integer('project_manager_id')->unsigned();

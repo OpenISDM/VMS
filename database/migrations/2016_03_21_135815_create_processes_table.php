@@ -12,13 +12,13 @@ class CreateProcessesTable extends Migration
      */
     public function up()
     {
-        Schema::create('processes', function(Blueprint $table) {
+        Schema::create('processes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->text('description');
             $table->string('location_name');
-            $table->double('longitude',9 ,5);
-            $table->double('latitude',9 ,5);
+            $table->double('longitude', 9, 5);
+            $table->double('latitude', 9, 5);
             $table->smallInteger('permission');
             $table->integer('project_id')->unsigned();
 

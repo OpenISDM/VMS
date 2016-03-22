@@ -12,7 +12,7 @@ class CreateProjectManagerProjectsTable extends Migration
      */
     public function up()
     {
-        Schema::create('project_manager_projects', function(Blueprint $table) {
+        Schema::create('project_manager_projects', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('project_id')->unsigned();
             $table->integer('project_manager_id')->unsigned();

@@ -12,7 +12,7 @@ class CreateHyperlinksTable extends Migration
      */
     public function up()
     {
-        Schema::create('hyperlinks', function(BluePrint $table) {
+        Schema::create('hyperlinks', function (BluePrint $table) {
             $table->bigIncrements('id');
             $table->string('name')->nullable();
             $table->string('link', 2083);

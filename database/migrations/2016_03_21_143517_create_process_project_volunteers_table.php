@@ -12,7 +12,7 @@ class CreateProcessProjectVolunteersTable extends Migration
      */
     public function up()
     {
-        Schema::create('process_project_volunteers', function(Blueprint $table) {
+        Schema::create('process_project_volunteers', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('process_id')->unsigned();
             $table->integer('project_volunteer_id')->unsigned();

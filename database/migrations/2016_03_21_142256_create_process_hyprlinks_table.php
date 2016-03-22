@@ -10,7 +10,7 @@ class CreateProcessHyprlinksTable extends Migration
      */
     public function up()
     {
-        Schema::create('process_hyperlinks', function(Blueprint $table) {
+        Schema::create('process_hyperlinks', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('process_id')->unsigned();
             $table->bigInteger('hyperlink_id')->unsigned();
