@@ -16,8 +16,14 @@ class CreateHyperlinksTable extends Migration
             $table->bigIncrements('id');
             $table->string('name')->nullable();
             $table->string('link', 2083);
+            $table->integer('project_id')->index()->unsigned();
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
+
+            // foreign constraint
+            $table->foreign('project_id')->references('id')
+                  ->on('projects')->onDelete('cascade')
+                  ->onUpdate('cascade');
         });
     }
 

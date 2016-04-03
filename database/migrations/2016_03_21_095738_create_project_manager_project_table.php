@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProjectVolunteersTable extends Migration
+class CreateProjectManagerProjectTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,20 +12,15 @@ class CreateProjectVolunteersTable extends Migration
      */
     public function up()
     {
-        Schema::create('project_volunteers', function (Blueprint $table) {
+        Schema::create('project_manager_project', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('project_id')->unsigned();
-            $table->integer('volunteer_id')->unsigned();
-            $table->smallInteger('status')->default(0);
-            $table->boolean('is_full_profile_permit');
-            $table->smallInteger('permission');
-            $table->dateTime('created_at');
-            $table->dateTime('updated_at');
+            $table->integer('project_id')->index()->unsigned();
+            $table->integer('project_manager_id')->index()->unsigned();
 
             $table->foreign('project_id')->references('id')
                 ->on('projects')->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->foreign('volunteer_id')->references('id')
+            $table->foreign('project_manager_id')->references('id')
                 ->on('volunteers')->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -38,6 +33,6 @@ class CreateProjectVolunteersTable extends Migration
      */
     public function down()
     {
-        Schema::drop('project_volunteers');
+        Schema::drop('project_manager_project');
     }
 }

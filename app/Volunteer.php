@@ -3,19 +3,31 @@
 namespace App;
 
 use Illuminate\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent\Model;
+use App\Traits\UserInProjectTraits;
+use App\Traits\ManageProjectTraits;
 
 class Volunteer extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
-    use Authenticatable, Authorizable, CanResetPassword;
+    use Authenticatable,
+        Authorizable,
+        CanResetPassword,
+        UserInProjectTraits,
+        ManageProjectTraits;
+
+    // Project manager traits
 
     protected $table = 'volunteers';
     protected $fillable = ['username', 'password', 'first_name', 'last_name',
+                            'birth_year', 'gender', 'city', 'address',
+                            'phone_number', 'email', 'emergency_contact', 'emergency_phone',
+                            'introduction'];
+    protected $visible = ['username', 'password', 'first_name', 'last_name',
                             'birth_year', 'gender', 'city', 'address',
                             'phone_number', 'email', 'emergency_contact', 'emergency_phone',
                             'introduction'];
@@ -26,7 +38,6 @@ class Volunteer extends Model implements AuthenticatableContract, AuthorizableCo
         'is_actived' => 'boolean',
         'is_locked' => 'boolean'
     ];
-
 
     public function city()
     {

@@ -1,4 +1,6 @@
 <?php
+use Faker\Generator;
+use App\Hyperlink;
 
 /*
 |--------------------------------------------------------------------------
@@ -104,5 +106,42 @@ $factory->define(App\Skill::class, function (Faker\Generator $faker) {
 $factory->define(App\Equipment::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->word
+    ];
+});
+
+$factory->define(App\Project::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'description' => $faker->paragraph(),
+        'organization' => $faker->sentence(),
+        'is_published' => true,
+        'permission' => 0,
+    ];
+});
+
+$factory->define(App\Hyperlink::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'link' => $faker->url
+    ];
+});
+
+$factory->defineAs(App\Project::class, 'project_private_for_user', function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'description' => $faker->paragraph(),
+        'organization' => $faker->sentence(),
+        'is_published' => true,
+        'permission' => 1,
+    ];
+});
+
+$factory->defineAs(App\Project::class, 'project_private_for_member', function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'description' => $faker->paragraph(),
+        'organization' => $faker->sentence(),
+        'is_published' => true,
+        'permission' => 2,
     ];
 });
