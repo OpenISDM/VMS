@@ -2,7 +2,7 @@
 
 use App\Utils\ArrayUtil;
 
-class ArrayUtiltest extends TestCase
+class ArrayUtilTest extends TestCase
 {
     public function testCombinedArray()
     {
