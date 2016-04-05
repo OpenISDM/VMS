@@ -26,7 +26,7 @@ class CreateHyperlinkRequest extends AbstractJsonRequest
         return [
             'data.type' => 'required|in:hyperlinks',
             'data.attributes.name' => 'required',
-            'data.attributes.link' => 'required|url'
+            'data.attributes.link' => 'required|url',
             'data.relationships.project.data.type' => 'required|in:projects',
             'data.relationships.project.data.id' => 'required|exists:projects,id'
         ];
