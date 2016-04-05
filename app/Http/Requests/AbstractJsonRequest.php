@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\Validator;
 use App\Utils\ValidatorUtil;
+use App\Traits\JwtAuthenticatable;
+use App\Services\JwtService;
 
 /**
  * Reference from:
@@ -11,6 +13,10 @@ use App\Utils\ValidatorUtil;
  */
 abstract class AbstractJsonRequest extends Request
 {
+    use JwtAuthenticatable;
+
+    private $jwtService;
+
     /**
      * Get the validator instanct
      *
@@ -65,5 +71,16 @@ abstract class AbstractJsonRequest extends Request
             "message" => "Validation failed",
             "errors" => $formattedResult
         ];
+    }
+
+    protected function makeJwtService()
+    {
+        if (!isset($this->jwtService)) {
+            $this->jwtInitialize();
+
+            $this->jwtService = new JwtService();
+        }
+
+        return $this->jwtService;
     }
 }

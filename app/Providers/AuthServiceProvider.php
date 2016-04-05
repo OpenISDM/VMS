@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use App\Education;
+use App\Experience;
+use App\Project;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -13,8 +16,9 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Education' => 'App\Policies\VolunteerEducationPolicy',
-        'App\Experience' => 'App\Policies\VolunteerExperiencePolicy',
+        Education::class => 'App\Policies\VolunteerEducationPolicy',
+        Experience::class => 'App\Policies\VolunteerExperiencePolicy',
+        Project::class => 'App\Policies\ProjectPolicy',
     ];
 
     /**
@@ -25,8 +29,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(GateContract $gate)
     {
-        parent::registerPolicies($gate);
-
-        //
+        $this->registerPolicies($gate);
     }
 }

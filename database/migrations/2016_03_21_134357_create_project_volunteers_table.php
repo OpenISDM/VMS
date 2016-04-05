@@ -17,7 +17,10 @@ class CreateProjectVolunteersTable extends Migration
             $table->integer('project_id')->unsigned();
             $table->integer('volunteer_id')->unsigned();
             $table->smallInteger('status');
+            $table->boolean('is_full_profile_permit');
             $table->smallInteger('permission');
+            $table->dateTime('created_at');
+            $table->dateTime('updated_at');
 
             $table->foreign('project_id')->references('id')
                 ->on('projects')->onDelete('cascade')

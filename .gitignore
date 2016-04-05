@@ -57,3 +57,4 @@ Temporary Items
 /vendor
 /.phpintel/
 /storage/database.sqlite
+/node_modules

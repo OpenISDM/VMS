@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProjectManagersTable extends Migration
+class CreateProjectsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,13 @@ class CreateProjectManagersTable extends Migration
      */
     public function up()
     {
-        Schema::create('project_managers', function (Blueprint $table) {
+        Schema::create('projects', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('organization')->nullable();
-            $table->string('token', 512)->nullable();
+            $table->text('description');
+            $table->string('organization');
+            $table->boolean('is_published')->default(true);
+            $table->tinyInteger('permission');
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
         });
@@ -29,6 +31,6 @@ class CreateProjectManagersTable extends Migration
      */
     public function down()
     {
-        Schema::drop('project_managers');
+        Schema::drop('projects');
     }
 }

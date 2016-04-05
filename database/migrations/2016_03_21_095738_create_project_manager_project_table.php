@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProcessProjectManagersTable extends Migration
+class CreateProjectManagerProjectTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,16 +12,16 @@ class CreateProcessProjectManagersTable extends Migration
      */
     public function up()
     {
-        Schema::create('process_project_manager', function (Blueprint $table) {
+        Schema::create('project_manager_project', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('process_id')->unsigned();
-            $table->integer('project_manager_id')->unsigned();
+            $table->integer('project_id')->index()->unsigned();
+            $table->integer('project_manager_id')->index()->unsigned();
 
-            $table->foreign('process_id')->references('id')
-                ->on('processes')->onDelete('cascade')
+            $table->foreign('project_id')->references('id')
+                ->on('projects')->onDelete('cascade')
                 ->onUpdate('cascade');
             $table->foreign('project_manager_id')->references('id')
-                ->on('project_managers')->onDelete('cascade')
+                ->on('volunteers')->onDelete('cascade')
                 ->onUpdate('cascade');
         });
     }
@@ -33,6 +33,6 @@ class CreateProcessProjectManagersTable extends Migration
      */
     public function down()
     {
-        Schema::drop('process_project_manager');
+        Schema::drop('project_manager_project');
     }
 }

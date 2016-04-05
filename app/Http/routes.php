@@ -62,6 +62,9 @@ $api->version('v1.0', function ($api) {
         // Get equipment candidates
         $api->get('equipment_candidates/{keyword}',
             'App\Http\Controllers\Api\V1_0\VolunteerProfileController@getEquipmentCandidatedKeywords');
+
+        $api->get('projects/{id}',
+            'App\Http\Controllers\Api\V1_0\ProjectController@show');
     });
 
     /*
@@ -135,6 +138,22 @@ $api->version('v1.0', function ($api) {
             'App\Http\Controllers\Api\V1_0\VolunteerEducationController@update');
         $api->delete('users/me/educations/{id}',
             'App\Http\Controllers\Api\V1_0\VolunteerEducationController@destroy');
+
+        // Projects CRUD
+        $api->post('projects',
+            'App\Http\Controllers\Api\V1_0\ProjectController@store');
+        $api->put('projects/{id}',
+            'App\Http\Controllers\Api\V1_0\ProjectController@update');
+        $api->get('projects',
+            'App\Http\Controllers\Api\V1_0\ProjectController@showAll');
+
+        // Project members
+        $api->post('projects/{id}/members',
+            'App\Http\Controllers\Api\V1_0\ProjectController@attachVolunteer');
+        $api->get('projects/{projectId}/members',
+            'App\Http\Controllers\Api\V1_0\ProjectController@showMembers');
+        $api->delete('projects/{projectId}/members/{userId}',
+            'App\Http\Controllers\Api\V1_0\ProjectController@detachVolunteer');
     });
 
     /*

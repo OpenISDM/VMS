@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1_0;
 
-use App\Http\Controllers\Api\BaseVolunteerController;
+use App\Http\Controllers\Api\BaseAuthController;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Requests\Api\V1_0\UpdateEquipmentRequest;
@@ -23,20 +23,8 @@ use App\Services\TransformerService;
 use App\Repositories\CityRepository;
 use App\Repositories\VolunteerRepository;
 
-class VolunteerProfileController extends BaseVolunteerController
+class VolunteerProfileController extends BaseAuthController
 {
-    /*
-     * For JSON Web Token service, App\Services\JwtService
-     */
-    protected $jwtService;
-
-    public function __construct(JwtService $jwtService)
-    {
-        parent::__construct();
-
-        $this->jwtService = $jwtService;
-    }
-
     /**
      * Display the specified resource.
      * @return \Illuminate\Http\JsonResponse
