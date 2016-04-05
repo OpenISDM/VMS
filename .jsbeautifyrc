@@ -1,0 +1,6 @@
+{
+    "php": {
+        "cs_fixer_path": "vendor/bin/php-cs-fixer",
+        "level": "psr2"
+    }
+}

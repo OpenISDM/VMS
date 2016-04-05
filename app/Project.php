@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\ProjectMemberTrait;
 
 class Project extends Model
 {
+    use ProjectMemberTrait;
+
     protected $table = 'projects';
     protected $fillable = ['name', 'description', 'is_published', 'permission',
         'organization'];
@@ -31,14 +34,5 @@ class Project extends Model
         'project_manager_project',
         'project_id',
         'project_manager_id');
-    }
-
-    public function members()
-    {
-        return $this->belongsToMany('App\Volunteer',
-            'project_volunteers',
-            'project_id',
-            'volunteer_id'
-        );
     }
 }

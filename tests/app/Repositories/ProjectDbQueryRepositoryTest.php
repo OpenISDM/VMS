@@ -2,8 +2,11 @@
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Collection;
 use App\Repositories\ProjectDbQueryRepository;
+use App\Hyperlink;
 use App\Project;
+use App\Utils\ArrayUtil;
 
 class ProjectDbQueryRepositoryTest extends TestCase
 {
@@ -83,7 +86,7 @@ class ProjectDbQueryRepositoryTest extends TestCase
 
         $user1ManageProjectIds = $this->getModelIds($this->makeCreateProjectWithPublic($this->user1, 3));
 
-        $viewableProjects = $this->repository->getViewableProjectsByUser($this->user2);
+        $viewableProjects = $this->invokeMethod($this->repository, 'viewableProjectsQuery', [$this->user2])->get();
         $collection = collect($viewableProjects);
 
         $this->assertCount(3, $viewableProjects);
@@ -105,9 +108,9 @@ class ProjectDbQueryRepositoryTest extends TestCase
         $user1Expected = array_merge($user1ManageProjectIdsWithPublic, $user1ManageProjectIdsWithPrivateForMember, [$user2AttachedProject->id]);
         $user2Expected = array_merge($user1ManageProjectIdsWithPublic, $user2ManageProjectIdsWithPrivateForMember, [$user2AttachedProject->id]);
 
-        $user1Result = $this->repository->getViewableProjectsByUser($this->user1);
+        $user1Result = $this->invokeMethod($this->repository, 'viewableProjectsQuery', [$this->user1])->get();
         $user1ResultCollection = collect($user1Result);
-        $user2Result = $this->repository->getViewableProjectsByUser($this->user2);
+        $user2Result = $this->invokeMethod($this->repository, 'viewableProjectsQuery', [$this->user2])->get();
         $user2ResultCollection = collect($user2Result);
 
         $user1ResultCollection->each(function ($project) use ($user1Expected) {
@@ -117,6 +120,44 @@ class ProjectDbQueryRepositoryTest extends TestCase
         $user2ResultCollection->each(function ($project) use ($user2Expected) {
             $this->assertContains($project->id, $user2Expected);
         });
+    }
+
+    public function testGetViewableProjectsWithHyperlinks()
+    {
+        $this->makeUsers();
+
+        $user1ManageProjects = $this->makeCreateProjectWithPublic($this->user1, 2);
+        $user1ManageProjectsWithPrivateForMember = $this->makeCreateProjectWithPrivateForMember($this->user1, 4);
+        $user2ManageProjectsWithPrivateForMember = $this->makeCreateProjectWithPrivateForMember($this->user2, 3);
+
+        $this->relationHyperlinks($user1ManageProjects, 3);
+        $this->relationHyperlinks($user1ManageProjectsWithPrivateForMember, 2);
+        $this->relationHyperlinks($user2ManageProjectsWithPrivateForMember, 4);
+
+        $user1ManageProjectIdsWithPublic = $this->getModelIds($user1ManageProjects);
+        $user1ManageProjectIdsWithPrivateForMember = $this->getModelIds($user1ManageProjectsWithPrivateForMember);
+        $user2AttachedProject = $this->makeCreateProjectWithPrivateForMember($this->user1, 1);
+        $user2ManageProjectIdsWithPrivateForMember = $this->getModelIds($user2ManageProjectsWithPrivateForMember);
+
+        $user1Expected = array_merge($user1ManageProjectIdsWithPublic, $user1ManageProjectIdsWithPrivateForMember, [$user2AttachedProject->id]);
+        $user2Expected = array_merge($user1ManageProjectIdsWithPublic, $user2ManageProjectIdsWithPrivateForMember, [$user2AttachedProject->id]);
+
+        $user1Result = $this->repository->getViewableProjectsWithHyperlinks($this->user1);
+        $user1ResultCollection = collect($user1Result);
+        $user2Result = $this->repository->getViewableProjectsWithHyperlinks($this->user2);
+        $user2ResultCollection = collect($user2Result);
+
+        $user1ResultCollection->each(function ($project) use ($user1Expected) {
+            $this->assertContains($project->id, $user1Expected);
+        });
+
+        $user2ResultCollection->each(function ($project) use ($user2Expected) {
+            $this->assertContains($project->id, $user2Expected);
+        });
+
+        /**
+         * TODO: Should be assert the count
+         */
     }
 
     protected function makeCreateProjectWithPublic($user, $count, $isPublished = true)
@@ -168,6 +209,30 @@ class ProjectDbQueryRepositoryTest extends TestCase
         }
 
         return $projects;
+    }
+
+    protected function relationHyperlinks($models, $count)
+    {
+        $hyperlinkMapping = [];
+
+        if ($models instanceof Collection) {
+            $models->each(function ($model) use ($count, &$hyperlinkMapping) {
+                $hyperlinks = factory(App\Hyperlink::class, $count)->make();
+
+                // echo '!!! hyperlinks !!! ';
+                // var_dump($hyperlinks);
+
+                $model->hyperlinks()->saveMany($hyperlinks);
+                $hyperlinkMapping[$model->id] = $hyperlinks;
+            });
+        } else {
+            $hyperlinks = factory(App\Hyperlink::class, $count)->make();
+
+            $models->hyperlins()->saveMany($hyperlinks);
+            $hyperlinkMapping[$model->id] = $hyperlinks;
+        }
+
+        return $hyperlinkMapping;
     }
 
     protected function invokeMethod(&$object, $methodName, array $parameters = array())

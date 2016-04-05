@@ -20,6 +20,15 @@ class TransformerService
         return $manager;
     }
 
+    public static function getJsonApiManager()
+    {
+        // Set serialzer for a transformer
+        $manager = new \League\Fractal\Manager();
+        $manager->setSerializer(new \League\Fractal\Serializer\JsonApiSerializer());
+
+        return $manager;
+    }
+
     /**
      * Get resource item object
      * @param  \Illuminate\Database\Eloquent\Model $object

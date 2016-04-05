@@ -27,7 +27,7 @@ class Volunteer extends Model implements AuthenticatableContract, AuthorizableCo
                             'birth_year', 'gender', 'city', 'address',
                             'phone_number', 'email', 'emergency_contact', 'emergency_phone',
                             'introduction'];
-    protected $visible = ['username', 'password', 'first_name', 'last_name',
+    protected $visible = ['id', 'username', 'password', 'first_name', 'last_name',
                             'birth_year', 'gender', 'city', 'address',
                             'phone_number', 'email', 'emergency_contact', 'emergency_phone',
                             'introduction'];

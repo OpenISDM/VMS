@@ -7,14 +7,41 @@ use App\Volunteer;
 
 class ProjectDbQueryRepository
 {
-    public function getViewableProjectsByUser(Volunteer $user)
+    public function getViewableProjectsWithHyperlinks(Volunteer $user, $count = null)
+    {
+        $viewableProjectsQuery = $this->viewableProjectsQuery($user);
+        $query = DB::table(DB::raw("({$viewableProjectsQuery->toSql()}) as sub"))
+                    ->mergeBindings($viewableProjectsQuery)
+                    ->leftJoin('hyperlinks', 'sub.id', '=', 'hyperlinks.project_id')
+                    ->select('sub.*', 'hyperlinks.name AS hyperlink_name', 'hyperlinks.link')
+                    ->orderBy('sub.updated_at');
+
+        if (is_int($count)) {
+            $query->paginate($count);
+        }
+
+        return $query->get();
+    }
+
+    public function getViewableProjects(Volunteer $user, $count = null)
+    {
+        $query = $this->viewableProjectsQuery($user);
+
+        if (is_int($count)) {
+            $query->paginate($count);
+        }
+
+        return $query->orderBy('projects.updated_at')->get();
+    }
+
+    protected function viewableProjectsQuery(Volunteer $user)
     {
         $manageProjects = $this->manageProjectsQuery($user)->select('projects.*');
         $asMemeberProjects = $this->asMemberProjectsQuery($user)->select('projects.*');
         $userLevelPermissionProjects = $this->userLevelPermissionProjectsQuery()->select('projects.*');
 
         return $manageProjects->union($asMemeberProjects)
-            ->union($userLevelPermissionProjects)->get();
+            ->union($userLevelPermissionProjects);
     }
 
     protected function manageProjectsQuery(Volunteer $user)

@@ -10,24 +10,12 @@ use App\Http\Controllers\Controller;
 use App\Exceptions\AccessDeniedException;
 use App\Experience;
 use App\Transformers\VolunteerExperienceTransformer;
-use App\Http\Controllers\Api\BaseVolunteerController;
+use App\Http\Controllers\Api\BaseAuthController;
 use App\Services\JwtService;
 use App\Services\TransformerService;
 
-class VolunteerExperienceController extends BaseVolunteerController
+class VolunteerExperienceController extends BaseAuthController
 {
-    /*
-     * For JSON Web Token service, App\Services\JwtService
-     */
-    protected $jwtService;
-
-    public function __construct(JwtService $jwtService)
-    {
-        parent::__construct();
-
-        $this->jwtService = $jwtService;
-    }
-
     /**
      * Show volunteer's own experiences
      * @return \Illuminate\Http\JsonResponse
@@ -52,7 +40,7 @@ class VolunteerExperienceController extends BaseVolunteerController
     public function store(ExperienceRequest $request)
     {
         $volunteer = $this->jwtService->getVolunteer();
-        
+
         $experience = new Experience($request->all());
         $experience = $volunteer->experiences()->save($experience);
         $responseJson = [

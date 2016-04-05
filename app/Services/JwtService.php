@@ -29,4 +29,9 @@ class JwtService
 
         return $volunteer;
     }
+
+    public function getUser()
+    {
+        return $this->getVolunteer();
+    }
 }

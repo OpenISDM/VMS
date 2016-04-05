@@ -19,5 +19,6 @@ return [
     'member_project_permission' => [
         'PUBLIC' => 0,
         'PRIVATE_FOR_ALL_ATTENDING_MANAGER' => 1,
+        'PRIVATE_FOR_MEMBER' => 2
     ]
 ];

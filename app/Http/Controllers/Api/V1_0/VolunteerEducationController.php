@@ -6,24 +6,15 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Api\V1_0\EducationRequest;
 use App\Http\Requests\Api\V1_0\UpdateEducationRequest;
 use Gate;
-use App\Http\Controllers\Api\BaseVolunteerController;
+use App\Http\Controllers\Api\BaseAuthController;
 use App\Exceptions\AccessDeniedException;
 use App\Transformers\VolunteerEducationTransformer;
 use App\Education;
 use App\Services\JwtService;
 use App\Services\TransformerService;
 
-class VolunteerEducationController extends BaseVolunteerController
+class VolunteerEducationController extends BaseAuthController
 {
-    protected $jwtService;
-
-    public function __construct(JwtService $jwtService)
-    {
-        parent::__construct();
-
-        $this->jwtService = $jwtService;
-    }
-
     /**
      * Show volunteer's own existing educations
      * @return Illuminate\Http\JsonResponse
@@ -33,7 +24,7 @@ class VolunteerEducationController extends BaseVolunteerController
         $volunteer = $this->jwtService->getVolunteer();
 
         $educations = $volunteer->educations()->get();
-        
+
         $manager = TransformerService::getManager();
         $resource = TransformerService::getResourceCollection($educations,
             'App\Transformers\VolunteerEducationTransformer', 'educations');
@@ -49,7 +40,7 @@ class VolunteerEducationController extends BaseVolunteerController
     public function store(EducationRequest $request)
     {
         $volunteer = $this->jwtService->getVolunteer();
-        
+
         $education = new Education($request->all());
         $education = $volunteer->educations()->save($education);
         $responseJson = [

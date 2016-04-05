@@ -16,7 +16,7 @@ class CreateProjectVolunteersTable extends Migration
             $table->increments('id');
             $table->integer('project_id')->unsigned();
             $table->integer('volunteer_id')->unsigned();
-            $table->smallInteger('status')->default(0);
+            $table->smallInteger('status');
             $table->boolean('is_full_profile_permit');
             $table->smallInteger('permission');
             $table->dateTime('created_at');

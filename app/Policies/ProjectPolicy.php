@@ -9,7 +9,7 @@ class ProjectPolicy
 {
     public function show(Volunteer $user, Project $project)
     {
-        if ($user->isCreatorOfProject()) {
+        if ($user->isCreatorOfProject($project)) {
             return true;
         }
 
