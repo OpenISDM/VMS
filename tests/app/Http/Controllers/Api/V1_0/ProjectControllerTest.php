@@ -104,7 +104,10 @@ class ProjectControllerTest extends AbstractTestCase
         $this->json('get',
             '/api/projects/' . $project->id,
             [],
-            ['X-VMS-API-Key' => $this->getApiKey()]
+            [
+                'X-VMS-API-Key' => $this->getApiKey(),
+                'Authorization' => 'Bearer ' . JWTAuth::fromUser($volunteer),
+            ]
         )->assertResponseStatus(200);
 
         /**
@@ -274,7 +277,7 @@ class ProjectControllerTest extends AbstractTestCase
             '/api/projects/' . $project->id . '/members',
             [],
             [
-                'Authorization' => 'Bearer ' . JWTAuth::fromUser($user1),
+                'Authorization' => 'Bearer ' . JWTAuth::fromUser($user2),
                 'X-VMS-API-Key' => $this->getApiKey()
             ]
         )->assertResponseStatus(200);

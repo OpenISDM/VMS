@@ -146,6 +146,10 @@ $api->version('v1.0', function ($api) {
             'App\Http\Controllers\Api\V1_0\ProjectController@update');
         $api->get('projects',
             'App\Http\Controllers\Api\V1_0\ProjectController@showAll');
+        $api->get('managed_projects',
+            'App\Http\Controllers\Api\V1_0\ProjectController@showManagedProjects');
+        $api->get('attending_projects',
+            'App\Http\Controllers\Api\V1_0\ProjectController@showSelfAttendingProjects');
 
         // Project members
         $api->post('projects/{id}/members',
@@ -154,6 +158,25 @@ $api->version('v1.0', function ($api) {
             'App\Http\Controllers\Api\V1_0\ProjectController@showMembers');
         $api->delete('projects/{projectId}/members/{userId}',
             'App\Http\Controllers\Api\V1_0\ProjectController@detachVolunteer');
+        $api->post('projects/{projectId}/attend',
+            'App\Http\Controllers\Api\V1_0\ProjectController@attend');
+
+        // Project custom field
+        $api->post('projects/{id}/custom_fields',
+            'App\Http\Controllers\Api\V1_0\ProjectCustomFieldController@store');
+        $api->get('projects/{projectId}/custom_fields',
+            'App\Http\Controllers\Api\V1_0\ProjectCustomFieldController@showAll');
+
+
+        // Project custom field data
+        $api->post('projects/{projectId}/members/custom_field_data',
+            'App\Http\Controllers\Api\V1_0\ProjectCustomFieldController@fillCustomField');
+        $api->post('projects/{projectId}/members/bulk_custom_field_data',
+            'App\Http\Controllers\Api\V1_0\ProjectCustomFieldController@fillBulkCustomFields');
+        $api->get('projects/{projectId}/members/custom_field_data',
+            'App\Http\Controllers\Api\V1_0\ProjectCustomFieldController@showAllCutsomFieldsData');
+        $api->get('projects/{projectId}/members/all_custom_field_data',
+            'App\Http\Controllers\Api\V1_0\ProjectCustomFieldController@showAllMembersCustomFieldData');
     });
 
     /*

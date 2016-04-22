@@ -4,10 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\ProjectMemberTrait;
+use App\Traits\ProjectHasCustomFieldTraits;
 
 class Project extends Model
 {
-    use ProjectMemberTrait;
+    use ProjectMemberTrait,
+        ProjectHasCustomFieldTraits;
 
     protected $table = 'projects';
     protected $fillable = ['name', 'description', 'is_published', 'permission',

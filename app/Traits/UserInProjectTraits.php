@@ -34,17 +34,17 @@ trait UserInProjectTraits
 
     public function isPendingProject(Project $project)
     {
-        return $this->pendingProjects()->where($this->getKeyName(), '=', $project->getKey())->first() ? true : false;
+        return $this->pendingProjects()->where('projects.' . $this->getKeyName(), '=', $project->getKey())->first() ? true : false;
     }
 
     public function inProject(Project $project)
     {
-        return $this->projects()->where($this->getKeyName(), '=', $project->getKey())->first() ? true : false;
+        return $this->projects()->where('projects.' . $this->getKeyName(), '=', $project->getKey())->first() ? true : false;
     }
 
     public function isAttendingProject(Project $project)
     {
-        return $this->attendingProjects()->where($this->getKeyName(), '=', $project->getKey())->first() ? true : false;
+        return $this->attendingProjects()->where('projects.' . $this->getKeyName(), '=', $project->getKey())->first() ? true : false;
     }
 
     public function attachProject(Project $project, $permission)
