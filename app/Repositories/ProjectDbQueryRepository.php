@@ -31,14 +31,14 @@ class ProjectDbQueryRepository
             $query->paginate($count);
         }
 
-        return $query->orderBy('projects.updated_at')->get();
+        return $query->orderBy('project_updated_at')->get();
     }
 
     protected function viewableProjectsQuery(Volunteer $user)
     {
-        $manageProjects = $this->manageProjectsQuery($user)->select('projects.*');
-        $asMemeberProjects = $this->asMemberProjectsQuery($user)->select('projects.*');
-        $userLevelPermissionProjects = $this->userLevelPermissionProjectsQuery()->select('projects.*');
+        $manageProjects = $this->manageProjectsQuery($user)->select('projects.*', 'projects.updated_at as project_updated_at');
+        $asMemeberProjects = $this->asMemberProjectsQuery($user)->select('projects.*', 'projects.updated_at as project_updated_at');
+        $userLevelPermissionProjects = $this->userLevelPermissionProjectsQuery()->select('projects.*', 'projects.updated_at as project_updated_at');
 
         return $manageProjects->union($asMemeberProjects)
             ->union($userLevelPermissionProjects);

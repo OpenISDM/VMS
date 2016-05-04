@@ -13,9 +13,9 @@ class CreateEquipmentVolunteerTable extends Migration
     public function up()
     {
         Schema::create('equipment_volunteer', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('volunteer_id')->unsigned();
-            $table->integer('equipment_id')->unsigned();
+            $table->bigIncrements('id');
+            $table->bigInteger('volunteer_id')->unsigned();
+            $table->bigInteger('equipment_id')->unsigned();
 
             // foreign constraints
             $table->foreign('volunteer_id')->references('id')

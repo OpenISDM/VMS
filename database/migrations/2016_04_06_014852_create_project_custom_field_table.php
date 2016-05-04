@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProjectVolunteersTable extends Migration
+class CreateProjectCustomFieldTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,23 +12,23 @@ class CreateProjectVolunteersTable extends Migration
      */
     public function up()
     {
-        Schema::create('project_volunteers', function (Blueprint $table) {
+        Schema::create('project_custom_field', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('name');
+            $table->text('description');
+            $table->boolean('required');
+            $table->tinyInteger('type');
+            $table->boolean('is_published')->default(true);
+            $table->binary('metadata')->nullable();
+            $table->integer('order');
             $table->bigInteger('project_id')->unsigned();
-            $table->bigInteger('volunteer_id')->unsigned();
-            $table->smallInteger('status');
-            $table->boolean('is_full_profile_permit');
-            $table->smallInteger('permission');
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
 
-            $table->unique(['project_id', 'volunteer_id']);
+            $table->unique(['order', 'project_id']);
 
             $table->foreign('project_id')->references('id')
                 ->on('projects')->onDelete('cascade')
-                ->onUpdate('cascade');
-            $table->foreign('volunteer_id')->references('id')
-                ->on('volunteers')->onDelete('cascade')
                 ->onUpdate('cascade');
         });
     }
@@ -40,6 +40,6 @@ class CreateProjectVolunteersTable extends Migration
      */
     public function down()
     {
-        Schema::drop('project_volunteers');
+        Schema::drop('project_custom_field');
     }
 }

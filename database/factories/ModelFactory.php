@@ -1,6 +1,9 @@
 <?php
 use Faker\Generator;
 use App\Hyperlink;
+use App\ProjectCustomField;
+use App\CustomField\RadioButtonMetadata;
+use App\MemberCustomFieldData;
 
 /*
 |--------------------------------------------------------------------------
@@ -143,5 +146,35 @@ $factory->defineAs(App\Project::class, 'project_private_for_member', function (F
         'organization' => $faker->sentence(),
         'is_published' => true,
         'permission' => 2,
+    ];
+});
+
+$factory->define(App\ProjectCustomField::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'description' => $faker->paragraph(),
+        'required' => true,
+        'type' => 'RADIO_BUTTON',
+        'order' => 1,
+        'metadata' => new RadioButtonMetadata([
+            'options' => [
+                [
+                    'value' => 0,
+                    'display_name' => 'qoo',
+                ],
+                [
+                    'value' => 1,
+                    'display_name' => 'foo',
+                ],
+            ]
+        ]),
+        'is_published' => true,
+    ];
+});
+
+$factory->define(App\MemberCustomFieldData::class, function (Faker\Generator $faker) {
+    return [
+        'data' => null,
+        'project_custom_field_id' => null,
     ];
 });

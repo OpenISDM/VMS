@@ -13,12 +13,12 @@ class CreateExperiencesTable extends Migration
     public function up()
     {
         Schema::create('experiences', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('company');
             $table->string('job_title', 100);
             $table->integer('start_year');
             $table->integer('end_year')->nullable();
-            $table->integer('volunteer_id')->index()->unsigned();    // foreign key
+            $table->bigInteger('volunteer_id')->index()->unsigned();    // foreign key
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
 

@@ -2,6 +2,8 @@
 
 namespace App\Traits;
 
+use App\Project;
+
 /**
  *
  */
@@ -20,19 +22,19 @@ trait ProjectMemberTrait
         )->withTimestamps();
     }
 
-    public function viewableMembers($user)
+    public function viewableMembers($user, Project $project)
     {
-        $query = $this->members();
         $allowedPermissions = [
             config('constants.member_project_permission.PUBLIC')
         ];
 
-        if ($user->inProject()) {
+        if ($user->inProject($project)) {
             $allowedPermissions[] = config('constants.member_project_permission.PRIVATE_FOR_MEMBER');
-            $query = $query->where('volunteer_id', '=', $user->id)
-                            ->orWhereIn('permission', $allowedPermissions);
+            $query = $this->members()->where('volunteer_id', '=', $user->id)
+                            ->orWhere('permission', '=', config('constants.member_project_permission.PUBLIC'))
+                            ->orWhere('permission', '=', config('constants.member_project_permission.PRIVATE_FOR_MEMBER'));
         } else {
-            $query = $query->whereIn('permission', $allowedPermissions);
+            $query = $this->members()->where('permission', '=', config('constants.member_project_permission.PUBLIC'));
         }
 
         return $query->get();

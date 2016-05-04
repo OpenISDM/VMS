@@ -13,9 +13,9 @@ class CreateSkillVolunteerTable extends Migration
     public function up()
     {
         Schema::create('skill_volunteer', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('volunteer_id')->unsigned();
-            $table->integer('skill_id')->unsigned();
+            $table->bigIncrements('id');
+            $table->bigInteger('volunteer_id')->unsigned();
+            $table->bigInteger('skill_id')->unsigned();
 
             // foreign constraints
             $table->foreign('volunteer_id')->references('id')
