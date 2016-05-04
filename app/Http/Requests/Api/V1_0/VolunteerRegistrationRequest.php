@@ -41,7 +41,7 @@ class VolunteerRegistrationRequest extends AbstractJsonRequest
             'emergency_contact' => 'sometimes|required|max:255',
             'emergency_phone' => 'sometimes|required|string|max:255',
             'introduction' => 'max:255',
-            'avatar' => 'sometimes|required'
+            'avatar' => 'sometimes'
         ];
     }
 }

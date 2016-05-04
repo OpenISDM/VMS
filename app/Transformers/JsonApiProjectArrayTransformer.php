@@ -15,7 +15,7 @@ class JsonApiProjectArrayTransformer extends TransformerAbstract
 
     public function transform($project)
     {
-        $item = Project::find($project->id)->first()->toArray();
+        $item = Project::find($project->id)->toArray();
 
         return $item;
     }
