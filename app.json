@@ -4,6 +4,6 @@
   "repository": "https://github.com/OpenISDM/VMS",
   "addons": [],
   "scripts": {
-  	"postdeploy": "sh scripts/heroku-deploy.sh"
+  	"postdeploy": "sh scripts/deploy.sh"
   }
 }
