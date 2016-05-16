@@ -26,7 +26,10 @@ class VolunteerRepository
         }
 
         $volunteer = Volunteer::firstOrNew($data);
-        $volunteer->avatar_path = $data['avatar_path'];
+
+        if (array_key_exists('avatar_path', $data)) {
+            $volunteer->avatar_path = $data['avatar_path'];
+        }
 
         if (!empty($city)) {
             // Associate with city model
