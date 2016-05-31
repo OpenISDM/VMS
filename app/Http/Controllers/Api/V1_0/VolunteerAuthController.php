@@ -26,6 +26,17 @@ use App\Exceptions\UnauthorizedException;
 use App\Exceptions\AuthenticatedUserNotFoundException;
 use App\Exceptions\NotFoundException;
 
+/**
+ * The controller provides user authentications
+ *
+ * @Author: Yi-Ming, Huang <ymhuang>
+ * @Date:   2015-11-19T14:59:59+08:00
+ * @Email:  ym.huang0808@gmail.com
+ * @Project: VMS
+ * @Last modified by:   ymhuang
+ * @Last modified time: 2016-05-30T15:09:34+08:00
+ * @License: GPL-3
+ */
 class VolunteerAuthController extends Controller
 {
     use Helpers;
@@ -70,19 +81,19 @@ class VolunteerAuthController extends Controller
 
         // Create a volunteer entity
         $volunteer = $volunteerRepository->create($volunteerInput);
-                
+
         // Save verification code
         $verificationCodeString = StringUtil::generateHashToken();
         $verificationCodeRepository->create(['code' => $verificationCodeString], $volunteer);
 
         // Send verification email to an queue
         $this->dispatch(new SendVerificationEmail($volunteer, $verificationCodeString, 'VMS 電子郵件驗證'));
-        
+
         $credentials = $request->only('username', 'password');
 
         // Generate JWT (JSON Web Token)
         $token = $jwtSerivce->getToken($credentials);
-        
+
         $rootUrl = request()->root();
         $responseJson = [
             'href' => env('APP_URL', $rootUrl) . '/api/users/me',

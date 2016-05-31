@@ -14,10 +14,22 @@ use App\Http\Controllers\Api\BaseAuthController;
 use App\Services\JwtService;
 use App\Services\TransformerService;
 
+/**
+ * The controller provides user to get, store, update and destroy
+ * his/her own experience.
+ *
+ * @Author: Yi-Ming, Huang <ymhuang>
+ * @Date:   2016-04-05T13:43:19+08:00
+ * @Email:  ym.huang0808@gmail.com
+ * @Project: VMS
+ * @Last modified by:   ymhuang
+ * @Last modified time: 2016-05-30T15:35:03+08:00
+ * @License: GPL-3
+ */
 class VolunteerExperienceController extends BaseAuthController
 {
     /**
-     * Show volunteer's own experiences
+     * Show user's own experiences
      * @return \Illuminate\Http\JsonResponse
      */
     public function show()
@@ -33,7 +45,7 @@ class VolunteerExperienceController extends BaseAuthController
     }
 
     /**
-     * Store a new volunteer's experience
+     * Store a new user's experience
      * @param  ExperienceRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -53,7 +65,7 @@ class VolunteerExperienceController extends BaseAuthController
     }
 
     /**
-     * Update an existing volunteer's own experience
+     * Update an existing user's own experience
      * @param  App\Http\Requests\Api\V1_0\UpdateExperienceRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -73,7 +85,8 @@ class VolunteerExperienceController extends BaseAuthController
     }
 
     /**
-     * Destroy an existing volunteer's own experience
+     * Destroy an existing user's own experience
+     *
      * @param  integer $id
      * @return \Illuminate\Http\JsonResponse
      */
