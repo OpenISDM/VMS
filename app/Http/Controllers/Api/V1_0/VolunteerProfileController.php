@@ -32,7 +32,7 @@ use App\Repositories\VolunteerRepository;
  * @Email:  ym.huang0808@gmail.com
  * @Project: VMS
  * @Last modified by:   ymhuang
- * @Last modified time: 2016-05-31T13:10:32+08:00
+ * @Last modified time: 2016-05-31T13:38:27+08:00
  * @License: GPL-3
  */
 
@@ -220,7 +220,7 @@ class VolunteerProfileController extends BaseAuthController
 
     /**
      * Get skill candidated keywords
-     * 
+     *
      * @param  String $keyword
      * @return \Illuminate\Http\JsonResponse    skill candidates with HTTP 200
      */

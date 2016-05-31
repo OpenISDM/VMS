@@ -190,6 +190,7 @@ $api->version('v1.0', function ($api) {
     $api->group(['middleware' => ['jwt.refresh']], function ($api) {
         // For refresh token
         $api->post('auth/refresh_token', function () {
-            return response(null, 204); });
+            return response(null, 204);
         });
+    });
 });

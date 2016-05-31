@@ -187,8 +187,8 @@ class ProjectDbQueryRepositoryTest extends TestCase
             $user->manageProjects()->save($projects);
         } else {
             $projects->each(function ($project) use ($user) {
-                    $user->manageProjects()->save($project);
-                });
+                $user->manageProjects()->save($project);
+            });
         }
 
         return $projects;
