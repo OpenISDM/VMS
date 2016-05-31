@@ -23,11 +23,28 @@ use App\Services\TransformerService;
 use App\Repositories\CityRepository;
 use App\Repositories\VolunteerRepository;
 
+/**
+ * The controller manages user's profile, including basic profile, avatar,
+ * skills and equipment.
+ *
+ * @Author: Yi-Ming, Huang <ymhuang>
+ * @Date:   2016-04-05T13:43:19+08:00
+ * @Email:  ym.huang0808@gmail.com
+ * @Project: VMS
+ * @Last modified by:   ymhuang
+ * @Last modified time: 2016-05-31T13:10:32+08:00
+ * @License: GPL-3
+ */
+
 class VolunteerProfileController extends BaseAuthController
 {
     /**
-     * Display the specified resource.
-     * @return \Illuminate\Http\JsonResponse
+     * Display the user's profile.
+     *
+     * It should identify and get user's model object from JWT token.
+     * And then, the user model is transformed into array.
+     *
+     * @return \Illuminate\Http\JsonResponse    user's profile with HTTP 200
      */
     public function showMe()
     {
@@ -42,10 +59,14 @@ class VolunteerProfileController extends BaseAuthController
 
     /**
      * Update volunteer's own profile
-     * @param  App\Http\Requests\Api\V1_0\UpdateProfileRequest $request
-     * @param  App\Repositories\CityRepository                 $cityRepository
-     * @param  App\Repositories\volunteerRepository            $volunteerRepository
-     * @return \Illuminate\Http\JsonResponse
+     *
+     * The request will be validated through
+     * `App\Http\Requests\Api\V1_0\UpdateProfileRequest`
+     *
+     * @param  App\Http\Requests\Api\V1_0\UpdateProfileRequest  request validation
+     * @param  App\Repositories\CityRepository
+     * @param  App\Repositories\volunteerRepository
+     * @return \Illuminate\Http\JsonResponse                    user's profile with HTTP 200
      */
     public function updateMe(UpdateProfileRequest $request, CityRepository $cityRepository,
         VolunteerRepository $volunteerRepository)
@@ -79,9 +100,10 @@ class VolunteerProfileController extends BaseAuthController
 
     /**
      * Upload volunteer's avatar
-     * @param  UploadAvatarRequest  $request
-     * @param  AvatarStorageService $avatarStorageService
-     * @return Illuminate\Http\JsonResponse
+     *
+     * @param  UploadAvatarRequest          request validation
+     * @param  AvatarStorageService         manage avatar store
+     * @return Illuminate\Http\JsonResponse avatar URL with HTTP 200
      */
     public function uploadAvatarMe(UploadAvatarRequest $request, AvatarStorageService $avatarStorageService, Avatar $avatar)
     {
@@ -116,9 +138,12 @@ class VolunteerProfileController extends BaseAuthController
 
     /**
      * Upload avatar without authorization
-     * @param  App\Http\Requests\Api\V1_0\UploadAvatarRequest  $request
-     * @param  App\Services\AvatarStorageService               $avatarStorageService
-     * @return \Illuminate\Http\JsonResponse
+     *
+     * The avatar image is encode by base64
+     *
+     * @param  App\Http\Requests\Api\V1_0\UploadAvatarRequest   $request
+     * @param  App\Services\AvatarStorageService                $avatarStorageService
+     * @return \Illuminate\Http\JsonResponse                    avatar URL with HTTP 200
      */
     public function uploadAvatar(UploadAvatarRequest $request, AvatarStorageService $avatarStorageService, Avatar $avatar)
     {
@@ -136,8 +161,13 @@ class VolunteerProfileController extends BaseAuthController
 
     /**
      * Update volunteer's own skills
-     * @param  App\Http\Requests\Api\V1_0\UpdateSkillsRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     *
+     * The request body contains new and existing skills.
+     * The indexes of existing skills are `existing_skill_indexes`, and
+     * the rest of skills will be attached into user.
+     *
+     * @param  App\Http\Requests\Api\V1_0\UpdateSkillsRequest   $request
+     * @return \Illuminate\Http\JsonResponse                    HTTP response 204
      */
     public function updateSkillsMe(UpdateSkillsRequest $request)
     {
@@ -155,10 +185,11 @@ class VolunteerProfileController extends BaseAuthController
                 throw new ExceedingIndexException();
             }
         }
-        // Get nonexistent skills
+        // Get nonexistent skills.
+        // The non-existent skills will be created.
         $nonexistentSkills = ArrayUtil::getNonexistent($skillsList, $existingSkillIndexes);
-        // var_dump($nonexistentSkills);
 
+        // If a skill doesn't exist, it will be detach from the user.
         $this->deleteNonUpdatedSkillEquipment($volunteer->skills(), $skillsList, $nonexistentSkills);
 
         // Update volunteer's nonexistant skills
@@ -170,6 +201,11 @@ class VolunteerProfileController extends BaseAuthController
         return response()->json(null, 204);
     }
 
+    /**
+     * Get user's skills
+     *
+     * @return \Illuminate\Http\JsonResponse    user's skills with HTTP 200
+     */
     public function getSkillsMe()
     {
         $volunteer = $this->jwtService->getVolunteer();
@@ -184,8 +220,9 @@ class VolunteerProfileController extends BaseAuthController
 
     /**
      * Get skill candidated keywords
+     * 
      * @param  String $keyword
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse    skill candidates with HTTP 200
      */
     public function getSkillCandidatedKeywords($keyword)
     {
@@ -194,8 +231,9 @@ class VolunteerProfileController extends BaseAuthController
 
     /**
      * Get equipment candidated keywords
+     *
      * @param  String $keyword
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse    equipment candidates with HTTP 200
      */
     public function getEquipmentCandidatedKeywords($keyword)
     {
@@ -204,8 +242,13 @@ class VolunteerProfileController extends BaseAuthController
 
     /**
      * Update volunteer's own equipment
+     *
+     * The request body contains new and existing equipment.
+     * The indexes of existing equipment are `existing_equipment_indexes`, and
+     * the rest of equipment will be attached into user.
+     *
      * @param  App\Http\Requests\Api\V1_0\UpdateEquipmentRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse    no content with HTTP 204
      */
     public function updateEquipmentMe(UpdateEquipmentRequest $request)
     {
@@ -237,6 +280,11 @@ class VolunteerProfileController extends BaseAuthController
         return response()->json(null, 204);
     }
 
+    /**
+     * Get user's equipment
+     *
+     * @return \Illuminate\Http\JsonResponse [description]
+     */
     public function getEquipmentMe()
     {
         $volunteer = $this->jwtService->getVolunteer();
@@ -281,6 +329,7 @@ class VolunteerProfileController extends BaseAuthController
 
     /**
      * Get candidated keywords from models
+     *
      * @param  String                           $model
      * @param  String                           $keyword
      * @return \Illuminate\Http\JsonResponse
@@ -301,6 +350,7 @@ class VolunteerProfileController extends BaseAuthController
 
     /**
      * Delete non-updated skills or equipment
+     *
      * @param Object                            $model
      * @param Array                             $originalList
      * @param Array                             $nonExistenceList

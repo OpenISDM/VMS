@@ -13,6 +13,18 @@ use App\Education;
 use App\Services\JwtService;
 use App\Services\TransformerService;
 
+/**
+ * The contoller provides user to show, store, update and destroy
+ * his/her own education.
+ *
+ * @Author: Yi-Ming, Huang <ymhuang>
+ * @Date:   2016-04-05T13:43:19+08:00
+ * @Email:  ym.huang0808@gmail.com
+ * @Project: VMS
+ * @Last modified by:   ymhuang
+ * @Last modified time: 2016-05-30T15:37:29+08:00
+ * @License: GPL-3
+ */
 class VolunteerEducationController extends BaseAuthController
 {
     /**
