@@ -9,13 +9,13 @@
 
 Volunteer management system (VMS) implements in Model-View-Controller architecture.
 
-## Models
+### Models
 The models are data entities and also working with database. For example, models allows to manipulate database, including insertion, selection, updating, deleting and relation without writing any SQL commands.
 
-## View
+### View
 The view component is in [VMS-frontend](https://github.com/OpenISDM/VMS-frontend) repo.
 
-## Controllers
+### Controllers
 Each REST API request is routed to a controller by [Dingo API router](https://github.com/dingo/api/wiki/Creating-API-Endpoints). Besides that, in the router, it also provides to inject HTTP middleware for filtering HTTP requests entering application. After HTTP requests entering, controllers process input and generate JSON response by transformers.
 
 ### Request and response flow
@@ -58,3 +58,7 @@ HTML & CSS in VMS follows the [Code Guide](http://codeguide.co/)
 
 ## Contribution
 Please see [Contribution](https://github.com/OpenISDM/VMS/wiki/Contribution) link on wiki
+
+## References
+- [Laravel 5.1 Authorization - Within Form  Requests](https://laravel.com/docs/5.1/authorization#within-form-requests)
+- [Laravel 5.1 Validation - Form Request Validation](https://laravel.com/docs/5.1/validation#form-request-validation)
