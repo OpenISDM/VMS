@@ -32,7 +32,7 @@ use App\Repositories\VolunteerRepository;
  * @Email:  ym.huang0808@gmail.com
  * @Project: VMS
  * @Last modified by:   ymhuang
- * @Last modified time: 2016-06-01T16:56:25+08:00
+ * @Last modified time: 2016-06-02T18:02:57+08:00
  * @License: GPL-3
  */
 
@@ -63,33 +63,36 @@ class VolunteerProfileController extends BaseAuthController
      * The request will be validated through
      * `App\Http\Requests\Api\V1_0\UpdateProfileRequest`
      *
-     * @param  UpdateProfileRequest  request validation
-     * @param  CityRepository
-     * @param  VolunteerRepository
-     * @return \Illuminate\Http\JsonResponse                    user's profile with HTTP 200
+     * @param  UpdateProfileRequest $request             [description]
+     * @return JsonResponse                              user's profile with HTTP 200
      */
-    public function updateMe(UpdateProfileRequest $request, CityRepository $cityRepository,
-        VolunteerRepository $volunteerRepository)
+    public function updateMe(UpdateProfileRequest $request)
     {
         $volunteer = $this->jwtService->getVolunteer();
+        $exceptedInput = [
+            'city',
+            'city.id',
+            'username',
+            'password',
+            'email',
+            'is_actived',
+            'is_locked',
+            'updated_at',
+            'created_at'
+        ];
 
-        if ($request->has('city') && $request->has('city.id')) {
-            // Filter some unnecessary fields
-            $input = $request->except(['city', 'city.id', 'username', 'password',
-                'is_actived', 'is_locked', 'updated_at', 'created_at']);
+        // Filter some unnecessary fields
+        $profile = $request->except($exceptedInput);
 
-            $cityInput = $request->input('city.id');
-            $city = $cityRepository->findById($cityInput);
+        // Update user's city
+        $cityId = $request->input('city.id');
+        $city = City::find($cityId);
 
-            // Update volunteer city
-            $volunteerRepository->updateCity($city, $volunteer);
-        } else {
-            // Filter some unnecessary fields
-            $input = $request->except(['username', 'password', 'is_actived', 'is_locked', 'updated_at', 'created_at']);
-        }
+        $volunteer->city()->associate($city);
+        $volunteer->save();
 
         // Update volunteer profile
-        $volunteer->update($input);
+        $volunteer->update($profile);
 
         $manager = TransformerService::getManager();
         $resource = TransformerService::getResourceItem($volunteer,
@@ -106,7 +109,9 @@ class VolunteerProfileController extends BaseAuthController
      * @param  Avatar               $avatar               Avatar model
      * @return JsonResponse                               [description]
      */
-    public function uploadAvatarMe(UploadAvatarRequest $request, AvatarStorageService $avatarStorageService, Avatar $avatar)
+    public function uploadAvatarMe(UploadAvatarRequest $request,
+        AvatarStorageService $avatarStorageService,
+        Avatar $avatar)
     {
         $volunteer = $this->jwtService->getVolunteer();
 
@@ -177,15 +182,6 @@ class VolunteerProfileController extends BaseAuthController
         $skillsList = $request->input('skills');
         $existingSkillIndexes = $request->input('existing_skill_indexes');
 
-        // Check if the skill array is empty
-        if (count($existingSkillIndexes) != 0) {
-            $maxIndex = max($existingSkillIndexes);
-
-            if (ArrayUtil::isIndexExceed($skillsList, $maxIndex)) {
-                // Index exceeds $skillsList size
-                throw new ExceedingIndexException();
-            }
-        }
         // Get nonexistent skills.
         // The non-existent skills will be created.
         $nonexistentSkills = ArrayUtil::getNonexistent($skillsList, $existingSkillIndexes);
@@ -257,15 +253,6 @@ class VolunteerProfileController extends BaseAuthController
 
         $equipmentList = $request->input('equipment');
         $existingEquipmentIndexes = $request->input('existing_equipment_indexes');
-
-        if (count($existingEquipmentIndexes) != 0) {
-            $maxIndex = max($existingEquipmentIndexes);
-
-            if (ArrayUtil::isIndexExceed($equipmentList, $maxIndex)) {
-                // Index exceeds $equipmentList size
-                throw new ExceedingIndexException();
-            }
-        }
 
         // Get nonexistent equipment
         $nonexistentEquipment = ArrayUtil::getNonexistent($equipmentList, $existingEquipmentIndexes);
@@ -357,7 +344,8 @@ class VolunteerProfileController extends BaseAuthController
      * @param Array                             $originalList
      * @param Array                             $nonExistenceList
      */
-    private function deleteNonUpdatedSkillEquipment($model, $originalList,
+    private function deleteNonUpdatedSkillEquipment($model,
+        $originalList,
         $nonExistenceList)
     {
         $existent = array_diff($originalList, $nonExistenceList);

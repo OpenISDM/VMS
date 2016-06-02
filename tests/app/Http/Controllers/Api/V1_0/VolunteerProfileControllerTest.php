@@ -288,8 +288,18 @@ class VolunteerProfileControllerTest extends AbstractTestCase
         $this->createSkillsAndEquipment();
 
         $putData = [
-            'city' => ['id' => 1],
-            'emergency_phone' => '0910123456',
+            "first_name" => "Lin",
+            "last_name" => "Jim",
+            "birth_year" => 2015,
+            "gender" => "male",
+            "city" => [
+                "id"=> 1
+            ],
+            "address" => "128 Academia Road, Section 2, Nankang Dist.",
+            "phone_number" => "0912345678",
+            "emergency_contact" => "Jeremy Lin",
+            "emergency_phone" => "0910123456",
+            "introduction"=> "My personal introduction"
         ];
 
         $city = $this->cities[0];
@@ -331,8 +341,19 @@ class VolunteerProfileControllerTest extends AbstractTestCase
         }
 
         $putData = [
-            'username' => 'qoo',
-            'emergency_phone' => '0910123456',
+            "username" => $this->volunteer->username,
+            "first_name" => "Lin",
+            "last_name" => "Jim",
+            "birth_year" => 2015,
+            "gender" => "male",
+            "city" => [
+                "id"=> 1
+            ],
+            "address" => "128 Academia Road, Section 2, Nankang Dist.",
+            "phone_number" => "0912345678",
+            "emergency_contact" => "Jeremy Lin",
+            "emergency_phone" => "0910123456",
+            "introduction"=> "My personal introduction"
         ];
 
         $this->json(
@@ -340,7 +361,8 @@ class VolunteerProfileControllerTest extends AbstractTestCase
             '/api/users/me',
             $putData,
             $this->getHeaderWithAuthorization()
-        )->assertResponseStatus(200);
+        )
+        ->assertResponseStatus(200);
         $this->seeInDatabase('volunteers', ['username' => $originalUsername]);
     }
 
