@@ -32,7 +32,7 @@ use App\Repositories\VolunteerRepository;
  * @Email:  ym.huang0808@gmail.com
  * @Project: VMS
  * @Last modified by:   ymhuang
- * @Last modified time: 2016-05-31T13:38:27+08:00
+ * @Last modified time: 2016-06-01T16:56:25+08:00
  * @License: GPL-3
  */
 
@@ -44,7 +44,7 @@ class VolunteerProfileController extends BaseAuthController
      * It should identify and get user's model object from JWT token.
      * And then, the user model is transformed into array.
      *
-     * @return \Illuminate\Http\JsonResponse    user's profile with HTTP 200
+     * @return JsonResponse    User's profile with HTTP 200
      */
     public function showMe()
     {
@@ -63,9 +63,9 @@ class VolunteerProfileController extends BaseAuthController
      * The request will be validated through
      * `App\Http\Requests\Api\V1_0\UpdateProfileRequest`
      *
-     * @param  App\Http\Requests\Api\V1_0\UpdateProfileRequest  request validation
-     * @param  App\Repositories\CityRepository
-     * @param  App\Repositories\volunteerRepository
+     * @param  UpdateProfileRequest  request validation
+     * @param  CityRepository
+     * @param  VolunteerRepository
      * @return \Illuminate\Http\JsonResponse                    user's profile with HTTP 200
      */
     public function updateMe(UpdateProfileRequest $request, CityRepository $cityRepository,
@@ -99,11 +99,12 @@ class VolunteerProfileController extends BaseAuthController
     }
 
     /**
-     * Upload volunteer's avatar
+     * Upload user's avatar
      *
-     * @param  UploadAvatarRequest          request validation
-     * @param  AvatarStorageService         manage avatar store
-     * @return Illuminate\Http\JsonResponse avatar URL with HTTP 200
+     * @param  UploadAvatarRequest  $request              Request data also provides authorization and validation
+     * @param  AvatarStorageService $avatarStorageService Store avatar
+     * @param  Avatar               $avatar               Avatar model
+     * @return JsonResponse                               [description]
      */
     public function uploadAvatarMe(UploadAvatarRequest $request, AvatarStorageService $avatarStorageService, Avatar $avatar)
     {
@@ -141,9 +142,9 @@ class VolunteerProfileController extends BaseAuthController
      *
      * The avatar image is encode by base64
      *
-     * @param  App\Http\Requests\Api\V1_0\UploadAvatarRequest   $request
-     * @param  App\Services\AvatarStorageService                $avatarStorageService
-     * @return \Illuminate\Http\JsonResponse                    avatar URL with HTTP 200
+     * @param  UploadAvatarRequest   $request               Request data also provides validation and authorization
+     * @param  AvatarStorageService  $avatarStorageService  For store avatar
+     * @return JsonResponse                                 avatar URL with HTTP 200
      */
     public function uploadAvatar(UploadAvatarRequest $request, AvatarStorageService $avatarStorageService, Avatar $avatar)
     {
@@ -166,8 +167,8 @@ class VolunteerProfileController extends BaseAuthController
      * The indexes of existing skills are `existing_skill_indexes`, and
      * the rest of skills will be attached into user.
      *
-     * @param  App\Http\Requests\Api\V1_0\UpdateSkillsRequest   $request
-     * @return \Illuminate\Http\JsonResponse                    HTTP response 204
+     * @param  UpdateSkillsRequest   $request   Request data also provides validation and authorization
+     * @return JsonResponse                     HTTP response 204
      */
     public function updateSkillsMe(UpdateSkillsRequest $request)
     {
@@ -299,10 +300,11 @@ class VolunteerProfileController extends BaseAuthController
 
     /**
      * Delete volunteer's own account
-     * @param  App\Http\Requests\Api\V1_0\CredentialRequest    $request
-     * @param  App\Services\AvatarStorageService               $avatarStorageService
-     * @param  App\Services\JwtService                         $jwtService
-     * @return \Illuminate\Http\JsonResponse
+     *
+     * @param  CredentialRequest    $request
+     * @param  AvatarStorageService $avatarStorageService
+     * @param  JwtService           $jwtService
+     * @return JsonResponse
      */
     public function deleteMe(CredentialRequest $request, AvatarStorageService $avatarStorageService,
         JwtService $jwtService)

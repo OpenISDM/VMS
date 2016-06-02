@@ -23,6 +23,7 @@ class ProjectController extends BaseAuthController
 {
     /**
      * Create a new project
+     *
      * @param  CreateProjectRequest $request
      * @return Illuminate\Http\JsonResponse
      */
@@ -56,6 +57,7 @@ class ProjectController extends BaseAuthController
 
     /**
      * Show a particular project information
+     *
      * @param  integer      $id
      * @return Illuminate\Http\JsonResponse
      */
