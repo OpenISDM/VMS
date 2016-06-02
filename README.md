@@ -26,9 +26,9 @@ The following figure illustrates how VMS process client's request and response t
 
 The client (view) sends a request to application, **HTTP Router** routes the request to a corresponding method in a controller by HTTP method and URL. If any **HTTP Middleware** is registered on a routing, the middleware will be invoked to filter request. For example, there is a middleware `\Tymon\JWTAuth\Middleware\GetUserFromToken` for checking the authentication token in a request.
 
-Next, before entering a controller, if there is a **HTTP request** dependency injection on a controller, the request will be created and called. Since the request may contain request validation logic and authorization control, it avoids fat controllers and duplicated code in controllers. A request allows to implement `authorize()`<sup>[1](#references)</sup> and `rules()`<sup>[2](#references)</sup> methods.
+Next, before entering a controller, if there is a **HTTP request** dependency injection on a controller, the request will be created and called. Since the request may contain request validation logic and authorization control, it avoids fat controllers and duplicated code in controllers. A request allows to implement `authorize()`<sup>[1](#references)</sup> and `rules()`<sup>[2](#references)</sup> methods. The `authorize()` returns `true` or `false` for determining whether the request is authorized or not. The `rules()` returns the validation rules <sup>[3](#references)</sup> in `array` type.
 
-After that, a controller processes the request and manipulate models. If the model data should be sent a response to view, it will be passed to **Transformers** in order to transform from object to `array` as JSON response.
+After that, a controller processes the request and manipulate **Models**. If the model data should be sent a response to view, it will be passed to **Transformers** in order to transform from object to `array` as JSON response.
 
 
 ### Code organization
@@ -62,3 +62,4 @@ Please see [Contribution](https://github.com/OpenISDM/VMS/wiki/Contribution) lin
 ## References
 1. [Laravel 5.1 Authorization - Within Form  Requests](https://laravel.com/docs/5.1/authorization#within-form-requests)
 2. [Laravel 5.1 Validation - Form Request Validation](https://laravel.com/docs/5.1/validation#form-request-validation)
+3. [Laravel 5.1 Validation - Available Validation Rules](https://laravel.com/docs/5.1/validation#available-validation-rules)
