@@ -16,6 +16,10 @@
 | Dingo API Routes
 |--------------------------------------------------------------------------
 |
+| It uses Dingo API Package https://github.com/dingo/api . Some routings
+| are registered HTTP Middleware for filtering HTTP request. The middleware
+| name is naming by `$routeMiddleware` array in `app/Http/Kernel.php` file.
+|
 | URL Prefix: /api
 | Example: /api/register
 |
@@ -31,7 +35,7 @@ $api->version('v1.0', function ($api) {
     | Public endpoints
     |--------------------------------------------------------------------------
     |
-    | The request MUST contain API key in header.
+    | The routings checks HTTP headers by the `check.header` middleware
     |
     */
     $api->group(['middleware' => ['check.header']], function ($api) {
@@ -61,6 +65,7 @@ $api->version('v1.0', function ($api) {
         $api->get('equipment_candidates/{keyword}',
             'App\Http\Controllers\Api\V1_0\VolunteerProfileController@getEquipmentCandidatedKeywords');
 
+        // Get a specifized project
         $api->get('projects/{id}',
             'App\Http\Controllers\Api\V1_0\ProjectController@show');
     });
@@ -70,7 +75,8 @@ $api->version('v1.0', function ($api) {
     | Protected endpoints
     |--------------------------------------------------------------------------
     |
-    | The request MUST contain API Key and JWT in header.
+    | The request MUST contain API Key and JWT in header by `check.header`
+    | and `api.auth` middleware.
     |
     */
     $api->group(['middleware' => ['check.header', 'api.auth']], function ($api) {
@@ -182,7 +188,7 @@ $api->version('v1.0', function ($api) {
     | Refresh token endpoint
     |--------------------------------------------------------------------------
     |
-    | Refresh a new JWT
+    | The `jwt.refresh` validates the JWT and refreshes a new token.
     |
     */
     $api->group(['middleware' => ['jwt.refresh']], function ($api) {
