@@ -57,7 +57,7 @@ abstract class AbstractJsonRequest extends Request
             'unique' => 'used_field',
             'max' => 'exceed_max_length',
             'in' => 'not_in_acceptable_list',
-            'exists' => 'not_exist'
+            'exists' => 'not_exist',
         ];
     }
 

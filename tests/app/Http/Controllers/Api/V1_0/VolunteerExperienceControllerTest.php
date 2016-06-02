@@ -79,12 +79,15 @@ class VolunteerExperienceControllerTest extends AbstractTestCase
                         'X-VMS-API-Key' => $this->getApiKey()
                     ])
              ->seeJsonEquals([
-                        'message' => 'Unable to execute',
-                        'errors' => [[
-                            'code' => 'exceeding_index_value'
-                        ]]
-                    ])
-             ->assertResponseStatus(400);
+                 'errors' => [
+                     [
+                         'code' => 'exceeding_index_value',
+                         'fields' => ['existing_equipment_indexes']
+                     ]
+                 ],
+                     'message' => 'Validation failed'
+             ])
+             ->assertResponseStatus(422);
     }
 
     public function testSuccessfullyStoreExperienceMe()
