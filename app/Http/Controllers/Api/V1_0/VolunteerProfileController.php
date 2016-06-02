@@ -32,7 +32,7 @@ use App\Repositories\VolunteerRepository;
  * @Email:  ym.huang0808@gmail.com
  * @Project: VMS
  * @Last modified by:   ymhuang
- * @Last modified time: 2016-06-02T18:02:57+08:00
+ * @Last modified time: 2016-06-02T18:16:10+08:00
  * @License: GPL-3
  */
 
@@ -52,7 +52,8 @@ class VolunteerProfileController extends BaseAuthController
 
         $manager = TransformerService::getManager();
         $resource = TransformerService::getResourceItem($volunteer,
-            'App\Transformers\VolunteerProfileTransformer', 'volunteer');
+            'App\Transformers\VolunteerProfileTransformer',
+            'volunteer');
 
         return response()->json($manager->createData($resource)->toArray(), 200);
     }
@@ -63,7 +64,7 @@ class VolunteerProfileController extends BaseAuthController
      * The request will be validated through
      * `App\Http\Requests\Api\V1_0\UpdateProfileRequest`
      *
-     * @param  UpdateProfileRequest $request             [description]
+     * @param  UpdateProfileRequest $request             Updated profile request data
      * @return JsonResponse                              user's profile with HTTP 200
      */
     public function updateMe(UpdateProfileRequest $request)
@@ -96,7 +97,8 @@ class VolunteerProfileController extends BaseAuthController
 
         $manager = TransformerService::getManager();
         $resource = TransformerService::getResourceItem($volunteer,
-            'App\Transformers\VolunteerProfileTransformer', 'volunteer');
+            'App\Transformers\VolunteerProfileTransformer',
+            'volunteer');
 
         return response()->json($manager->createData($resource)->toArray(), 200);
     }
@@ -151,7 +153,9 @@ class VolunteerProfileController extends BaseAuthController
      * @param  AvatarStorageService  $avatarStorageService  For store avatar
      * @return JsonResponse                                 avatar URL with HTTP 200
      */
-    public function uploadAvatar(UploadAvatarRequest $request, AvatarStorageService $avatarStorageService, Avatar $avatar)
+    public function uploadAvatar(UploadAvatarRequest $request,
+        AvatarStorageService $avatarStorageService,
+        Avatar $avatar)
     {
         if ($request->has('avatar')) {
             $avatarBase64File = $request->input('avatar');
@@ -252,12 +256,15 @@ class VolunteerProfileController extends BaseAuthController
         $volunteer = $this->jwtService->getVolunteer();
 
         $equipmentList = $request->input('equipment');
-        $existingEquipmentIndexes = $request->input('existing_equipment_indexes');
+        $existingIndexes = $request->input('existing_equipment_indexes');
 
         // Get nonexistent equipment
-        $nonexistentEquipment = ArrayUtil::getNonexistent($equipmentList, $existingEquipmentIndexes);
+        $nonexistentEquipment = ArrayUtil::getNonexistent($equipmentList,
+            $existingIndexes);
 
-        $this->deleteNonUpdatedSkillEquipment($volunteer->equipment(), $equipmentList, $nonexistentEquipment);
+        $this->deleteNonUpdatedSkillEquipment($volunteer->equipment(),
+            $equipmentList,
+            $nonexistentEquipment);
 
         // Update volunteer's skills
         foreach ($nonexistentEquipment as $equipment) {
@@ -280,7 +287,8 @@ class VolunteerProfileController extends BaseAuthController
 
         $manager = TransformerService::getManager();
         $resource = TransformerService::getResourceCollection($equipment,
-            'App\Transformers\VolunteerEquipmentTransformer', 'equipment');
+            'App\Transformers\VolunteerEquipmentTransformer',
+            'equipment');
 
         return response()->json($manager->createData($resource)->toArray(), 200);
     }

@@ -127,11 +127,14 @@ class VolunteerProfileControllerTest extends AbstractTestCase
             $postData,
             $this->getHeaderWithAuthorization()
         )->seeJsonEquals([
-            'message' => 'Unable to execute',
-            'errors' => [[
-                'code' => 'exceeding_index_value',
-            ]],
-        ])->assertResponseStatus(400);
+            'errors' => [
+                [
+                    'code' => 'exceeding_index_value',
+                    'fields' => ['existing_skill_indexes']
+                ]
+            ],
+                'message' => 'Validation failed'
+        ])->assertResponseStatus(422);
     }
 
     public function testGetSkillsMe()
