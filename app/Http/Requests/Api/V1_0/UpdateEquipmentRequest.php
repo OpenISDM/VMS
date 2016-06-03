@@ -25,7 +25,7 @@ class UpdateEquipmentRequest extends AbstractJsonRequest
     {
         return [
             'equipment' => 'required',
-            'existing_equipment_indexes' => 'sometimes|array_index:equipment',
+            'existing_equipment_indexes' => 'sometimesarray_index:equipment',
         ];
     }
 }
