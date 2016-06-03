@@ -20,8 +20,6 @@ use App\Transformers\VolunteerAvatarTransformer;
 use App\Services\AvatarStorageService;
 use App\Services\JwtService;
 use App\Services\TransformerService;
-use App\Repositories\CityRepository;
-use App\Repositories\VolunteerRepository;
 
 /**
  * The controller manages user's profile, including basic profile, avatar,
@@ -32,7 +30,7 @@ use App\Repositories\VolunteerRepository;
  * @Email:  ym.huang0808@gmail.com
  * @Project: VMS
  * @Last modified by:   ymhuang
- * @Last modified time: 2016-06-02T18:16:10+08:00
+ * @Last modified time: 2016-06-03T10:00:23+08:00
  * @License: GPL-3
  */
 
