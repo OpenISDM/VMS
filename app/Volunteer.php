@@ -12,7 +12,9 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\UserInProjectTraits;
 use App\Traits\ManageProjectTraits;
 
-class Volunteer extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
+class Volunteer extends Model implements AuthenticatableContract,
+    AuthorizableContract,
+    CanResetPasswordContract
 {
     use Authenticatable,
         Authorizable,
@@ -20,30 +22,66 @@ class Volunteer extends Model implements AuthenticatableContract, AuthorizableCo
         UserInProjectTraits,
         ManageProjectTraits;
 
-    // Project manager traits
-
+    /**
+     * Table name
+     *
+     * @var string
+     */
     protected $table = 'volunteers';
+
+    /**
+     * The attributes are allowed to be mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = ['username', 'password', 'first_name', 'last_name',
                             'birth_year', 'gender', 'city', 'address',
                             'phone_number', 'email', 'emergency_contact', 'emergency_phone',
                             'introduction'];
+
+    /**
+     * The attributes that should be visible in arrays.
+     *
+     * @var array
+     */
     protected $visible = ['id', 'username', 'password', 'first_name', 'last_name',
                             'birth_year', 'gender', 'city', 'address',
                             'phone_number', 'email', 'emergency_contact', 'emergency_phone',
                             'introduction'];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
     protected $hidden = ['password', 'remember_token'];
 
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
     protected $casts = [
         'id' => 'integer',
         'is_actived' => 'boolean',
         'is_locked' => 'boolean'
     ];
 
+    /**
+     * Relationship with `App\City` model
+     *
+     * @return [type] [description]
+     */
     public function city()
     {
         return $this->belongsTo('App\City');
     }
 
+    /**
+     * Relationship with `App\VerificationCode` model
+     *
+     * @return [type] [description]
+     */
     public function verificationCode()
     {
         return $this->hasOne('App\VerificationCode');
