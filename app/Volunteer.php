@@ -12,7 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\UserInProjectTraits;
 use App\Traits\ManageProjectTraits;
 
-class Volunteer extends Model implements AuthenticatableContract,
+class Volunteer extends Model implements
+    AuthenticatableContract,
     AuthorizableContract,
     CanResetPasswordContract
 {
