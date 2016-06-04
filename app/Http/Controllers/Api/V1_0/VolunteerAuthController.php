@@ -34,19 +34,12 @@ use App\Exceptions\NotFoundException;
  * @Email:  ym.huang0808@gmail.com
  * @Project: VMS
  * @Last modified by:   ymhuang
- * @Last modified time: 2016-06-04T15:18:30+08:00
+ * @Last modified time: 2016-06-04T15:29:58+08:00
  * @License: GPL-3
  */
 class VolunteerAuthController extends Controller
 {
     use Helpers;
-
-    public function __construct()
-    {
-        // if (env('APP_ENV') == 'testing' && array_key_exists("HTTP_AUTHORIZATION", request()->server())) {
-        //     JWTAuth::setRequest(\Route::getCurrentRequest());
-        // }
-    }
 
     /**
      * Register a new volunteer. The request will be validated by

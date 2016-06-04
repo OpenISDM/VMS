@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\Validator;
 use App\Utils\ValidatorUtil;
-use App\Traits\JwtAuthenticatable;
 use App\Services\JwtService;
 use Dingo\Api\Http\FormRequest;
 
@@ -14,8 +13,6 @@ use Dingo\Api\Http\FormRequest;
  */
 abstract class AbstractJsonRequest extends FormRequest
 {
-    use JwtAuthenticatable;
-
     private $jwtService;
 
     /**
@@ -77,8 +74,6 @@ abstract class AbstractJsonRequest extends FormRequest
     protected function makeJwtService()
     {
         if (!isset($this->jwtService)) {
-            $this->jwtInitialize();
-
             $this->jwtService = new JwtService();
         }
 
