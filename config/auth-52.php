@@ -11,8 +11,8 @@ return [
     |
     */
     'defaults' => [
-        'guard' => 'jwt',
-        'passwords' => 'volunteers',
+        'guard' => 'web',
+        'passwords' => 'users',
     ],
     /*
     |--------------------------------------------------------------------------
@@ -39,10 +39,6 @@ return [
             'driver' => 'token',
             'provider' => 'users',
         ],
-        'jwt' => [
-            'driver' => 'jwt',
-            'provider' => 'volunteers'
-        ]
     ],
     /*
     |--------------------------------------------------------------------------
@@ -61,7 +57,7 @@ return [
     |
     */
     'providers' => [
-        'volunteers' => [
+        'users' => [
             'driver' => 'eloquent',
             'model' => App\Volunteer::class,
         ],
@@ -89,8 +85,8 @@ return [
     |
     */
     'passwords' => [
-        'volunteers' => [
-            'provider' => 'volunteers',
+        'users' => [
+            'provider' => 'users',
             'email' => 'auth.emails.password',
             'table' => 'password_resets',
             'expire' => 60,

@@ -14,7 +14,7 @@ class VolunteerAuthControllerTest extends AbstractTestCase
     protected $postData;
     protected $apiKey;
     protected $exampleRoot;
-    
+
     public function setUp()
     {
         parent::setUp();
@@ -30,16 +30,16 @@ class VolunteerAuthControllerTest extends AbstractTestCase
         $validationErrorPostData =
             json_decode(file_get_contents($this->exampleRoot . '/register_post_validation_error.json'), true);
         $expectedJsonResponseBody = [
-                            'message' => 'Validation failed',
-                            'errors' => [[
-                                    'fields' => ['password'],
-                                    'code' => 'not_enough_password_strength'
-                                ]]
-                        ];
+            "errors" => [
+                "password" => ["not_enough_password_strength"]
+            ],
+            "message" => "422 Unprocessable Entity",
+            "status_code" => 422
+        ];
 
         $this->factoryModel();
         $this->json('post', '/api/register', $validationErrorPostData, $this->unauthoirzedHeader)
-             ->seeJsonEquals($expectedJsonResponseBody)
+             ->seeJson($expectedJsonResponseBody)
              ->assertResponseStatus(422);
     }
 
@@ -51,7 +51,7 @@ class VolunteerAuthControllerTest extends AbstractTestCase
         StringUtil::shouldReceive('generateHashToken')
                         ->once()
                         ->andReturn('avatar123');
-        
+
         $fileSystemMock = Mockery::mock('\Illuminate\Contracts\Filesystem\Filesystem');
         $fileSystemMock->shouldReceive('put')->once()->andReturn(true);
         Storage::shouldReceive('disk')
@@ -70,7 +70,7 @@ class VolunteerAuthControllerTest extends AbstractTestCase
     public function testSuccessfulEmailVerification()
     {
         $this->factoryModel();
-        
+
         $volunteer = factory(App\Volunteer::class)->create();
         $code = \App\Utils\StringUtil::generateHashToken();
         $verificationCode = factory(App\VerificationCode::class)->make([
@@ -140,7 +140,7 @@ class VolunteerAuthControllerTest extends AbstractTestCase
     {
         $this->factoryModel();
         $this->expectsJobs(App\Jobs\SendVerificationEmail::class);
-        
+
         $volunteer = factory(App\Volunteer::class)->create();
         $verificationCode = new VerificationCode(['code' => 'ABC123456']);
         $verificationCode->volunteer()->associate($volunteer);

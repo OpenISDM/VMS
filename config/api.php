@@ -139,7 +139,20 @@ return [
     'errorFormat' => [
         'message' => ':message',
         'errors' => ':errors',
-        'debug' => ':debug',
+        'code' => ':code',
+        'status_code' => ':status_code',
+        // 'debug' => ':debug',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | API Middleware
+    |--------------------------------------------------------------------------
+    |
+    | Middleware that will be applied globally to all API requests.
+    |
+    */
+    'middleware' => [
     ],
 
     /*
@@ -153,7 +166,7 @@ return [
     */
 
     'auth' => [
-        'jwt' => 'Dingo\Api\Auth\Provider\JWT',
+        'jwt' => Dingo\Api\Auth\Provider\JWT::class,
     ],
 
     /*
@@ -183,7 +196,7 @@ return [
     |
     */
 
-    'transformer' => env('API_TRANSFORMER', 'Dingo\Api\Transformer\Adapter\Fractal'),
+    'transformer' => env('API_TRANSFORMER', Dingo\Api\Transformer\Adapter\Fractal::class),
 
     /*
     |--------------------------------------------------------------------------

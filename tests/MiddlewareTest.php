@@ -54,7 +54,7 @@ class MiddlewareTest extends TestCase
         StringUtil::shouldReceive('generateHashToken')
                         ->once()
                         ->andReturn('avatar123');
-        
+
         $fileSystemMock = Mockery::mock('\Illuminate\Contracts\Filesystem\Filesystem');
         $fileSystemMock->shouldReceive('put')->once()->andReturn(true);
         Storage::shouldReceive('disk')

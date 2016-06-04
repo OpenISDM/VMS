@@ -11,11 +11,13 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\UserInProjectTraits;
 use App\Traits\ManageProjectTraits;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Volunteer extends Model implements
     AuthenticatableContract,
     AuthorizableContract,
-    CanResetPasswordContract
+    CanResetPasswordContract,
+    JWTSubject
 {
     use Authenticatable,
         Authorizable,
@@ -106,5 +108,15 @@ class Volunteer extends Model implements
     public function experiences()
     {
         return $this->hasMany('App\Experience');
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }

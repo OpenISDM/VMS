@@ -126,14 +126,12 @@ class VolunteerProfileControllerTest extends AbstractTestCase
             '/api/users/me/skills',
             $postData,
             $this->getHeaderWithAuthorization()
-        )->seeJsonEquals([
-            'errors' => [
-                [
-                    'code' => 'exceeding_index_value',
-                    'fields' => ['existing_skill_indexes']
-                ]
+        )->seeJson([
+            "errors" => [
+                "existing_skill_indexes" => ["exceeding_index_value"]
             ],
-                'message' => 'Validation failed'
+            "message" => "422 Unprocessable Entity",
+            "status_code" => 422
         ])->assertResponseStatus(422);
     }
 

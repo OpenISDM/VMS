@@ -79,13 +79,11 @@ class VolunteerExperienceControllerTest extends AbstractTestCase
                         'X-VMS-API-Key' => $this->getApiKey()
                     ])
              ->seeJsonEquals([
-                 'errors' => [
-                     [
-                         'code' => 'exceeding_index_value',
-                         'fields' => ['existing_equipment_indexes']
-                     ]
+                 "errors" => [
+                     "existing_equipment_indexes" => ["exceeding_index_value"]
                  ],
-                     'message' => 'Validation failed'
+                 "message" => "422 Unprocessable Entity",
+                 "status_code" => 422
              ])
              ->assertResponseStatus(422);
     }
