@@ -21,8 +21,8 @@ use App\Services\TransformerService;
  * @Date:   2016-04-05T13:43:19+08:00
  * @Email:  ym.huang0808@gmail.com
  * @Project: VMS
- * @Last modified by:   ymhuang
- * @Last modified time: 2016-05-30T15:37:29+08:00
+ * @Last modified by:   aming
+ * @Last modified time: 2016-06-04T17:53:11+08:00
  * @License: GPL-3
  */
 class VolunteerEducationController extends BaseAuthController

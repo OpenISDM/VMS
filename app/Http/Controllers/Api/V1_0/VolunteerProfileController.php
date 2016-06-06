@@ -8,8 +8,8 @@
  * @Date:   2016-04-05T13:43:19+08:00
  * @Email:  ym.huang0808@gmail.com
  * @Project: VMS
- * @Last modified by:   ymhuang
- * @Last modified time: 2016-06-03T13:48:36+08:00
+ * @Last modified by:   aming
+ * @Last modified time: 2016-06-06T11:29:10+08:00
  * @License: GPL-3
  */
 
@@ -48,13 +48,7 @@ class VolunteerProfileController extends BaseAuthController
     {
         $volunteer = $this->jwtService->getVolunteer();
 
-        $manager = TransformerService::getManager();
-        $resource = TransformerService::getResourceItem(
-            $volunteer,
-            'App\Transformers\VolunteerProfileTransformer',
-            'volunteer');
-
-        return response()->json($manager->createData($resource)->toArray(), 200);
+        return $this->item($volunteer, new VolunteerProfileTransformer);
     }
 
     /**
@@ -94,13 +88,7 @@ class VolunteerProfileController extends BaseAuthController
         // Update volunteer profile
         $volunteer->update($profile);
 
-        $manager = TransformerService::getManager();
-        $resource = TransformerService::getResourceItem($volunteer,
-            'App\Transformers\VolunteerProfileTransformer',
-            'volunteer');
-
-        return response()
-                ->json($manager->createData($resource)->toArray(), 200);
+        return $this->item($volunteer, new VolunteerProfileTransformer);
     }
 
     /**

@@ -40,17 +40,17 @@ class Volunteer extends Model implements
     protected $fillable = ['username', 'password', 'first_name', 'last_name',
                             'birth_year', 'gender', 'city', 'address',
                             'phone_number', 'email', 'emergency_contact', 'emergency_phone',
-                            'introduction'];
+                            'introduction', 'avatar_path'];
 
     /**
      * The attributes that should be visible in arrays.
      *
      * @var array
      */
-    protected $visible = ['id', 'username', 'password', 'first_name', 'last_name',
+    protected $visible = ['id', 'username', 'first_name', 'last_name',
                             'birth_year', 'gender', 'city', 'address',
                             'phone_number', 'email', 'emergency_contact', 'emergency_phone',
-                            'introduction'];
+                            'introduction', 'avatar_path'];
 
     /**
      * The attributes that should be hidden for arrays.
