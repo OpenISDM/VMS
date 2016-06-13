@@ -9,33 +9,39 @@ use App\Services\TransformerService;
 use App\Exceptions\AccessDeniedException;
 use App\Project;
 use Illuminate\Support\Arr;
+use Gate;
+use App\Transformers\ProjectHyperlinkTransformer;
 
 class HyperlinkController extends BaseAuthController
 {
-    public function store(CreateHyperlinkRequest $request)
+    public function store(CreateHyperlinkRequest $request, $projectId)
     {
         $user = $this->jwtService->getUser();
-        $relationshipProjectId = $request->input('data.relationships.project.data.id');
-        $project = Project::find($relationshipProjectId);
 
-        if ($user->isCreatorOfProject($project)) {
-            $data = $request->only([
-                'data.attributes.name',
-                'data.attributes.link'
-            ]);
-            $hyperlinksData = Arr::get($data, 'data.attributes');
-            $hyperlink = new Hyperlink($hyperlinksData);
+        $project = Project::findOrFail($projectId);
 
-            $project->hyperlinks()->save($hyperlink);
-        }
+        // var_dump($request->all());
 
-        $manager = TransformerService::getJsonApiManager();
-        $resource = TransformerService::getResourceItem($hyperlink,
-            'App\Transformers\JsonApiHyperlinkTransformer', 'hyperlinks');
+        $hyperlinks = $project->hyperlinks()->createMany($request->all());
 
-        $manager->parseIncludes('hyperlink');
+        $manager = TransformerService::getDataArrayManager();
+        $resource = TransformerService::getResourceCollection($hyperlinks,
+            'App\Transformers\ProjectHyperlinkTransformer', 'data');
 
         return response()->json($manager->createData($resource)->toArray(), 201);
+    }
+
+    public function showByProjectId($projectId)
+    {
+        $project = Project::findOrFail($projectId);
+
+        if (Gate::denies('show', $project)) {
+            throw new AccessDeniedException();
+        }
+
+        $hyperlinks = $project->hyperlinks()->get();
+
+        return $this->response->collection($hyperlinks, new ProjectHyperlinkTransformer);
     }
 
     public function update($id)

@@ -155,6 +155,12 @@ $api->version('v1.0', function ($api) {
         $api->get('attending_projects',
             'App\Http\Controllers\Api\V1_0\ProjectController@showSelfAttendingProjects');
 
+        // Project links
+        $api->post('projects/{projectId}/hyperlinks',
+            'App\Http\Controllers\Api\V1_0\HyperlinkController@store');
+        $api->get('projects/{projectId}/hyperlinks',
+            'App\Http\Controllers\Api\V1_0\HyperlinkController@showByProjectId');
+
         // Project members
         $api->post('projects/{id}/members',
             'App\Http\Controllers\Api\V1_0\ProjectController@attachVolunteer');

@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Api\V1_0;
 
 use App\Http\Requests\AbstractJsonRequest;
+use App\Project;
+use Gate;
 
 class CreateHyperlinkRequest extends AbstractJsonRequest
 {
@@ -13,7 +15,11 @@ class CreateHyperlinkRequest extends AbstractJsonRequest
      */
     public function authorize()
     {
-        return true;
+        $projectId = $this->route('projectId');
+
+        $project = Project::findOrFail($projectId);
+
+        return Gate::allows('update', $project);
     }
 
     /**
@@ -24,11 +30,8 @@ class CreateHyperlinkRequest extends AbstractJsonRequest
     public function rules()
     {
         return [
-            'data.type' => 'required|in:hyperlinks',
-            'data.attributes.name' => 'required',
-            'data.attributes.link' => 'required|url',
-            'data.relationships.project.data.type' => 'required|in:projects',
-            'data.relationships.project.data.id' => 'required|exists:projects,id'
+            '*.name' => 'required',
+            '*.link' => 'required|url'
         ];
     }
 }
