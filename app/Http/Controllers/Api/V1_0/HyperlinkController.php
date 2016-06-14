@@ -41,14 +41,30 @@ class HyperlinkController extends BaseAuthController
 
         $hyperlinks = $project->hyperlinks()->get();
 
-        return $this->response->collection($hyperlinks, new ProjectHyperlinkTransformer);
+        return $this->response
+                    ->collection($hyperlinks, new ProjectHyperlinkTransformer);
     }
 
     public function update($id)
     {
     }
 
-    public function delete($id)
+    public function delete($projectId, $hyperlinkId)
     {
+        $project = Project::findOrFail($projectId);
+
+        if (Gate::denies('update', $project)) {
+            throw new AccessDeniedException();
+        }
+
+        $deletedRows = $project->hyperlinks()
+                                ->where('hyperlinks.id', $hyperlinkId)
+                                ->delete();
+
+        if ($deletedRows === 0) {
+            return $this->response->errorNotFound();
+        }
+
+        return $this->response->noContent();
     }
 }

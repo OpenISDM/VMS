@@ -160,6 +160,8 @@ $api->version('v1.0', function ($api) {
             'App\Http\Controllers\Api\V1_0\HyperlinkController@store');
         $api->get('projects/{projectId}/hyperlinks',
             'App\Http\Controllers\Api\V1_0\HyperlinkController@showByProjectId');
+        $api->delete('projects/{projectId}/hyperlinks/{hyperlinkId}',
+            'App\Http\Controllers\Api\V1_0\HyperlinkController@delete');
 
         // Project members
         $api->post('projects/{id}/members',
