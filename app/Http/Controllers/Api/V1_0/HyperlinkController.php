@@ -4,23 +4,20 @@ namespace App\Http\Controllers\Api\V1_0;
 
 use App\Http\Controllers\Api\BaseAuthController;
 use App\Http\Requests\Api\V1_0\CreateHyperlinkRequest;
-use App\Hyperlink;
+use App\Http\Requests\Api\V1_0\CreateOrUpdateHyperlinksRequest;
+use App\Transformers\ProjectHyperlinkTransformer;
 use App\Services\TransformerService;
 use App\Exceptions\AccessDeniedException;
 use App\Project;
+use App\Hyperlink;
 use Illuminate\Support\Arr;
 use Gate;
-use App\Transformers\ProjectHyperlinkTransformer;
 
 class HyperlinkController extends BaseAuthController
 {
     public function store(CreateHyperlinkRequest $request, $projectId)
     {
-        $user = $this->jwtService->getUser();
-
         $project = Project::findOrFail($projectId);
-
-        // var_dump($request->all());
 
         $hyperlinks = $project->hyperlinks()->createMany($request->all());
 
@@ -47,6 +44,47 @@ class HyperlinkController extends BaseAuthController
 
     public function update($id)
     {
+    }
+
+    public function createOrUpdateWithBulk(
+        CreateOrUpdateHyperlinksRequest $request,
+        $projectId)
+    {
+        $project = Project::findOrFail($projectId);
+
+        $createdHyperlinks = [];
+        $updatedHyperlinks = [];
+
+        // Create
+        if ($request->has('create.*')) {
+            $newHyperlinksInput = $request->input('create.*');
+            $createdHyperlinks = $project->hyperlinks()
+                                        ->createMany($newHyperlinksInput);
+        }
+
+        // Update
+        if ($request->has('update.*')) {
+            $updateHyperlinksInput = $request->input('update.*');
+
+            foreach ($updateHyperlinksInput as $item) {
+                $hyperlink = $project->hyperlinks()
+                                    ->where('hyperlinks.id', $item['id'])
+                                    ->first();
+
+                if ($hyperlink != null) {
+                    $fields = array_only($item, ['name', 'link']);
+
+                    $hyperlink->fill($fields);
+
+                    array_push($updatedHyperlinks, $hyperlink);
+                }
+            }
+        }
+
+        $merged = collect($createdHyperlinks)->merge($updatedHyperlinks);
+
+        return $this->response
+                    ->collection($merged, new ProjectHyperlinkTransformer);
     }
 
     public function delete($projectId, $hyperlinkId)

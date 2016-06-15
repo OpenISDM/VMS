@@ -31,7 +31,7 @@ class ApiErrorHandlerServiceProvider extends ServiceProvider
         app('Dingo\Api\Exception\Handler')->register(function (TokenExpiredException $e) {
             $message = 'Token expired';
             $error = new Error('token_expired');
-            $statusCode = $e->getStatusCode();
+            $statusCode = 401;
 
             return response()->apiJsonError($message, $error, $statusCode);
         });
@@ -39,7 +39,7 @@ class ApiErrorHandlerServiceProvider extends ServiceProvider
         app('Dingo\Api\Exception\Handler')->register(function (TokenInvalidException $e) {
             $message = 'Token invalid';
             $error = new Error('token_invalid');
-            $statusCode = $e->getStatusCode();
+            $statusCode = 401;
 
             return response()->apiJsonError($message, $error, $statusCode);
         });

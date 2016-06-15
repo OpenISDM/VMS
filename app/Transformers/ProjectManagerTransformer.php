@@ -5,7 +5,7 @@ namespace App\Transformers;
 use App\Volunteer;
 use League\Fractal\TransformerAbstract;
 
-class JsonApiManagerTransformer extends TransformerAbstract
+class ProjectManagerTransformer extends TransformerAbstract
 {
     public function transform(Volunteer $user)
     {

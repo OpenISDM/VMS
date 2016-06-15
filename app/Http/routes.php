@@ -158,6 +158,8 @@ $api->version('v1.0', function ($api) {
         // Project links
         $api->post('projects/{projectId}/hyperlinks',
             'App\Http\Controllers\Api\V1_0\HyperlinkController@store');
+        $api->post('projects/{projectId}/hyperlinks/create_or_update_bulk',
+            'App\Http\Controllers\Api\V1_0\HyperlinkController@createOrUpdateWithBulk');
         $api->get('projects/{projectId}/hyperlinks',
             'App\Http\Controllers\Api\V1_0\HyperlinkController@showByProjectId');
         $api->delete('projects/{projectId}/hyperlinks/{hyperlinkId}',
