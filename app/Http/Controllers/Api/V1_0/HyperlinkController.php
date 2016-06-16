@@ -75,6 +75,7 @@ class HyperlinkController extends BaseAuthController
                     $fields = array_only($item, ['name', 'link']);
 
                     $hyperlink->fill($fields);
+                    $hyperlink->save();
 
                     array_push($updatedHyperlinks, $hyperlink);
                 }
