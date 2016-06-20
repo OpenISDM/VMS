@@ -143,6 +143,10 @@ $api->version('v1.0', function ($api) {
         $api->delete('users/me/educations/{id}',
             'App\Http\Controllers\Api\V1_0\VolunteerEducationController@destroy');
 
+        // User's projects
+        $api->get('users/{id}/attending_projects',
+            'App\Http\Controllers\Api\V1_0\VolunteerProfileController@showAttendingProjects');
+
         // Projects CRUD
         $api->post('projects',
             'App\Http\Controllers\Api\V1_0\ProjectController@store');
