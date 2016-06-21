@@ -7,7 +7,6 @@ use App\Hyperlink;
 
 class ProjectHyperlinkTransformer extends TransformerAbstract
 {
-
     public function transform(Hyperlink $hyperlink)
     {
         $item = $hyperlink->toArray();
