@@ -78,7 +78,7 @@ class VolunteerExperienceControllerTest extends AbstractTestCase
                         'Authorization' => 'Bearer ' . $token,
                         'X-VMS-API-Key' => $this->getApiKey()
                     ])
-             ->seeJsonEquals([
+             ->seeJson([
                  "errors" => [
                      "existing_equipment_indexes" => ["exceeding_index_value"]
                  ],

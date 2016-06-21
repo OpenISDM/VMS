@@ -7,7 +7,7 @@ use App\Project;
 use App\Transformers\ProjectTransformer;
 use App\Services\TransformerService;
 
-class ProjectTransformerTest extends TestCase
+class ProjectQueryTransformerTest extends TestCase
 {
     use DatabaseMigrations;
 

@@ -114,7 +114,7 @@ class VolunteerAuthControllerTest extends AbstractTestCase
                     ],
                     $this->unauthoirzedHeader)
              ->seeJson([
-                'href' => env('APP_URL') . '/api/users/me'
+                'username' => $volunteer->username
              ])
              ->assertResponseStatus(200);
     }
