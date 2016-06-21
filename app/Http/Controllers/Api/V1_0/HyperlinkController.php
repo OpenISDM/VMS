@@ -4,45 +4,106 @@ namespace App\Http\Controllers\Api\V1_0;
 
 use App\Http\Controllers\Api\BaseAuthController;
 use App\Http\Requests\Api\V1_0\CreateHyperlinkRequest;
-use App\Hyperlink;
+use App\Http\Requests\Api\V1_0\CreateOrUpdateHyperlinksRequest;
+use App\Transformers\ProjectHyperlinkTransformer;
 use App\Services\TransformerService;
 use App\Exceptions\AccessDeniedException;
 use App\Project;
+use App\Hyperlink;
 use Illuminate\Support\Arr;
+use Gate;
 
 class HyperlinkController extends BaseAuthController
 {
-    public function store(CreateHyperlinkRequest $request)
+    public function store(CreateHyperlinkRequest $request, $projectId)
     {
-        $user = $this->jwtService->getUser();
-        $relationshipProjectId = $request->input('data.relationships.project.data.id');
-        $project = Project::find($relationshipProjectId);
+        $project = Project::findOrFail($projectId);
 
-        if ($user->isCreatorOfProject($project)) {
-            $data = $request->only([
-                'data.attributes.name',
-                'data.attributes.link'
-            ]);
-            $hyperlinksData = Arr::get($data, 'data.attributes');
-            $hyperlink = new Hyperlink($hyperlinksData);
+        $hyperlinks = $project->hyperlinks()->createMany($request->all());
 
-            $project->hyperlinks()->save($hyperlink);
-        }
-
-        $manager = TransformerService::getJsonApiManager();
-        $resource = TransformerService::getResourceItem($hyperlink,
-            'App\Transformers\JsonApiHyperlinkTransformer', 'hyperlinks');
-
-        $manager->parseIncludes('hyperlink');
+        $manager = TransformerService::getDataArrayManager();
+        $resource = TransformerService::getResourceCollection($hyperlinks,
+            'App\Transformers\ProjectHyperlinkTransformer', 'data');
 
         return response()->json($manager->createData($resource)->toArray(), 201);
+    }
+
+    public function showByProjectId($projectId)
+    {
+        $project = Project::findOrFail($projectId);
+
+        if (Gate::denies('show', $project)) {
+            throw new AccessDeniedException();
+        }
+
+        $hyperlinks = $project->hyperlinks()->get();
+
+        return $this->response
+                    ->collection($hyperlinks, new ProjectHyperlinkTransformer);
     }
 
     public function update($id)
     {
     }
 
-    public function delete($id)
+    public function createOrUpdateWithBulk(
+        CreateOrUpdateHyperlinksRequest $request,
+        $projectId)
     {
+        $project = Project::findOrFail($projectId);
+
+        $createdHyperlinks = [];
+        $updatedHyperlinks = [];
+
+        // Create
+        if ($request->has('create.*')) {
+            $newHyperlinksInput = $request->input('create.*');
+            $createdHyperlinks = $project->hyperlinks()
+                                        ->createMany($newHyperlinksInput);
+        }
+
+        // Update
+        if ($request->has('update.*')) {
+            $updateHyperlinksInput = $request->input('update.*');
+
+            foreach ($updateHyperlinksInput as $item) {
+                $hyperlink = $project->hyperlinks()
+                                    ->where('hyperlinks.id', $item['id'])
+                                    ->first();
+
+                if ($hyperlink != null) {
+                    $fields = array_only($item, ['name', 'link']);
+
+                    $hyperlink->fill($fields);
+                    $hyperlink->save();
+
+                    array_push($updatedHyperlinks, $hyperlink);
+                }
+            }
+        }
+
+        $merged = collect($createdHyperlinks)->merge($updatedHyperlinks);
+
+        return $this->response
+                    ->collection($merged, new ProjectHyperlinkTransformer);
+    }
+
+    public function delete($projectId, $hyperlinkId)
+    {
+        $project = Project::findOrFail($projectId);
+
+        if (Gate::denies('update', $project)) {
+            throw new AccessDeniedException();
+        }
+
+        $deletedRows = $project->hyperlinks()
+                                ->where('hyperlinks.id', $hyperlinkId)
+                                ->delete();
+
+        if ($deletedRows === 0) {
+            return $this->response->errorNotFound();
+        }
+
+        return $this->response->noContent();
     }
 }

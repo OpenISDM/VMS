@@ -4,17 +4,15 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\Validator;
 use App\Utils\ValidatorUtil;
-use App\Traits\JwtAuthenticatable;
 use App\Services\JwtService;
+use Dingo\Api\Http\FormRequest;
 
 /**
  * Reference from:
  * https://laracasts.com/discuss/channels/laravel/how-to-validate-json-input-using-requests
  */
-abstract class AbstractJsonRequest extends Request
+abstract class AbstractJsonRequest extends FormRequest
 {
-    use JwtAuthenticatable;
-
     private $jwtService;
 
     /**
@@ -62,22 +60,20 @@ abstract class AbstractJsonRequest extends Request
     }
 
 
-    protected function formatErrors(Validator $validator)
-    {
-        $errorArray = $validator->errors()->toArray();
-        $formattedResult = ValidatorUtil::formatter($errorArray);
-
-        return [
-            "message" => "Validation failed",
-            "errors" => $formattedResult
-        ];
-    }
+    // protected function formatErrors(Validator $validator)
+    // {
+    //     $errorArray = $validator->errors()->toArray();
+    //     $formattedResult = ValidatorUtil::formatter($errorArray);
+    //
+    //     return [
+    //         "message" => "Validation failed",
+    //         "errors" => $formattedResult
+    //     ];
+    // }
 
     protected function makeJwtService()
     {
         if (!isset($this->jwtService)) {
-            $this->jwtInitialize();
-
             $this->jwtService = new JwtService();
         }
 

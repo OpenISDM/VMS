@@ -11,11 +11,13 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\UserInProjectTraits;
 use App\Traits\ManageProjectTraits;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Volunteer extends Model implements
     AuthenticatableContract,
     AuthorizableContract,
-    CanResetPasswordContract
+    CanResetPasswordContract,
+    JWTSubject
 {
     use Authenticatable,
         Authorizable,
@@ -38,17 +40,17 @@ class Volunteer extends Model implements
     protected $fillable = ['username', 'password', 'first_name', 'last_name',
                             'birth_year', 'gender', 'city', 'address',
                             'phone_number', 'email', 'emergency_contact', 'emergency_phone',
-                            'introduction'];
+                            'introduction', 'avatar_path'];
 
     /**
      * The attributes that should be visible in arrays.
      *
      * @var array
      */
-    protected $visible = ['id', 'username', 'password', 'first_name', 'last_name',
+    protected $visible = ['id', 'username', 'first_name', 'last_name',
                             'birth_year', 'gender', 'city', 'address',
                             'phone_number', 'email', 'emergency_contact', 'emergency_phone',
-                            'introduction'];
+                            'introduction', 'avatar_path'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -106,5 +108,15 @@ class Volunteer extends Model implements
     public function experiences()
     {
         return $this->hasMany('App\Experience');
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }

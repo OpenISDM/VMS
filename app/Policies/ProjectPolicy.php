@@ -41,4 +41,9 @@ class ProjectPolicy
     {
         return $user->isAttendingProject($project);
     }
+
+    public function manage(Volunteer $user, Project $project)
+    {
+        return $user->isCreatorOfProject($project);
+    }
 }

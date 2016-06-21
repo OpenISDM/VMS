@@ -6,7 +6,7 @@ use App\Http\Requests\AbstractJsonRequest;
 use App\Project;
 use Gate;
 
-class CreateHyperlinkRequest extends AbstractJsonRequest
+class CreateOrUpdateHyperlinksRequest extends AbstractJsonRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,8 +30,12 @@ class CreateHyperlinkRequest extends AbstractJsonRequest
     public function rules()
     {
         return [
-            '*.name' => 'required',
-            '*.link' => 'required|url'
+            'create.*.name'=> 'required',
+            'create.*.link' => 'required|url',
+            'update' => 'array',
+            'update.*.id' => 'required|exists:hyperlinks,id',
+            'update.*.name' => 'required',
+            'update.*.link' => 'required|url'
         ];
     }
 }

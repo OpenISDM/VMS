@@ -143,6 +143,10 @@ $api->version('v1.0', function ($api) {
         $api->delete('users/me/educations/{id}',
             'App\Http\Controllers\Api\V1_0\VolunteerEducationController@destroy');
 
+        // User's projects
+        $api->get('users/{id}/attending_projects',
+            'App\Http\Controllers\Api\V1_0\VolunteerProfileController@showAttendingProjects');
+
         // Projects CRUD
         $api->post('projects',
             'App\Http\Controllers\Api\V1_0\ProjectController@store');
@@ -154,6 +158,16 @@ $api->version('v1.0', function ($api) {
             'App\Http\Controllers\Api\V1_0\ProjectController@showManagedProjects');
         $api->get('attending_projects',
             'App\Http\Controllers\Api\V1_0\ProjectController@showSelfAttendingProjects');
+
+        // Project links
+        $api->post('projects/{projectId}/hyperlinks',
+            'App\Http\Controllers\Api\V1_0\HyperlinkController@store');
+        $api->post('projects/{projectId}/hyperlinks/create_or_update_bulk',
+            'App\Http\Controllers\Api\V1_0\HyperlinkController@createOrUpdateWithBulk');
+        $api->get('projects/{projectId}/hyperlinks',
+            'App\Http\Controllers\Api\V1_0\HyperlinkController@showByProjectId');
+        $api->delete('projects/{projectId}/hyperlinks/{hyperlinkId}',
+            'App\Http\Controllers\Api\V1_0\HyperlinkController@delete');
 
         // Project members
         $api->post('projects/{id}/members',

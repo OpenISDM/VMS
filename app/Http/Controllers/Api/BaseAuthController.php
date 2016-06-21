@@ -6,17 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Exceptions\AuthenticatedUserNotFoundException;
 use App\Exceptions\JWTTokenNotFoundException;
 use App\Services\JwtService;
-use App\Traits\JwtAuthenticatable;
+use Dingo\Api\Routing\Helpers;
 
 abstract class BaseAuthController extends Controller
 {
-    use JwtAuthenticatable;
+    use Helpers;
 
     protected $jwtService;
 
     public function __construct(JwtService $jwtService)
     {
-        $this->jwtInitialize();
         $this->jwtService = $jwtService;
     }
 }

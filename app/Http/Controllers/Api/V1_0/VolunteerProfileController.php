@@ -8,8 +8,8 @@
  * @Date:   2016-04-05T13:43:19+08:00
  * @Email:  ym.huang0808@gmail.com
  * @Project: VMS
- * @Last modified by:   ymhuang
- * @Last modified time: 2016-06-03T13:48:36+08:00
+ * @Last modified by:   aming
+ * @Last modified time: 2016-06-16T16:35:54+08:00
  * @License: GPL-3
  */
 
@@ -17,6 +17,7 @@ namespace App\Http\Controllers\Api\V1_0;
 
 use App\Http\Controllers\Api\BaseAuthController;
 use JWTAuth;
+use Gate;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Requests\Api\V1_0\UpdateEquipmentRequest;
 use App\Http\Requests\Api\V1_0\UpdateSkillsRequest;
@@ -24,12 +25,14 @@ use App\Http\Requests\Api\V1_0\UpdateProfileRequest;
 use App\Http\Requests\Api\V1_0\UploadAvatarRequest;
 use App\Http\Requests\Api\V1_0\CredentialRequest;
 use App\Http\Responses\Avatar;
+use App\Exceptions\AccessDeniedException;
 use App\Exceptions\ExceedingIndexException;
 use App\City;
 use App\Volunteer;
 use App\Utils\ArrayUtil;
 use App\Transformers\VolunteerProfileTransformer;
 use App\Transformers\VolunteerAvatarTransformer;
+use App\Transformers\AttendingProjectTransformer;
 use App\Services\AvatarStorageService;
 use App\Services\JwtService;
 use App\Services\TransformerService;
@@ -48,13 +51,7 @@ class VolunteerProfileController extends BaseAuthController
     {
         $volunteer = $this->jwtService->getVolunteer();
 
-        $manager = TransformerService::getManager();
-        $resource = TransformerService::getResourceItem(
-            $volunteer,
-            'App\Transformers\VolunteerProfileTransformer',
-            'volunteer');
-
-        return response()->json($manager->createData($resource)->toArray(), 200);
+        return $this->item($volunteer, new VolunteerProfileTransformer);
     }
 
     /**
@@ -94,13 +91,7 @@ class VolunteerProfileController extends BaseAuthController
         // Update volunteer profile
         $volunteer->update($profile);
 
-        $manager = TransformerService::getManager();
-        $resource = TransformerService::getResourceItem($volunteer,
-            'App\Transformers\VolunteerProfileTransformer',
-            'volunteer');
-
-        return response()
-                ->json($manager->createData($resource)->toArray(), 200);
+        return $this->item($volunteer, new VolunteerProfileTransformer);
     }
 
     /**
@@ -381,5 +372,21 @@ class VolunteerProfileController extends BaseAuthController
                 }
             }
         }
+    }
+
+    public function showAttendingProjects($id)
+    {
+        $user = $this->jwtService->getUser();
+        $volunteer = Volunteer::findOrFail($id);
+
+        if (Gate::denies('show-attending-projects', $volunteer)) {
+            throw new AccessDeniedException();
+        }
+
+        $projects = $volunteer->attendingProjects()->get();
+
+        // var_dump($projects);
+
+        return $this->response->collection($projects, new AttendingProjectTransformer);
     }
 }

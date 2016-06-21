@@ -18,6 +18,8 @@ use App\Exceptions\GeneralException;
 use App\Exceptions\AccessDeniedException;
 use App\Repositories\ProjectDbQueryRepository;
 use App\Utils\ArrayUtil;
+use App\Transformers\ProjectTransformer;
+use App\Transformers\JsonApiProjectTransformer;
 
 class ProjectController extends BaseAuthController
 {
@@ -46,11 +48,9 @@ class ProjectController extends BaseAuthController
         // Assign the project owner
         $user->manageProjects()->attach($project);
 
-        $manager = TransformerService::getJsonApiManager();
+        $manager = TransformerService::getManager();
         $resource = TransformerService::getResourceItem($project,
-            'App\Transformers\JsonApiProjectTransformer', 'projects');
-
-        $manager->parseIncludes(['managers']);
+            'App\Transformers\JsonApiProjectTransformer', 'data');
 
         return response()->json($manager->createData($resource)->toArray(), 201);
     }

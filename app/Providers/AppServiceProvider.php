@@ -22,7 +22,14 @@ class AppServiceProvider extends ServiceProvider
             return new \Dingo\Api\Auth\Provider\JWT($app['Tymon\JWTAuth\JWTAuth']);
         });
 
-        /**
+        /*
+         * Transformer
+         */
+         $this->app['Dingo\Api\Transformer\Factory']->setAdapter(function ($app) {
+             return new \Dingo\Api\Transformer\Adapter\Fractal(new \League\Fractal\Manager, 'include', ',');
+         });
+
+        /*
          * Add custom validator
          */
         Validator::extend('array_index',

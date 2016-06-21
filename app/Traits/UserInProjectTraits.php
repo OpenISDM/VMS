@@ -18,7 +18,8 @@ trait UserInProjectTraits
         )->withPivot(
             'status',
             'is_full_profile_permit',
-            'permission'
+            'permission',
+            'created_at'
         )->withTimestamps();
     }
 
