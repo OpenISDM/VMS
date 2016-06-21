@@ -7,7 +7,6 @@ use App\Project;
 
 class AttendingProjectTransformer extends TransformerAbstract
 {
-
     public function transform(Project $project)
     {
         $item = [];
