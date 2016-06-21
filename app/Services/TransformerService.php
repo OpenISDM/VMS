@@ -15,6 +15,9 @@ class TransformerService
      */
     public static function getManager()
     {
+        /**
+         * @TODO: The method should be changed into `newManager()` or `makeManager()`
+         */
         // Set serialzer for a transformer
         $manager = new \League\Fractal\Manager();
         $manager->setSerializer(new \League\Fractal\Serializer\ArraySerializer());

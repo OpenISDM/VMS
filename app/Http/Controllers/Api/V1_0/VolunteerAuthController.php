@@ -25,6 +25,7 @@ use App\Commands\VerifyEmailCommand;
 use App\Exceptions\UnauthorizedException;
 use App\Exceptions\AuthenticatedUserNotFoundException;
 use App\Exceptions\NotFoundException;
+use App\Transformers\VolunteerProfileTransformer;
 
 /**
  * The controller provides user authentications
@@ -33,8 +34,8 @@ use App\Exceptions\NotFoundException;
  * @Date:   2015-11-19T14:59:59+08:00
  * @Email:  ym.huang0808@gmail.com
  * @Project: VMS
- * @Last modified by:   ymhuang
- * @Last modified time: 2016-06-04T15:29:58+08:00
+ * @Last modified by:   aming
+ * @Last modified time: 2016-06-21T11:19:02+08:00
  * @License: GPL-3
  */
 class VolunteerAuthController extends Controller
@@ -122,14 +123,19 @@ class VolunteerAuthController extends Controller
             throw new UnauthorizedException($message, $error);
         }
 
-        $rootUrl = request()->root();
+        // $rootUrl = request()->root();
+        //
+        // $responseJson = [
+        //     'href' => env('APP_URL', $rootUrl) . '/api/users/me',
+        //     'auth_access_token' => $token
+        // ];
+        //
+        // return response()->json($responseJson, 200);
 
-        $responseJson = [
-            'href' => env('APP_URL', $rootUrl) . '/api/users/me',
-            'auth_access_token' => $token
-        ];
-
-        return response()->json($responseJson, 200);
+        return $this->response
+                    ->item($volunteer, new VolunteerProfileTransformer)
+                    ->withHeader('Authorization', 'Bearer ' . $token)
+                    ->setStatusCode(200);
     }
 
     /**
