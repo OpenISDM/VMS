@@ -32,12 +32,11 @@ class ProjectDbQueryRepositoryTest extends TestCase
         $projectWithPrivateForMemberIds = $this->getModelIds($this->makeCreateProjectWithPrivateForMember($this->user1, 2));
 
         $query = $this->invokeMethod($this->repository, 'userLevelPermissionProjectsQuery');
-        $result = $query->get();
+        $result = $query->distinct()->get();
 
         $expectProjectIds = array_merge($projectWithPublicIds, $projectWithPrivateForUserIds);
 
         $collection = collect($result);
-
         $collection->each(function ($project) use ($expectProjectIds) {
             $this->assertContains($project->id, $expectProjectIds);
         });

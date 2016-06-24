@@ -66,7 +66,7 @@ $factory->define(App\Volunteer::class, function (Faker\Generator $faker) {
         'birth_year' => 1991,
         'gender' => 'male',
         'city_id' => 1,
-        'address' => $faker->address,
+        'location' => $faker->address,
         'phone_number' => $faker->phoneNumber,
         'email' => $faker->email,
         'emergency_contact' => $faker->name(),

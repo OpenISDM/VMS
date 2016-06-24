@@ -169,13 +169,15 @@ class ProjectController extends BaseAuthController
         $user = $this->jwtService->getUser();
 
         $projects = $repository->getViewableProjects($user);
+        $projectsCollection = collect($projects);
+        // var_dump($projectsCollection);
 
         if (!empty($projects)) {
-            $manager = TransformerService::getJsonApiManager();
-            $resource = TransformerService::getResourceCollection($projects,
-                'App\Transformers\JsonApiProjectArrayTransformer', 'projects');
+            $manager = TransformerService::getManager();
+            $resource = TransformerService::getResourceCollection($projectsCollection,
+                'App\Transformers\ProjectBriefTransformer', 'data');
 
-            $manager->parseIncludes(['managers', 'hyperlinks']);
+            // $manager->parseIncludes(['managers', 'hyperlinks']);
 
             $result = $manager->createData($resource)->toArray();
             $status = 200;

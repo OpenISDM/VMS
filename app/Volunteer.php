@@ -38,7 +38,7 @@ class Volunteer extends Model implements
      * @var array
      */
     protected $fillable = ['username', 'password', 'first_name', 'last_name',
-                            'birth_year', 'gender', 'city', 'address',
+                            'birth_year', 'gender', 'city', 'location',
                             'phone_number', 'email', 'emergency_contact', 'emergency_phone',
                             'introduction', 'avatar_path'];
 
@@ -48,7 +48,7 @@ class Volunteer extends Model implements
      * @var array
      */
     protected $visible = ['id', 'username', 'first_name', 'last_name',
-                            'birth_year', 'gender', 'city', 'address',
+                            'birth_year', 'gender', 'city', 'location',
                             'phone_number', 'email', 'emergency_contact', 'emergency_phone',
                             'introduction', 'avatar_path'];
 

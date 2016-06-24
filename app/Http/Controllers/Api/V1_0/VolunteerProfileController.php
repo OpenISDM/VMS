@@ -9,7 +9,7 @@
  * @Email:  ym.huang0808@gmail.com
  * @Project: VMS
  * @Last modified by:   aming
- * @Last modified time: 2016-06-16T16:35:54+08:00
+ * @Last modified time: 2016-06-23T17:41:55+08:00
  * @License: GPL-3
  */
 
@@ -311,6 +311,8 @@ class VolunteerProfileController extends BaseAuthController
         AvatarStorageService $avatarStorageService,
         JwtService $jwtService)
     {
+        // echo 'deleteMe';
+
         $volunteer = $this->jwtService->getVolunteer();
         $credentials = $request->only('username', 'password');
 

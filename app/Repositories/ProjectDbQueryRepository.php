@@ -31,40 +31,54 @@ class ProjectDbQueryRepository
             $query->paginate($count);
         }
 
-        return $query->orderBy('project_updated_at')->get();
+        return $query->get();
     }
 
     protected function viewableProjectsQuery(Volunteer $user)
     {
-        $manageProjects = $this->manageProjectsQuery($user)->select('projects.*', 'projects.updated_at as project_updated_at');
-        $asMemeberProjects = $this->asMemberProjectsQuery($user)->select('projects.*', 'projects.updated_at as project_updated_at');
-        $userLevelPermissionProjects = $this->userLevelPermissionProjectsQuery()->select('projects.*', 'projects.updated_at as project_updated_at');
+        $manageProjects = $this->manageProjectsQuery($user);
 
-        return $manageProjects->union($asMemeberProjects)
-            ->union($userLevelPermissionProjects);
+        $asMemeberProjects = $this->asMemberProjectsQuery($user);
+
+        $userLevelPermissionProjects = $this->userLevelPermissionProjectsQuery();
+
+        $query = $manageProjects->union($asMemeberProjects)
+                                ->union($userLevelPermissionProjects);
+
+        return $query;
     }
 
     protected function manageProjectsQuery(Volunteer $user)
     {
         return DB::table('projects')
-                ->join('project_manager_project', 'projects.id', '=', 'project_manager_project.project_id')
-                ->where('project_manager_project.project_manager_id', '=', $user->id);
+                ->leftJoin('project_manager_project', 'projects.id', '=', 'project_manager_project.project_id')
+                ->leftJoin('project_volunteers', 'projects.id', '=', 'project_volunteers.project_id')
+                ->where('project_manager_project.project_manager_id', '=', $user->id)
+                ->select('projects.*');
     }
 
     protected function asMemberProjectsQuery(Volunteer $user)
     {
         return DB::table('projects')
-                    ->join('project_volunteers', 'projects.id', '=', 'project_volunteers.project_id')
-                    ->where('project_volunteers.volunteer_id', '=', $user->id);
+                    ->leftJoin('project_manager_project', 'projects.id', '=', 'project_manager_project.project_id')
+                    ->leftJoin('project_volunteers', 'projects.id', '=', 'project_volunteers.project_id')
+                    ->where('project_volunteers.volunteer_id', '=', $user->id)
+                    ->select('projects.*');
     }
 
     protected function userLevelPermissionProjectsQuery()
     {
-        return DB::table('projects')
+        $query = DB::table('projects')
+
+                    ->leftJoin('project_manager_project', 'projects.id', '=', 'project_manager_project.project_id')
+                    ->leftJoin('project_volunteers', 'projects.id', '=', 'project_volunteers.project_id')
                     ->where('is_published', '=', true)
-                    ->whereIn('permission', [
+                    ->whereIn('projects.permission', [
                         config('constants.project_permission.PUBLIC'),
                         config('constants.project_permission.PRIVATE_FOR_USER')
-                    ]);
+                    ])
+                    ->select('projects.*');
+
+        return $query;
     }
 }

@@ -296,7 +296,7 @@ class VolunteerProfileControllerTest extends AbstractTestCase
             "city" => [
                 "id"=> 1
             ],
-            "address" => "128 Academia Road, Section 2, Nankang Dist.",
+            "location" => "128 Academia Road, Section 2, Nankang Dist.",
             "phone_number" => "0912345678",
             "emergency_contact" => "Jeremy Lin",
             "emergency_phone" => "0910123456",
@@ -350,7 +350,7 @@ class VolunteerProfileControllerTest extends AbstractTestCase
             "city" => [
                 "id"=> 1
             ],
-            "address" => "128 Academia Road, Section 2, Nankang Dist.",
+            "location" => "128 Academia Road, Section 2, Nankang Dist.",
             "phone_number" => "0912345678",
             "emergency_contact" => "Jeremy Lin",
             "emergency_phone" => "0910123456",
@@ -576,7 +576,7 @@ class VolunteerProfileControllerTest extends AbstractTestCase
             'birth_year' => $this->volunteer->birth_year,
             'gender' => $this->volunteer->gender,
             'city' => ['id' => $this->volunteer->city->id, 'name_en' => $this->volunteer->city->name],
-            'address' => $this->volunteer->address,
+            'location' => $this->volunteer->location,
             'phone_number' => $this->volunteer->phone_number,
             'email' => $this->volunteer->email,
             'emergency_contact' => $this->volunteer->emergency_contact,
