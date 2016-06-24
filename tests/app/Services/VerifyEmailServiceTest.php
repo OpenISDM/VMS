@@ -9,13 +9,13 @@ class VerifyEmailServiceTest extends TestCase
     use DatabaseMigrations;
 
     protected $volunteer;
-    
+
     public function setUp()
     {
         parent::setUp();
         $this->volunteer = $this->factoryVolunteer();
     }
-    
+
     public function testEmailCompareSuccess()
     {
         $service = new VerifyEmailService($this->volunteer, 'abc@abc.com', 'MY_VERIFICATION_CODE');
@@ -88,7 +88,7 @@ class VerifyEmailServiceTest extends TestCase
         $verificationCode = factory(App\VerificationCode::class)->make(['code' => 'MY_VERIFICATION_CODE']);
         $verificationCode->volunteer()->associate($this->volunteer);
         $verificationCode->save();
-        
+
         $service = new VerifyEmailService($this->volunteer, 'abc@abc.com', 'MY_VERIFICATION_CODE');
         $interval = new \DateInterval('PT9H');
         $nowDateTime = new \DateTime();
@@ -96,7 +96,7 @@ class VerifyEmailServiceTest extends TestCase
 
         $service->isExpeired($nowDateTime);
     }
-    
+
     protected function factoryVolunteer()
     {
         return factory(App\Volunteer::class)
@@ -108,7 +108,7 @@ class VerifyEmailServiceTest extends TestCase
                 'birth_year' => 1991,
                 'gender' => 'male',
                 'city_id' => 1,
-                'address' => 'MY Address',
+                'location' => 'MY Address',
                 'phone_number' => '0910123456',
                 'email' => 'abc@abc.com',
                 'emergency_contact' => 'Huang PAPA',

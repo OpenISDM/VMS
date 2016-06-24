@@ -21,7 +21,7 @@ class VolunteerProfileTransformer extends TransformerAbstract
             'birth_year' => (int) $volunteer->birth_year,
             'gender' => $volunteer->gender,
             'city' => ['id' => empty($city) ? null : (int) $city->id, 'name_en' => empty($city) ? null : $city->name],
-            'address' => empty($volunteer->address) ? null : $volunteer->address,
+            'location' => empty($volunteer->location) ? null : $volunteer->location,
             'phone_number' => empty($volunteer->phone_number) ? null : $volunteer->phone_number,
             'email' => empty($volunteer->email) ? null : $volunteer->email,
             'emergency_contact' => empty($volunteer->emergency_contact) ? null : $volunteer->emergency_contact,

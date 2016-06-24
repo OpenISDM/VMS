@@ -31,7 +31,7 @@ class UpdateProfileRequest extends AbstractJsonRequest
             'introduction' => 'required|max:255',
             'city' => 'required',
             'city.id' => 'required|exists:cities,id',
-            'address' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
             'phone_number' => 'required|max:255',
             'emergency_contact' => 'required|max:255',
             'emergency_phone' => 'required|string|max:255',

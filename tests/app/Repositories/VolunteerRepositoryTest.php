@@ -24,7 +24,7 @@ class VolunteerRepositoryTest extends TestCase
             'birth_year' => '1991',
             'gender' => 'male',
             'city' => $city,
-            'address' => 'Taipei city',
+            'location' => 'Taipei city',
             'phone_number' => '0910123456',
             'email' => 'aming@abc.com',
             'emergency_contact' => 'Qoo',
