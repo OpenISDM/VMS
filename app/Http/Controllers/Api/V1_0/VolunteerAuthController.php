@@ -35,7 +35,7 @@ use App\Transformers\VolunteerProfileTransformer;
  * @Email:  ym.huang0808@gmail.com
  * @Project: VMS
  * @Last modified by:   aming
- * @Last modified time: 2016-06-21T11:19:02+08:00
+ * @Last modified time: 2016-07-04T13:40:27+08:00
  * @License: GPL-3
  */
 class VolunteerAuthController extends Controller
@@ -88,14 +88,10 @@ class VolunteerAuthController extends Controller
         // Generate JWT (JSON Web Token)
         $token = $jwtSerivce->getToken($credentials);
 
-        $rootUrl = request()->root();
-        $responseJson = [
-            'href' => env('APP_URL', $rootUrl) . '/api/users/me',
-            'username' => $volunteer->username,
-            'auth_access_token' => $token
-        ];
-
-        return response()->json($responseJson, 201);
+        return $this->response
+                    ->item($volunteer, new VolunteerProfileTransformer)
+                    ->withHeader('Authorization', 'Bearer ' . $token)
+                    ->setStatusCode(201);
     }
 
     /**

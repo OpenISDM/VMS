@@ -48,7 +48,9 @@ class JsonApiMemberCustomFieldsDbTransformer extends TransformerAbstract
 
     public function includeMember($value)
     {
-        $member = Volunteer::find($value->volunteer_id);
+        $projectCustomField = ProjectCustomField::find($value->project_custom_field_id);
+        $project = $projectCustomField->project()->first();
+        $member = $project->members()->where('volunteer_id', $value->volunteer_id)->first();
 
         if ($member === null) {
             return $this->null();

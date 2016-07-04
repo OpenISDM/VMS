@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\V1_0;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Api\BaseAuthController;
-use App\Http\Requests\Api\V1_0\CreatePasswordResetRequest;
+use App\Http\Requests\Api\V1_0\ForgotPasswordRequest;
 use App\Http\Requests\Api\V1_0\PasswordResetRequest;
 use App\Http\Requests\Api\V1_0\ChangePasswordRequest;
 use Password;
@@ -13,19 +13,25 @@ use Illuminate\Mail\Message;
 use App\Exceptions\InvalidUserException;
 use App\Exceptions\GeneralException;
 use App\Services\JwtService;
+use Illuminate\Foundation\Auth\ResetsPasswords;
 
 class VolunteerPasswordController extends BaseAuthController
 {
+    use ResetsPasswords;
+
     /**
      * Create a password reset request
-     * @param  App\Http\Requests\Api\V1_0\CreatePasswordResetRequest $request
+     * @param  App\Http\Requests\Api\V1_0\ForgotPasswordRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function createPasswordReset(CreatePasswordResetRequest $request)
+    public function forgotPassword(ForgotPasswordRequest $request)
     {
-        $response = Password::sendResetLink($request->only('email'), function (Message $message) {
-            $message->subject($this->getPasswordResetEmailSubject());
-        });
+        $broker = $this->getBroker();
+
+        $response = Password::broker($broker)->sendResetLink(
+            $this->getSendResetLinkEmailCredentials($request),
+            $this->resetEmailBuilder()
+        );
 
         switch ($response) {
             case Password::RESET_LINK_SENT:

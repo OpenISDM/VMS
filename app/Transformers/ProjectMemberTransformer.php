@@ -19,6 +19,7 @@ class ProjectMemberTransformer extends TransformerAbstract
         ];
         $userArray = $user->toArray();
         $item = array_only($userArray, $visibleFields);
+        $item['attending_at'] = $user->pivot->created_at;
 
         return $item;
     }
