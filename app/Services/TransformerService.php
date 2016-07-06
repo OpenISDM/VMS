@@ -20,7 +20,7 @@ class TransformerService
          */
         // Set serialzer for a transformer
         $manager = new \League\Fractal\Manager();
-        $manager->setSerializer(new \League\Fractal\Serializer\ArraySerializer());
+        $manager->setSerializer(new \League\Fractal\Serializer\DataArraySerializer());
 
         return $manager;
     }

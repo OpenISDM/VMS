@@ -215,7 +215,3 @@ $api->version('v1.0', function ($api) {
         });
     });
 });
-
-Route::auth();
-
-Route::get('/home', 'HomeController@index');

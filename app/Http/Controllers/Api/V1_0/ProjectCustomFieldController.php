@@ -14,6 +14,8 @@ use App\Repositories\MemberCustomFieldDataDbRepository;
 use App\Project;
 use App\CustomField\TypeMapping;
 use App\Services\TransformerService;
+use App\Transformers\ProjectCustomFieldTransformer;
+use App\Transformers\ProjectMemberDataCustomFieldTransformer;
 use Illuminate\Support\Arr;
 
 class ProjectCustomFieldController extends BaseAuthController
@@ -24,10 +26,19 @@ class ProjectCustomFieldController extends BaseAuthController
         $id
     ) {
         $project = Project::findOrFail($id);
-        $data = $request->input('data.attributes');
+        $data = $request->only([
+            'name',
+            'type',
+            'description',
+            'required',
+            'order'
+        ]);
 
-        if ($request->has('data.id')) {
-            $customField = $repository->update($project, $request->input('data.id'), $data);
+        $transformer = new ProjectCustomFieldTransformer();
+
+        if ($request->has('id')) {
+            $customField = $repository->update($project, $request->input('id'), $data);
+            $response = $this->response->item($customField, $transformer);
         } else {
             $metadata = (isset($data['metadata'])) ? $data['metadata'] : null;
             $customField = $repository->newInstance(
@@ -40,21 +51,13 @@ class ProjectCustomFieldController extends BaseAuthController
             );
 
             $project->customFields()->save($customField);
+
+            $response = $this->response
+                            ->item($customField, $transformer)
+                            ->setStatusCode(201);
         }
 
-        // var_dump($customField);
-
-        $manager = TransformerService::getJsonApiManager();
-        $resource = TransformerService::getResourceItem(
-            $customField,
-            'App\Transformers\JsonApiProjectCustomFieldTransformer',
-            'project_custom_fields'
-        );
-
-        $result = $manager->createData($resource)->toArray();
-        $status = 201;
-
-        return response()->json($result, $status);
+        return $response;
     }
 
     public function showAll($projectId)
@@ -62,17 +65,8 @@ class ProjectCustomFieldController extends BaseAuthController
         $project = Project::find($projectId);
         $customFields = $project->customFields()->get();
 
-        $manager = TransformerService::getJsonApiManager();
-        $resource = TransformerService::getResourceCollection(
-            $customFields,
-            'App\Transformers\JsonApiProjectCustomFieldTransformer',
-            'project_custom_fields'
-        );
-
-        $result = $manager->createData($resource)->toArray();
-        $status = 200;
-
-        return response()->json($result, $status);
+        return $this->response->collection($customFields,
+            new ProjectCustomFieldTransformer);
     }
 
     public function fillCustomField(FillCustomFieldRequest $request,
@@ -122,7 +116,8 @@ class ProjectCustomFieldController extends BaseAuthController
     }
 
     public function showAllCutsomFieldsData(ShowProjectRequest $request,
-        MemberCustomFieldDataRepository $repository, $projectId)
+        MemberCustomFieldDataRepository $repository,
+        $projectId)
     {
         $user = $this->jwtService->getUser();
         $project = Project::find($projectId);
@@ -132,21 +127,15 @@ class ProjectCustomFieldController extends BaseAuthController
         if ($memberCustomFieldData === null) {
             $result = [];
             $status = 204;
+
+            $response = $this->response->noContent();
         } else {
-            $manager = TransformerService::getJsonApiManager();
-            $resource = TransformerService::getResourceCollection(
-                $memberCustomFieldData,
-                'App\Transformers\JsonApiMemberCustomFieldsDataTransformer',
-                'custom_field_data'
-            );
-
-            $manager->parseIncludes(['project_custom_field']);
-
-            $result = $manager->createData($resource)->toArray();
-            $status = 200;
+            $transformer = new ProjectMemberDataCustomFieldTransformer();
+            $response = $this->response->collection($memberCustomFieldData,
+                $transformer);
         }
 
-        return response()->json($result, $status);
+        return $response;
     }
 
     public function showAllMembersCustomFieldData(
