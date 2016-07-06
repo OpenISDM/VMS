@@ -54,7 +54,10 @@ $api->version('v1.0', function ($api) {
             'App\Http\Controllers\Api\V1_0\VolunteerPasswordController@forgotPassword');
 
         // Reset password
-        $api->put('users/password_reset/{email_address}/{reset_password_token}',
+        $api->post('users/password_reset/verify',
+            'App\Http\Controllers\Api\V1_0\VolunteerPasswordController@verifiyPasswordReset');
+
+        $api->post('users/password_reset',
             'App\Http\Controllers\Api\V1_0\VolunteerPasswordController@postPasswordReset');
 
         // Get skill candidiates
@@ -212,3 +215,7 @@ $api->version('v1.0', function ($api) {
         });
     });
 });
+
+Route::auth();
+
+Route::get('/home', 'HomeController@index');

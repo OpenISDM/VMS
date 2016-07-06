@@ -7,12 +7,14 @@ use App\Http\Controllers\Api\BaseAuthController;
 use App\Http\Requests\Api\V1_0\ForgotPasswordRequest;
 use App\Http\Requests\Api\V1_0\PasswordResetRequest;
 use App\Http\Requests\Api\V1_0\ChangePasswordRequest;
+use App\Http\Requests\Api\V1_0\VerifyPasswordResetRequest;
 use Password;
 use Auth;
 use Illuminate\Mail\Message;
 use App\Exceptions\InvalidUserException;
 use App\Exceptions\GeneralException;
 use App\Services\JwtService;
+use App\Volunteer;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 
 class VolunteerPasswordController extends BaseAuthController
@@ -41,6 +43,22 @@ class VolunteerPasswordController extends BaseAuthController
         }
     }
 
+    public function verifiyPasswordReset(VerifyPasswordResetRequest $request)
+    {
+        $email = $request->input('email');
+        $token = $request->input('token');
+
+        $user = Volunteer::where('email', $email)->first();
+
+        $check = Password::tokenExists($user, $token);
+
+        if (!$check) {
+            throw new GeneralException('Resetting password verfification failure', 'password_reset_verification_failure', 403);
+        }
+
+        return $this->response->noContent();
+    }
+
     /**
      * Reset password
      * It will check the token. If the token is correct,
@@ -50,14 +68,14 @@ class VolunteerPasswordController extends BaseAuthController
      * @param  App\Http\Requests\Api\V1_0\PasswordResetRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function postPasswordReset($email, $token, PasswordResetRequest $request)
+    public function postPasswordReset(PasswordResetRequest $request)
     {
-        $credentials = [
-            'email' => $email,
-            'token' => $token,
-            'password' => $request->input('password'),
-            'password_confirmation' => $request->input('password')
-        ];
+        $credentials = $request->only([
+            'email',
+            'token',
+            'password',
+            'password_confirmation'
+        ]);
 
         $response = Password::reset($credentials, function ($volunteer, $password) {
             $this->resetPassword($volunteer, $password);
@@ -82,12 +100,12 @@ class VolunteerPasswordController extends BaseAuthController
     {
         $volunteer = $jwtService->getVolunteer();
         $credentials = [
-                'username' => $volunteer->username,
-                'password' => $request->input('existing_password')
-            ];
+            'username' => $volunteer->username,
+            'password' => $request->input('existing_password')
+        ];
 
-            // Check credentials
-            $jwtService->getToken($credentials);
+        // Check credentials
+        $jwtService->getToken($credentials);
         $newPassword = $request->input('new_password');
 
         $volunteer->password = bcrypt($newPassword);

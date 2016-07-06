@@ -18,8 +18,8 @@ class Error implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        $errors = ['code' => $this->code];
-        
+        $errors = $this->code;
+
         return $errors;
     }
 }

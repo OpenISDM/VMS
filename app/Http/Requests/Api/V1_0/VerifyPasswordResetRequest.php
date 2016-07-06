@@ -3,8 +3,9 @@
 namespace App\Http\Requests\Api\V1_0;
 
 use App\Http\Requests\AbstractJsonRequest;
+use Gate;
 
-class PasswordResetRequest extends AbstractJsonRequest
+class VerifyPasswordResetRequest extends AbstractJsonRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,9 +26,7 @@ class PasswordResetRequest extends AbstractJsonRequest
     {
         return [
             'email' => 'required|email|exists:volunteers,email',
-            'token' => 'required',
-            'password' => 'required|between:6,255|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/',
-            'password_confirmation' => 'required|same:password'
+            'token' => 'required'
         ];
     }
 }
