@@ -4,6 +4,7 @@ namespace App\Http\Requests\Api\V1_0;
 
 use App\Http\Requests\AbstractJsonRequest;
 use Gate;
+use App\Project;
 
 class ShowAllMembersCustomFieldDataRequest extends AbstractJsonRequest
 {
@@ -14,10 +15,10 @@ class ShowAllMembersCustomFieldDataRequest extends AbstractJsonRequest
      */
     public function authorize()
     {
-        /**
-         * @TODO: NEED TO BE IMPLEMENTED
-         */
-        return true;
+        $projectId = $this->route('projectId');
+        $project = Project::findOrFail($projectId);
+
+        return Gate::allows('manage', $project);
     }
 
     /**

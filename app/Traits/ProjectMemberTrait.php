@@ -16,6 +16,7 @@ trait ProjectMemberTrait
             'project_id',
             'volunteer_id'
         )->withPivot(
+            'id',
             'status',
             'is_full_profile_permit',
             'permission'

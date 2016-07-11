@@ -35,15 +35,14 @@ class ProjectController extends BaseAuthController
 
         // Retrive the project input from the request
         $data = $request->only([
-            'data.attributes.name',
-            'data.attributes.description',
-            'data.attributes.organization',
-            'data.attributes.is_published',
-            'data.attributes.permission'
+            'name',
+            'description',
+            'organization',
+            'is_published',
+            'permission'
         ]);
-        $projectData = Arr::get($data, 'data.attributes');
 
-        $project = Project::create($projectData);
+        $project = Project::create($data);
 
         // Assign the project owner
         $user->manageProjects()->attach($project);

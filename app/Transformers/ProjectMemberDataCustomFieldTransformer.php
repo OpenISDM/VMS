@@ -5,12 +5,14 @@ namespace App\Transformers;
 use League\Fractal\TransformerAbstract;
 use App\ProjectCustomField;
 use App\MemberCustomFieldData;
+use App\Transformers\ProjectMemberTransformer;
 use App\Transformers\ProjectCustomFieldTransformer;
 
 class ProjectMemberDataCustomFieldTransformer extends TransformerAbstract
 {
     protected $defaultIncludes = [
-        'projectCustomField' => 'custom_field'
+        'projectCustomField' => 'custom_field',
+        'member'
     ];
 
     public function transform(MemberCustomFieldData $value)
@@ -34,7 +36,24 @@ class ProjectMemberDataCustomFieldTransformer extends TransformerAbstract
             'custom_field'
         );
 
-        // var_dump($result);
+        return $result;
+    }
+
+    public function includeMember(MemberCustomFieldData $value)
+    {
+        $member = $value->member()->first();
+
+        if ($member === null) {
+            return $this->null();
+        }
+
+        $transformer = new ProjectMemberTransformer();
+
+        $result = $this->item(
+            $member,
+            $transformer,
+            'member'
+        );
 
         return $result;
     }

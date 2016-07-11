@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use League\Fractal\Serializer\ArraySerializer;
 use League\Fractal\Serializer\DataArraySerializer;
 
 /**
@@ -20,7 +21,7 @@ class TransformerService
          */
         // Set serialzer for a transformer
         $manager = new \League\Fractal\Manager();
-        $manager->setSerializer(new \League\Fractal\Serializer\DataArraySerializer());
+        $manager->setSerializer(new \League\Fractal\Serializer\ArraySerializer());
 
         return $manager;
     }

@@ -26,4 +26,9 @@ class ProjectMember extends Model
     {
         return $this->hasMany('App\MemberCustomFieldData');
     }
+
+    public function volunteers()
+    {
+        return $this->belongsToMany('App\Volunteer');
+    }
 }
