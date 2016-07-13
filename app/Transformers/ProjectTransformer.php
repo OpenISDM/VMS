@@ -4,26 +4,34 @@ namespace App\Transformers;
 
 use League\Fractal\TransformerAbstract;
 use App\Project;
+use App\Transformers\ManagerTransformer;
+use App\Transformers\ProjectHyperlinkTransformer;
 
 class ProjectTransformer extends TransformerAbstract
 {
+    protected $defaultIncludes = [
+        'managers',
+        'hyperlinks'
+    ];
+
     public function transform(Project $project)
     {
-        $managerVisibleField = [
-            'volunteers.id',
-            'username',
-            'first_name',
-            'last_name',
-            'avatar_path'
-        ];
-
         $item = $project->toArray();
-        $managerCollection = $project->managers()->get($managerVisibleField)->toArray();
-        $hyperlinkCollection = $project->hyperlinks()->get()->toArray();
-
-        $item['managers'] = $managerCollection;
-        $item['hyperlinks'] = $hyperlinkCollection;
 
         return $item;
+    }
+
+    public function includeManagers(Project $project)
+    {
+        $managerCollection = $project->managers()->get();
+
+        return $this->collection($managerCollection, new ManagerTransformer);
+    }
+
+    public function includeHyperlinks(Project $project)
+    {
+        $hyperlinkCollection = $project->hyperlinks()->get();
+
+        return $this->collection($hyperlinkCollection, new ProjectHyperlinkTransformer);
     }
 }

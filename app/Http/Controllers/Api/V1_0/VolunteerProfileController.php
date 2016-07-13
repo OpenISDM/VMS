@@ -9,7 +9,7 @@
  * @Email:  ym.huang0808@gmail.com
  * @Project: VMS
  * @Last modified by:   aming
- * @Last modified time: 2016-06-23T17:41:55+08:00
+ * @Last modified time: 2016-07-13T10:52:35+08:00
  * @License: GPL-3
  */
 
@@ -31,6 +31,7 @@ use App\City;
 use App\Volunteer;
 use App\Utils\ArrayUtil;
 use App\Transformers\VolunteerProfileTransformer;
+use App\Transformers\VolunteerSkillTransformer;
 use App\Transformers\VolunteerAvatarTransformer;
 use App\Transformers\AttendingProjectTransformer;
 use App\Services\AvatarStorageService;
@@ -131,14 +132,19 @@ class VolunteerProfileController extends BaseAuthController
                 'App\Transformers\VolunteerAvatarTransformer',
                 'avatar');
 
-            return response()
-                    ->json($manager->createData($resource)->toArray(), 200);
+            return $this->response->item($avatar, new VolunteerAvatarTransformer);
+            //
+            // return response()
+            //         ->json($manager->createData($resource)->toArray(), 200);
         }
 
-        $resource = TransformerService::getResourceItem($avatar,
-            'App\Transformers\VolunteerProfileTransformer', 'volunteer');
+        // $resource = TransformerService::getResourceItem($volunteer,
+        //     'App\Transformers\VolunteerProfileTransformer', 'volunteer');
+        //
+        // return response()->json($manager->createData($resource)->toArray(), 200);
 
-        return response()->json($manager->createData($resource)->toArray(), 200);
+
+        return $this->response->item($volunteer, new VolunteerProfileTransformer);
     }
 
     /**
@@ -201,7 +207,11 @@ class VolunteerProfileController extends BaseAuthController
             $volunteer->skills()->firstOrCreate(['name' => $skill]);
         }
 
-        return response()->json(null, 204);
+        $skills = $volunteer->skills()->get();
+
+        return $this->response->collection($skills, new VolunteerSkillTransformer);
+
+        // return response()->json(null, 204);
     }
 
     /**

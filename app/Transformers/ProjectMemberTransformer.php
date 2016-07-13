@@ -3,11 +3,11 @@
 namespace App\Transformers;
 
 use League\Fractal\TransformerAbstract;
-use App\Volunteer;
+use App\ProjectMember;
 
 class ProjectMemberTransformer extends TransformerAbstract
 {
-    public function transform(Volunteer $user)
+    public function transform(ProjectMember $user)
     {
         $visibleFields = [
             'id',

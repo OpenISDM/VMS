@@ -7,6 +7,7 @@ use App\Project;
 use App\Volunteer;
 use App\ProjectMember;
 use App\CustomField\Payload;
+use App\ProjectCustomField;
 
 class MemberCustomFieldDataRepository
 {
@@ -59,11 +60,21 @@ class MemberCustomFieldDataRepository
         /**
          * @TODO: Should use left join
          */
-        $customFieldData = MemberCustomFieldData::where(
-            'member_id',
-            '=',
-            $projectMemberRelationship->id
-        )->get();
+        // $customFieldData = MemberCustomFieldData::where(
+        //     'member_id',
+        //     '=',
+        //     $projectMemberRelationship->id
+        // )->get();
+
+        $memberId = $projectMemberRelationship->id;
+
+        $customFieldData = $project->publishedCustomFields()
+            ->with(['memberCustomFieldData' => function ($query) use ($memberId) {
+                $query->where('member_id', '=', $memberId);
+            }])
+            ->get();
+
+        // var_dump($customFieldData);
 
         return $customFieldData;
     }

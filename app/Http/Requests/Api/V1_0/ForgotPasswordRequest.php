@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api\V1_0;
 
 use App\Http\Requests\AbstractJsonRequest;
 
-class CreatePasswordResetRequest extends AbstractJsonRequest
+class ForgotPasswordRequest extends AbstractJsonRequest
 {
     /**
      * Determine if the user is authorized to make this request.

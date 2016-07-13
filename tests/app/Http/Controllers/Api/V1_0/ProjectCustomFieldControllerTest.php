@@ -23,32 +23,27 @@ class ProjectCustomFieldControllerTest extends AbstractTestCase
         $project->managers()->save($this->volunteer);
 
         $postData = [
-            'data' => [
-                'type' => 'project_custom_field',
-                'attributes' => [
-                    'name' => 'FOFOLOlOLo',
-                    'type' => 'RADIO_BUTTON',
-                    'description' => 'FooOFoooQooOOOqOqf',
-                    'required' => true,
-                    'metadata' => [
-                        'options' => [
-                            [
-                                'value' => 0,
-                                'display_name' => 'abc',
-                            ],
-                            [
-                                'value' => 1,
-                                'display_name' => 'def',
-                            ],
-                            [
-                                'value' => 2,
-                                'display_name' => 'ghi',
-                            ],
-                        ]
+            'name' => 'FOFOLOlOLo',
+            'type' => 'RADIO_BUTTON',
+            'description' => 'FooOFoooQooOOOqOqf',
+            'required' => true,
+            'metadata' => [
+                'options' => [
+                    [
+                        'value' => 0,
+                        'display_name' => 'abc',
                     ],
-                    'order' => 1
+                    [
+                        'value' => 1,
+                        'display_name' => 'def',
+                    ],
+                    [
+                        'value' => 2,
+                        'display_name' => 'ghi',
+                    ],
                 ]
-            ]
+            ],
+            'order' => 1
         ];
 
         $this->json(
@@ -76,16 +71,11 @@ class ProjectCustomFieldControllerTest extends AbstractTestCase
         $project->managers()->save($this->volunteer);
 
         $postData = [
-            'data' => [
-                'type' => 'project_custom_field',
-                'attributes' => [
-                    'name' => 'FOFOLOlOLo',
-                    'type' => 'TEXT',
-                    'description' => 'FooOFoooQooOOOqOqf',
-                    'required' => true,
-                    'order' => 1
-                ]
-            ]
+            'name' => 'FOFOLOlOLo',
+            'type' => 'TEXT',
+            'description' => 'FooOFoooQooOOOqOqf',
+            'required' => true,
+            'order' => 1
         ];
 
         $this->json(
@@ -146,27 +136,23 @@ class ProjectCustomFieldControllerTest extends AbstractTestCase
         $project->customFields()->saveMany([$radioCustomField1, $radioCustomField2]);
 
         $postData = [
-            'data' => [
-                'id' => $radioCustomField2->id,
-                'type' => 'project_custom_field',
-                'attributes' => [
-                    'name' => 'FOFOLOlOLo',
-                    'type' => 'RADIO_BUTTON',
-                    'description' => 'FooOFoooQooOOOqOqf',
-                    'required' => true,
-                    'order' => 2,
-                    'metadata' => [
-                        'options' => [
-                            [
-                                'value' => 0,
-                                'display_name' => 'abc',
-                            ],
-                            [
-                                'value' => 1,
-                                'display_name' => 'def',
-                            ],
-                        ]
-                    ]
+            'id' => $radioCustomField2->id,
+            'type' => 'project_custom_field',
+            'name' => 'FOFOLOlOLo',
+            'type' => 'RADIO_BUTTON',
+            'description' => 'FooOFoooQooOOOqOqf',
+            'required' => true,
+            'order' => 2,
+            'metadata' => [
+                'options' => [
+                    [
+                        'value' => 0,
+                        'display_name' => 'abc',
+                    ],
+                    [
+                        'value' => 1,
+                        'display_name' => 'def',
+                    ],
                 ]
             ]
         ];
@@ -176,7 +162,7 @@ class ProjectCustomFieldControllerTest extends AbstractTestCase
             '/api/projects/' . $project->id . '/custom_fields',
             $postData,
             $this->getHeaderWithAuthorization()
-        )->assertResponseStatus(201);
+        )->assertResponseStatus(200);
     }
 
     public function testShowAll()
@@ -362,44 +348,22 @@ class ProjectCustomFieldControllerTest extends AbstractTestCase
         $project->customFields()->saveMany([$radioCustomField1, $radioCustomField2]);
 
         $postData = [
-            'data' => [
                 [
-                    'type' => 'project_custom_field_data',
-                    'attributes' => [
-                        'data' => [
-                            'options' => [
-                                'value' => 0
-                            ]
+                    'data' => [
+                        'options' => [
+                            'value' => 0
                         ]
                     ],
-                    'relationships' => [
-                        'project_custom_field' => [
-                            'data' => [
-                                'type' => 'custom_fields',
-                                'id' => $radioCustomField1->id
-                            ]
-                        ]
-                    ]
+                    'custom_field_id' => $radioCustomField1->id
                 ],
                 [
-                    'type' => 'project_custom_field_data',
-                    'attributes' => [
-                        'data' => [
-                            'options' => [
-                                'value' => 0
-                            ]
+                    'data' => [
+                        'options' => [
+                            'value' => 0
                         ]
                     ],
-                    'relationships' => [
-                        'project_custom_field' => [
-                            'data' => [
-                                'type' => 'custom_fields',
-                                'id' => $radioCustomField2->id
-                            ]
-                        ]
-                    ]
+                    'custom_field_id' => $radioCustomField2->id
                 ]
-            ]
         ];
 
         $this->json(
@@ -479,44 +443,22 @@ class ProjectCustomFieldControllerTest extends AbstractTestCase
         ]);
 
         $postData = [
-            'data' => [
                 [
-                    'type' => 'project_custom_field_data',
-                    'attributes' => [
-                        'data' => [
-                            'options' => [
-                                'value' => 1
-                            ]
+                    'data' => [
+                        'options' => [
+                            'value' => 1
                         ]
                     ],
-                    'relationships' => [
-                        'project_custom_field' => [
-                            'data' => [
-                                'type' => 'custom_fields',
-                                'id' => $radioCustomField1->id
-                            ]
-                        ]
-                    ]
+                    'custom_field_id' => $radioCustomField1->id
                 ],
                 [
-                    'type' => 'project_custom_field_data',
-                    'attributes' => [
-                        'data' => [
-                            'options' => [
-                                'value' => 0
-                            ]
+                    'data' => [
+                        'options' => [
+                            'value' => 0
                         ]
                     ],
-                    'relationships' => [
-                        'project_custom_field' => [
-                            'data' => [
-                                'type' => 'custom_fields',
-                                'id' => $radioCustomField2->id
-                            ]
-                        ]
-                    ]
+                    'custom_field_id' => $radioCustomField2->id
                 ]
-            ]
         ];
 
         $this->json(
@@ -748,7 +690,7 @@ class ProjectCustomFieldControllerTest extends AbstractTestCase
             '/api/projects/' . $project->id . '/members/all_custom_field_data',
             [],
             [
-                'Authorization' => 'Bearer ' . JWTAuth::fromUser($user2),
+                'Authorization' => 'Bearer ' . JWTAuth::fromUser($user1),
                 'X-VMS-API-Key' => $this->getApiKey()
             ]
         )->assertResponseStatus(200);

@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use League\Fractal\Serializer\ArraySerializer;
 use League\Fractal\Serializer\DataArraySerializer;
 
 /**

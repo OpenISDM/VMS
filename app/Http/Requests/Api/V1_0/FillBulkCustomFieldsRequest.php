@@ -25,7 +25,8 @@ class FillBulkCustomFieldsRequest extends AbstractJsonRequest
     public function rules()
     {
         return [
-            'data' => 'required',
+            '*.custom_field_id' => 'required|exists:project_custom_field,id',
+            '*.data' => 'required',
         ];
     }
 }

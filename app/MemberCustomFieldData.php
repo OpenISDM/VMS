@@ -12,7 +12,7 @@ class MemberCustomFieldData extends Model
     protected $casts = [
         'id' => 'integer',
     ];
-    protected $visible = ['id', 'data', 'created_at', 'updated_at'];
+    protected $visible = ['data', 'created_at', 'updated_at'];
 
     public function projectCustomField()
     {

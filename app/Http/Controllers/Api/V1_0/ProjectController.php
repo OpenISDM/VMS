@@ -35,15 +35,14 @@ class ProjectController extends BaseAuthController
 
         // Retrive the project input from the request
         $data = $request->only([
-            'data.attributes.name',
-            'data.attributes.description',
-            'data.attributes.organization',
-            'data.attributes.is_published',
-            'data.attributes.permission'
+            'name',
+            'description',
+            'organization',
+            'is_published',
+            'permission'
         ]);
-        $projectData = Arr::get($data, 'data.attributes');
 
-        $project = Project::create($projectData);
+        $project = Project::create($data);
 
         // Assign the project owner
         $user->manageProjects()->attach($project);
@@ -76,22 +75,9 @@ class ProjectController extends BaseAuthController
             }
         }
 
-        $manager = TransformerService::getJsonApiManager();
-        $resource = TransformerService::getResourceItem($project,
-            'App\Transformers\JsonApiProjectTransformer', 'projects');
-
-        // set meta for the resource
-        $meta = [
-            'role' => $this->getRoleInProject($user, $project)
-        ];
-        $resource->setMeta($meta);
-
-        $manager->parseIncludes(['managers', 'hyperlinks']);
-
-        $result = $manager->createData($resource)->toArray();
-        $status = 200;
-
-        return response()->json($result, $status);
+        return $this->response
+                    ->item($project, new ProjectTransformer)
+                    ->addMeta('role', $this->getRoleInProject($user, $project));
     }
 
     public function delete($id)
@@ -112,11 +98,14 @@ class ProjectController extends BaseAuthController
     {
         $project = Project::findOrFail($id);
         $data = $request->only([
-            'data.attributes'
+            'name',
+            'description',
+            'organization',
+            'is_published',
+            'permission'
         ]);
-        $projectData = Arr::get($data, 'data.attributes');
 
-        $project->update($projectData);
+        $project->update($data);
 
         $manager = TransformerService::getJsonApiManager();
         $resource = TransformerService::getResourceItem($project,
@@ -135,16 +124,7 @@ class ProjectController extends BaseAuthController
         $user = $this->jwtService->getUser();
         $projects = $user->manageProjects()->get();
 
-        $manager = TransformerService::getJsonApiManager();
-        $resource = TransformerService::getResourceCollection($projects,
-            'App\Transformers\JsonApiProjectTransformer', 'projects');
-
-        $manager->parseIncludes(['managers', 'hyperlinks']);
-
-        $result = $manager->createData($resource)->toArray();
-        $status = 200;
-
-        return response()->json($result, $status);
+        return $this->collection($projects, new ProjectTransformer);
     }
 
     public function showSelfAttendingProjects()

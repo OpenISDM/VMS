@@ -28,13 +28,16 @@ class CreateProjectCustomFieldRequest extends AbstractJsonRequest
      */
     public function rules()
     {
+        // @TODO
+        // 'is_published' => 'boolean'
+
         return [
-            'data.type' => 'required|in:project_custom_field',
-            'data.attributes.name' => 'required',
-            'data.attributes.type' => 'required',
-            'data.attributes.description' => 'required',
-            'data.attributes.required' => 'required',
-            'data.attributes.order' => 'required'
+            'id' => 'exists:project_custom_field,id',
+            'name' => 'required',
+            'type' => 'required',
+            'description' => 'required',
+            'required' => 'required',
+            'order' => 'required'
         ];
     }
 }

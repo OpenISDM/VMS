@@ -29,11 +29,11 @@ class UpdateProjectRequest extends AbstractJsonRequest
     public function rules()
     {
         return [
-            'data.type' => 'required|in:projects',
-            'data.attributes' => 'required',
-            'data.attributes.name' => 'string',
-            'data.attributes.is_published' => 'boolean',
-            'data.attributes.permission' => 'numeric',
+            'name' => 'required',
+            'description' => 'required',
+            'organization' => 'required',
+            'is_published' => 'boolean',
+            'permission' => 'integer|in:0,1,2'
         ];
     }
 }
