@@ -36,7 +36,7 @@ class VolunteerProfileControllerTest extends AbstractTestCase
             '/api/users/me/skills',
             $postData,
             $this->getHeaderWithAuthorization()
-        )->assertResponseStatus(204);
+        )->assertResponseStatus(200);
 
         $testVolunter = App\Volunteer::find($this->volunteer->id);
 
@@ -83,7 +83,7 @@ class VolunteerProfileControllerTest extends AbstractTestCase
             '/api/users/me/skills',
             $postData,
             $this->getHeaderWithAuthorization()
-        )->assertResponseStatus(204);
+        )->assertResponseStatus(200);
 
         // Test for deleted skills
         foreach ($deleteSkills as $skill) {
@@ -397,12 +397,12 @@ class VolunteerProfileControllerTest extends AbstractTestCase
             '/api/users/me/avatar',
             $putData,
             $this->getHeaderWithAuthorization()
-        )->seeJsonEquals(
-            [
+        )->seeJsonEquals([
+            'data' => [
                 'avatar_url' => config('vms.avatarHost').'/'.config('vms.avatarRootPath').'/'.$avatarFileName,
                 'avatar_name' => $avatarFileName,
             ]
-        )->assertResponseStatus(200);
+        ])->assertResponseStatus(200);
     }
 
     public function testUploadAvatar()

@@ -21,7 +21,7 @@ class VolunteerPasswordControllerTest extends AbstractTestCase
         Mail::shouldReceive('send')->once();
 
         $this->json('post',
-            '/api/users/password_reset',
+            '/api/users/forgot_password',
             ['email' => $volunteer->email],
             $headerArray
         )->assertResponseStatus(204);
@@ -31,7 +31,7 @@ class VolunteerPasswordControllerTest extends AbstractTestCase
     {
         $this->factoryModel();
         $volunteer = factory(App\Volunteer::class)->create();
-        
+
         $headerArray = [
             'X-VMS-API-Key' => $this->getApiKey()
         ];
@@ -49,9 +49,14 @@ class VolunteerPasswordControllerTest extends AbstractTestCase
                         ->with($credentials, Mockery::any())
                         ->andReturn(Password::PASSWORD_RESET);
 
-        $this->json('put',
-            '/api/users/password_reset/' . $volunteer->email . '/ABCToKeNStRiNg',
-            ['password' => 'VMSReSetPassw0Rd'],
+        $this->json('post',
+            '/api/users/password_reset/',
+            [
+                'email' => $volunteer->email,
+                'token' => 'ABCToKeNStRiNg',
+                'password' => 'VMSReSetPassw0Rd',
+                'password_confirmation' => 'VMSReSetPassw0Rd'
+            ],
             $headerArray
         )
         ->assertResponseStatus(204);

@@ -18,16 +18,11 @@ class ProjectControllerTest extends AbstractTestCase
 
         $token = JWTAuth::fromUser($volunteer);
         $postData = [
-            'data' => [
-                'type' => 'projects',
-                'attributes' => [
-                    'name' => 'Flood surveillance',
-                    'description' => 'FoOfOoFoOfOoFoOfOoFoOfOoFoOfOo',
-                    'organization' => 'QOQOQOQOQO...OOO',
-                    'is_published' => true,
-                    'permission' => 0,
-                ],
-            ],
+            'name' => 'Flood surveillance',
+            'description' => 'FoOfOoFoOfOoFoOfOoFoOfOoFoOfOo',
+            'organization' => 'QOQOQOQOQO...OOO',
+            'is_published' => true,
+            'permission' => 0,
         ];
 
         $jsonRequest = $this->json('post',
@@ -127,17 +122,12 @@ class ProjectControllerTest extends AbstractTestCase
         $project->managers()->save($this->volunteer);
 
         $putData = [
-            'data' => [
-                'type' => 'projects',
-                'id' => '1',
-                'attributes' => [
-                    'name' => 'POPOPO',
-                    'description' => 'OPOPOOPPOOOP',
-                    'organization' => 'ZOZOZOZOZ',
-                    'is_published' => false,
-                    'permission' => 1,
-                ]
-            ]
+            'id' => '1',
+            'name' => 'POPOPO',
+            'description' => 'OPOPOOPPOOOP',
+            'organization' => 'ZOZOZOZOZ',
+            'is_published' => false,
+            'permission' => 1,
         ];
 
         $this->json(

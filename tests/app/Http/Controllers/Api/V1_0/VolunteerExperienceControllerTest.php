@@ -182,9 +182,9 @@ class VolunteerExperienceControllerTest extends AbstractTestCase
                     ])
              ->seeJsonEquals([
                     'message' => 'Not have right to access',
-                    'errors' => [[
-                        'code' => 'cannot_access'
-                    ]]
+                    'errors' => [
+                        'cannot_access'
+                    ]
                 ])
              ->assertResponseStatus(403);
     }

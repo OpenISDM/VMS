@@ -19,7 +19,8 @@ class ProjectTransformerTest extends TestCase
             'username' => 'aBcD',
             'first_name' => 'LollLo',
             'last_name' => 'CocO',
-            'avatar_path' => 'http://avatar.vms.app/01a34d.jpg'
+            'avatar_path' => '01a34d.jpg',
+            'email' => 'abc@abc.cc'
         ]);
 
         $this->project = factory(App\Project::class)->create([
@@ -68,12 +69,15 @@ class ProjectTransformerTest extends TestCase
         ];
 
         $expectedManagers = [
-            [
-                'id' => 1,
-                'username' => 'aBcD',
-                'first_name' => 'LollLo',
-                'last_name' => 'CocO',
-                'avatar_path' => 'http://avatar.vms.app/01a34d.jpg'
+            'data' => [
+                [
+                    'id' => 1,
+                    'username' => 'aBcD',
+                    'first_name' => 'LollLo',
+                    'last_name' => 'CocO',
+                    'avatar_url' => 'http://vms-openisdm.s3-website-ap-northeast-1.amazonaws.com/upload/avatars/01a34d.jpg',
+                    'email' => 'abc@abc.cc'
+                ]
             ]
         ];
 
@@ -92,10 +96,10 @@ class ProjectTransformerTest extends TestCase
 
         $this->assertContains($expectedProject, $actual);
 
-        $this->assertCount(1, $actual['managers']);
+        $this->assertCount(1, $actual['managers']['data']);
         $this->assertEquals($expectedManagers, $actual['managers']);
 
-        $this->assertCount(2, $actual['hyperlinks']);
-        $this->assertEquals($expectedHyperlinks, $actual['hyperlinks']);
+        $this->assertCount(2, $actual['hyperlinks']['data']);
+        $this->assertEquals($expectedHyperlinks, $actual['hyperlinks']['data']);
     }
 }
