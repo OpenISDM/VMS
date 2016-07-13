@@ -3,11 +3,11 @@
 namespace App\Transformers;
 
 use League\Fractal\TransformerAbstract;
-use App\Volunteer;
+use App\ProjectMember;
 
 class ProjectMemberTransformer extends TransformerAbstract
 {
-    public function transform(Volunteer $user)
+    public function transform(ProjectMember $user)
     {
         $visibleFields = [
             'id',
@@ -19,7 +19,6 @@ class ProjectMemberTransformer extends TransformerAbstract
         ];
         $userArray = $user->toArray();
         $item = array_only($userArray, $visibleFields);
-        $item['attending_at'] = $user->pivot->created_at;
 
         return $item;
     }

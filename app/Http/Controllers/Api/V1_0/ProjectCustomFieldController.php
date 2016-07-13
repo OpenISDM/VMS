@@ -18,6 +18,7 @@ use App\Transformers\ProjectCustomFieldTransformer;
 use App\Transformers\JsonApiMemberCustomFieldsDbTransformer;
 use App\Transformers\ProjectMemberDataCustomFieldTransformer;
 use App\Transformers\ProjectMemberWithCustomFieldDataTransformer;
+use App\Transformers\CustomField\UserCustomFieldWithDataTransformer;
 use App\ProjectMember;
 use Illuminate\Support\Arr;
 
@@ -34,7 +35,8 @@ class ProjectCustomFieldController extends BaseAuthController
             'type',
             'description',
             'required',
-            'order'
+            'order',
+            'metadata'
         ]);
 
         $transformer = new ProjectCustomFieldTransformer();
@@ -44,6 +46,7 @@ class ProjectCustomFieldController extends BaseAuthController
             $response = $this->response->item($customField, $transformer);
         } else {
             $metadata = (isset($data['metadata'])) ? $data['metadata'] : null;
+
             $customField = $repository->newInstance(
                 $data['name'],
                 $data['description'],
@@ -98,7 +101,7 @@ class ProjectCustomFieldController extends BaseAuthController
         $user = $this->jwtService->getUser();
 
         // TODO Should validate the project_custom_field.id exists
-        $collection = collect($request->input('data'));
+        $collection = collect($request->all());
         $project = Project::find($projectId);
         $mapping = [];
 
@@ -106,8 +109,8 @@ class ProjectCustomFieldController extends BaseAuthController
          * @TODO MUST validate the custom field id is able to be updated
          */
         $collection->each(function ($customFieldData) use (&$mapping) {
-            $customFieldId = Arr::get($customFieldData, 'relationships.project_custom_field.data.id');
-            $mapping[$customFieldId] = Arr::get($customFieldData, 'attributes.data');
+            $customFieldId = $customFieldData['custom_field_id'];
+            $mapping[$customFieldId] = $customFieldData['data'];
         });
 
         $repository->updateOrCreateMany($project, $user, $mapping);
@@ -118,7 +121,7 @@ class ProjectCustomFieldController extends BaseAuthController
         return response()->json($result, $status);
     }
 
-    public function showAllCutsomFieldsData(
+    public function showAllCustomFieldsData(
         ShowProjectRequest $request,
         MemberCustomFieldDataRepository $repository,
         $projectId)
@@ -134,7 +137,7 @@ class ProjectCustomFieldController extends BaseAuthController
 
             $response = $this->response->noContent();
         } else {
-            $transformer = new ProjectMemberDataCustomFieldTransformer();
+            $transformer = new UserCustomFieldWithDataTransformer();
             $response = $this->response->collection($memberCustomFieldData,
                 $transformer);
         }
@@ -148,30 +151,6 @@ class ProjectCustomFieldController extends BaseAuthController
         $projectId
     ) {
         $project = Project::find($projectId);
-
-        // var_dump($project);
-        // $projectMember = ProjectMember::where('project_id', $projectId);
-        //
-        //
-        //
-        // $customFieldSets = $repository->getAllProjectCustomFieldData($project);
-        //
-        // // $transformer = new ProjectMemberDataCustomFieldTransformer();
-        // $transformer = new JsonApiMemberCustomFieldsDbTransformer();
-        //
-        // $manager = TransformerService::getJsonApiManager();
-        // $resource = TransformerService::getResourceCollection(
-        //     $customFieldSets,
-        //     $transformer,
-        //     'data'
-        // );
-        //
-        // $manager->parseIncludes(['project_custom_field', 'member']);
-        //
-        // $result = $manager->createData($resource)->toArray();
-        // $status = 200;
-        //
-        // return response()->json($result, $status);
 
         $transformer = new ProjectMemberWithCustomFieldDataTransformer();
 

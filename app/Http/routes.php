@@ -195,7 +195,7 @@ $api->version('v1.0', function ($api) {
         $api->post('projects/{projectId}/members/bulk_custom_field_data',
             'App\Http\Controllers\Api\V1_0\ProjectCustomFieldController@fillBulkCustomFields');
         $api->get('projects/{projectId}/members/custom_field_data',
-            'App\Http\Controllers\Api\V1_0\ProjectCustomFieldController@showAllCutsomFieldsData');
+            'App\Http\Controllers\Api\V1_0\ProjectCustomFieldController@showAllCustomFieldsData');
         $api->get('projects/{projectId}/members/all_custom_field_data',
             'App\Http\Controllers\Api\V1_0\ProjectCustomFieldController@showAllMembersCustomFieldData');
     });

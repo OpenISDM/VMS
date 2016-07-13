@@ -12,7 +12,7 @@ class ProjectMemberDataCustomFieldTransformer extends TransformerAbstract
 {
     protected $defaultIncludes = [
         'projectCustomField' => 'custom_field',
-        'member'
+        // 'member'
     ];
 
     public function transform(MemberCustomFieldData $value)
@@ -39,22 +39,22 @@ class ProjectMemberDataCustomFieldTransformer extends TransformerAbstract
         return $result;
     }
 
-    public function includeMember(MemberCustomFieldData $value)
-    {
-        $member = $value->member()->first();
-
-        if ($member === null) {
-            return $this->null();
-        }
-
-        $transformer = new ProjectMemberTransformer();
-
-        $result = $this->item(
-            $member,
-            $transformer,
-            'member'
-        );
-
-        return $result;
-    }
+    // public function includeMember(MemberCustomFieldData $value)
+    // {
+    //     $member = $value->member()->first();
+    //
+    //     if ($member === null) {
+    //         return $this->null();
+    //     }
+    //
+    //     $transformer = new ProjectMemberTransformer();
+    //
+    //     $result = $this->item(
+    //         $member,
+    //         $transformer,
+    //         'member'
+    //     );
+    //
+    //     return $result;
+    // }
 }
