@@ -10,4 +10,3 @@ services:
       - ./:/var/www/html/app
     ports:
       - "80:80"
-    command: /usr/bin/supervisord && cd /var/www/html/app && compose install

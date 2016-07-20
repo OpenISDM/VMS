@@ -117,6 +117,8 @@ RUN apt-get remove --purge -y software-properties-common && \
     rm -rf /usr/share/man/?? && \
     rm -rf /usr/share/man/??_*
 
+WORKDIR /var/www/html/app
+
 # expose ports
 EXPOSE 80 443 3306 6379
 
