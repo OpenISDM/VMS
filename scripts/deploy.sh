@@ -1,7 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-echo 'Run heroku-deploy.sh'
-php artisan migrate:rollback
+echo 'Run deploy.sh'
 php artisan migrate
 php artisan db:seed
 php artisan db:seed --class=CountryCityTableSeeder

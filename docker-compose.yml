@@ -1,0 +1,12 @@
+version: '2'
+services:
+  web:
+    build: .
+    env_file: .env
+    environment:
+      APP_NAME: vms
+      APP_DOMAIN: vms.dev
+    volumes:
+      - ./:/var/www/html/app
+    ports:
+      - "80:80"
