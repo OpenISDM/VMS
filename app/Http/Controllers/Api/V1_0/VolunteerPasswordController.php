@@ -39,7 +39,7 @@ class VolunteerPasswordController extends BaseAuthController
             case Password::RESET_LINK_SENT:
                 return response(null, 204);
             case Password::INVALID_USER:
-                throw new InvalidUserException('The email does not exist', 'inexistence_email');
+                throw new InvalidUserException('The email does not exist', 'nonexistent_email');
         }
     }
 
