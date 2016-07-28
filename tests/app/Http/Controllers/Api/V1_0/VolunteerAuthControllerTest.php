@@ -31,7 +31,7 @@ class VolunteerAuthControllerTest extends AbstractTestCase
             json_decode(file_get_contents($this->exampleRoot . '/register_post_validation_error.json'), true);
         $expectedJsonResponseBody = [
             "errors" => [
-                "password" => ["not_enough_password_strength"]
+                "password" => ["weak_password_strength"]
             ],
             "message" => "422 Unprocessable Entity",
             "status_code" => 422
