@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Transformers\CandidateKeywordsTrait;
+use App\Traits\CandidateKeywordsTrait;
 
 class Skill extends Model
 {
