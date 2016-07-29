@@ -30,9 +30,9 @@ use App\Exceptions\ExceedingIndexException;
 use App\City;
 use App\Volunteer;
 use App\Utils\ArrayUtil;
-use App\Transformers\VolunteerProfileTransformer;
-use App\Transformers\VolunteerSkillTransformer;
-use App\Transformers\VolunteerAvatarTransformer;
+use App\Transformers\Volunteer\VolunteerProfileTransformer;
+use App\Transformers\Volunteer\VolunteerSkillTransformer;
+use App\Transformers\Volunteer\VolunteerAvatarTransformer;
 use App\Transformers\AttendingProjectTransformer;
 use App\Services\AvatarStorageService;
 use App\Services\JwtService;
@@ -129,7 +129,7 @@ class VolunteerProfileController extends BaseAuthController
             // Not response full profile
             $avatar->avatar_name = $avatarStorageService->getFileName();
             $resource = TransformerService::getResourceItem($avatar,
-                'App\Transformers\VolunteerAvatarTransformer',
+                'App\Transformers\Volunteer\VolunteerAvatarTransformer',
                 'avatar');
 
             return $this->response->item($avatar, new VolunteerAvatarTransformer);
@@ -139,7 +139,7 @@ class VolunteerProfileController extends BaseAuthController
         }
 
         // $resource = TransformerService::getResourceItem($volunteer,
-        //     'App\Transformers\VolunteerProfileTransformer', 'volunteer');
+        //     'App\Transformers\Volunteer\VolunteerProfileTransformer', 'volunteer');
         //
         // return response()->json($manager->createData($resource)->toArray(), 200);
 
@@ -168,7 +168,7 @@ class VolunteerProfileController extends BaseAuthController
             $avatar->avatar_name = $avatarStorageService->getFileName();
         }
         $resource = TransformerService::getResourceItem($avatar,
-            'App\Transformers\VolunteerAvatarTransformer',
+            'App\Transformers\Volunteer\VolunteerAvatarTransformer',
             'avatar');
         $manager = TransformerService::getManager();
 
@@ -226,7 +226,7 @@ class VolunteerProfileController extends BaseAuthController
 
         $manager = TransformerService::getManager();
         $resource = TransformerService::getResourceCollection($skills,
-            'App\Transformers\VolunteerSkillTransformer', 'skills');
+            'App\Transformers\Volunteer\VolunteerSkillTransformer', 'skills');
 
         return response()->json($manager->createData($resource)->toArray(), 200);
     }
@@ -303,7 +303,7 @@ class VolunteerProfileController extends BaseAuthController
         $manager = TransformerService::getManager();
         $resource = TransformerService::getResourceCollection(
             $equipment,
-            'App\Transformers\VolunteerEquipmentTransformer',
+            'App\Transformers\Volunteer\VolunteerEquipmentTransformer',
             'equipment');
 
         return response()->json($manager->createData($resource)->toArray(), 200);

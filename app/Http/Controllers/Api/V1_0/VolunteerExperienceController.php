@@ -9,7 +9,7 @@ use App\Http\Requests\Api\V1_0\UpdateExperienceRequest;
 use App\Http\Controllers\Controller;
 use App\Exceptions\AccessDeniedException;
 use App\Experience;
-use App\Transformers\VolunteerExperienceTransformer;
+use App\Transformers\Volunteer\VolunteerExperienceTransformer;
 use App\Http\Controllers\Api\BaseAuthController;
 use App\Services\JwtService;
 use App\Services\TransformerService;
@@ -39,7 +39,7 @@ class VolunteerExperienceController extends BaseAuthController
 
         $manager = TransformerService::getManager();
         $resource = TransformerService::getResourceCollection($experiences,
-            'App\Transformers\VolunteerExperienceTransformer', 'experiences');
+            'App\Transformers\Volunteer\VolunteerExperienceTransformer', 'experiences');
 
         return response()->json($manager->createData($resource)->toArray(), 200);
     }
