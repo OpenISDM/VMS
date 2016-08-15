@@ -103,13 +103,20 @@ class VolunteerAuthController extends Controller
      */
     public function login(CredentialRequest $request, JwtService $jwtSerivce)
     {
-        $credentials = $request->only('username', 'password');
+        $credentials = $request->all();
 
         // Generate JWT (JSON Web Token)
         $token = $jwtSerivce->getToken($credentials);
 
         // Check if the volunteer was locked
-        $volunteer = Volunteer::where('username', '=', $credentials['username'])->first();
+        if ($request->has('username')) {
+            $key = 'username';
+        } else {
+            $key = 'email';
+        }
+
+        $volunteer = Volunteer::where($key, '=', $credentials[$key])->first();
+
 
         if ($volunteer->is_locked == 1 || $volunteer->is_locked == true) {
             $token = null;
