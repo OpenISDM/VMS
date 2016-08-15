@@ -60,7 +60,5 @@ Temporary Items
 /node_modules
 
 /.idea
-/docker/data
-app/Transformers/Project/
 docker/data/
 tests/data/
