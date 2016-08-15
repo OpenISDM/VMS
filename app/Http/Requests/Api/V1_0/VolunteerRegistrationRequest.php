@@ -1,16 +1,26 @@
 <?php
 
+/**
+ * The class is responsible for validating the volunteer data on registration
+ *
+ * @Author: Yi-Ming, Huang <aming>
+ * @Date:   2016-06-24T10:40:23+08:00
+ * @Email:  ym.huang0808@gmail.com
+ * @Project: VMS
+ * @Last modified by:   aming
+ * @Last modified time: 2016-07-29T14:21:07+08:00
+ * @License: GPL-3
+ */
+
 namespace App\Http\Requests\Api\V1_0;
 
 use App\Http\Requests\AbstractJsonRequest;
 
-/**
- * The class is responsible for validating the volunteer data on registration
- */
 class VolunteerRegistrationRequest extends AbstractJsonRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Because VolunteerRegistrationRequest is public for all users,
+     * it always returns true.
      *
      * @return bool
      */

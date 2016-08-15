@@ -61,3 +61,6 @@ Temporary Items
 
 /.idea
 /docker/data
+app/Transformers/Project/
+docker/data/
+tests/data/
