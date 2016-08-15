@@ -113,7 +113,6 @@ class VolunteerAuthController extends Controller
             $key = 'username';
         } else {
             $key = 'email';
-
         }
 
         $volunteer = Volunteer::where($key, '=', $credentials[$key])->first();
