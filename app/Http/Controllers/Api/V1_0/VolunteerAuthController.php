@@ -109,7 +109,7 @@ class VolunteerAuthController extends Controller
         $token = $jwtSerivce->getToken($credentials);
 
         // Check if the volunteer was locked
-        if($request->has('username')) {
+        if ($request->has('username')) {
             $key = 'username';
         } else {
             $key = 'email';
