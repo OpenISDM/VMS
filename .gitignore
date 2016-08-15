@@ -58,3 +58,4 @@ Temporary Items
 /.phpintel/
 /storage/database.sqlite
 /node_modules
+/.idea
