@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Transformers;
+namespace App\Transformers\Volunteer;
 
 use League\Fractal\TransformerAbstract;
 use App\Volunteer;
