@@ -4,7 +4,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use League\Fractal\Resource\Item;
 use App\Project;
-use App\Transformers\ProjectTransformer;
+use App\Transformers\Project\ProjectTransformer;
 use App\Services\TransformerService;
 
 class ProjectQueryTransformerTest extends TestCase
@@ -59,7 +59,7 @@ class ProjectQueryTransformerTest extends TestCase
 
         $manager = TransformerService::getManager();
         $resource = TransformerService::getResourceItem($project,
-            'App\Transformers\ProjectQueryTransformer', 'data');
+            'App\Transformers\Project\ProjectQueryTransformer', 'data');
 
         $actual = $manager->createData($resource)->toArray();
 

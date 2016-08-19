@@ -8,5 +8,6 @@ services:
       APP_DOMAIN: vms.dev
     volumes:
       - ./:/var/www/html/app
+      - ./docker/data:/var/lib/mysql
     ports:
       - "80:80"

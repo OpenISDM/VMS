@@ -59,4 +59,5 @@ Temporary Items
 /storage/database.sqlite
 /node_modules
 /.idea
-/docker/data
+docker/data/
+tests/data/

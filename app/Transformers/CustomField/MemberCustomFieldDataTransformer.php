@@ -5,7 +5,7 @@ namespace App\Transformers\CustomField;
 use League\Fractal\TransformerAbstract;
 use App\Volunteer;
 use App\MemberCustomFieldData;
-use App\Transformers\VolunteerProfileTransformer;
+use App\Transformers\Volunteer\VolunteerProfileTransformer;
 use App\Transformers\CustomField\CustomFieldDataTransformer;
 use App\Services\TransformerService;
 

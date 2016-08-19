@@ -25,7 +25,7 @@ use App\Commands\VerifyEmailCommand;
 use App\Exceptions\UnauthorizedException;
 use App\Exceptions\AuthenticatedUserNotFoundException;
 use App\Exceptions\NotFoundException;
-use App\Transformers\VolunteerProfileTransformer;
+use App\Transformers\Volunteer\VolunteerProfileTransformer;
 
 /**
  * The controller provides user authentications

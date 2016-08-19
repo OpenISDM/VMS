@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\V1_0;
 use App\Http\Controllers\Api\BaseAuthController;
 use App\Http\Requests\Api\V1_0\CreateHyperlinkRequest;
 use App\Http\Requests\Api\V1_0\CreateOrUpdateHyperlinksRequest;
-use App\Transformers\ProjectHyperlinkTransformer;
+use App\Transformers\Project\ProjectHyperlinkTransformer;
 use App\Services\TransformerService;
 use App\Exceptions\AccessDeniedException;
 use App\Project;
@@ -23,7 +23,7 @@ class HyperlinkController extends BaseAuthController
 
         $manager = TransformerService::getDataArrayManager();
         $resource = TransformerService::getResourceCollection($hyperlinks,
-            'App\Transformers\ProjectHyperlinkTransformer', 'data');
+            'App\Transformers\Project\ProjectHyperlinkTransformer', 'data');
 
         return response()->json($manager->createData($resource)->toArray(), 201);
     }

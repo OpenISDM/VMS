@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers\Api\V1_0;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\Api\V1_0\EducationRequest;
 use App\Http\Requests\Api\V1_0\UpdateEducationRequest;
 use Gate;
 use App\Http\Controllers\Api\BaseAuthController;
 use App\Exceptions\AccessDeniedException;
-use App\Transformers\VolunteerEducationTransformer;
 use App\Education;
-use App\Services\JwtService;
 use App\Services\TransformerService;
 
 /**
@@ -39,7 +36,7 @@ class VolunteerEducationController extends BaseAuthController
 
         $manager = TransformerService::getManager();
         $resource = TransformerService::getResourceCollection($educations,
-            'App\Transformers\VolunteerEducationTransformer', 'educations');
+            'App\Transformers\Volunteer\VolunteerEducationTransformer', 'educations');
 
         return response()->json($manager->createData($resource)->toArray(), 200);
     }
