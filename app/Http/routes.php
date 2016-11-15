@@ -181,6 +181,8 @@ $api->version('v1.0', function ($api) {
             'App\Http\Controllers\Api\V1_0\ProjectController@detachVolunteer');
         $api->post('projects/{projectId}/attend',
             'App\Http\Controllers\Api\V1_0\ProjectController@attend');
+        $api->post('projects/{projectId}/invite/volunteer',
+            'App\Http\Controllers\Api\V1_0\ProjectController@inviteVolunteer');
 
         // Project custom field
         $api->post('projects/{id}/custom_fields',

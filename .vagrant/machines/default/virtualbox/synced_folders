@@ -1,0 +1,1 @@
+{"virtualbox":{"/home/vagrant/vms":{"type":null,"mount_options":[],"guestpath":"/home/vagrant/vms","hostpath":"C:/Users/willy/VMS_will/VMS","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"C:/Users/willy/VMS_will/VMS","disabled":false,"__vagrantfile":true}}}

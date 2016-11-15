@@ -9,6 +9,7 @@ use App\Http\Requests\Api\V1_0\CreateProjectRequest;
 use App\Http\Requests\Api\V1_0\ShowProjectRequest;
 use App\Http\Requests\Api\V1_0\UpdateProjectRequest;
 use App\Http\Requests\Api\V1_0\AttachVolunteerInProjectRequest;
+use App\Http\Requests\Api\V1_0\InviteVolunteerInProjectRequest;
 use App\Http\Requests\Api\V1_0\DetachVolunteerInProjectRequest;
 use App\Project;
 use App\Hyperlink;
@@ -168,6 +169,37 @@ class ProjectController extends BaseAuthController
 
         return response()->json($result, $status);
     }
+
+
+    /**
+     * For the project manager to invite a volunteer to become member of his/her project
+     * 
+     */
+
+    public function inviteVolunteer(InviteVolunteerInProjectRequest $request, $projectId)
+    {
+        // get the ids of to-be-invited volunteers from the $request
+        $volunteersId = $request->input('volunteers.*.id');
+        // check if these volunteers can be added to project
+        $volunteers = Volunteer::find($volunteersId);
+        $project = Project::find($projectId);
+        $checked = true;
+
+        $volunteers->each(function($volunteer) use ($project, $checked) {
+            if ($volunteer->inProject($project)) {
+                $checked = false;
+
+                return false;
+            }
+        });
+
+        // if yes, invite them to the project, send them an email to notify that they
+        // are being invited to this project. Then respond 200
+        // 
+        // if no, respond error 
+        // resond
+    }
+
 
     /**
      * Attch a volunteer in a project

@@ -22,7 +22,8 @@
         "symfony/dom-crawler": "~3.0",
         "symfony/css-selector": "~3.0",
         "phpspec/phpspec": "~2.1",
-        "friendsofphp/php-cs-fixer": "^1.11"
+        "friendsofphp/php-cs-fixer": "^1.11",
+        "laravel/homestead": "^3.0"
     },
     "autoload": {
         "classmap": [
