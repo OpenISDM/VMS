@@ -284,6 +284,17 @@ class ProjectController extends BaseAuthController
         return response()->json($result, $status);
     }
 
+    // add parameters
+    public function showPMs()
+    {
+        $user = $this->jwtService->getUser();
+        $project = Project::findOrFail($projectId);
+        // if this is a pm of the project
+        if ($user->isCreatorOfProject($project)) {
+            $pms = $project->project_managers()->get();
+        }
+    }
+
     protected function isPublic(Project $project)
     {
         if ($project->is_published === true) {
