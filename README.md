@@ -4,6 +4,17 @@
 [![Build Status](https://travis-ci.org/OpenISDM/VMS.svg)](https://travis-ci.org/OpenISDM/VMS)
 [![Coverage Status](https://coveralls.io/repos/OpenISDM/VMS/badge.svg?branch=develop&service=github)](https://coveralls.io/github/OpenISDM/VMS?branch=develop)
 
+## Introduction
+This is the backend repository of the Volunteer management system (VMS).
+VMS is a website service for volunteers and project managers of all kinds.
+Volunteers can provide their information to VMS and choose to participate in projects that ineterest him/her. 
+Project managers can create projects for the volunteers to participate, and can use the contact information they provide to contact them.
+We have a up and running VMS site here: http://openisdm.github.io/volunteer/.
+Fell free to try out our features.
+You can also set it up and manage your own site.
+Here are our instructions:
+Frontend:
+Backend:
 
 ## Architecture
 
