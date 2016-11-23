@@ -19,7 +19,9 @@ Fell free to try out our features.
 You can also set it up and manage your own site.
 
 Here are our instructions:
+
 Frontend: https://github.com/OpenISDM/VMS-frontend
+
 Backend: https://github.com/OpenISDM/VMS/wiki/1_1_Setup-development-environment
 
 ## Architecture
