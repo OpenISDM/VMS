@@ -185,6 +185,7 @@ class ProjectController extends BaseAuthController
         $project = Project::find($projectId);
         $checked = true;
 
+        
         $volunteers->each(function($volunteer) use ($project, $checked) {
             if ($volunteer->inProject($project)) {
                 $checked = false;
@@ -284,15 +285,29 @@ class ProjectController extends BaseAuthController
         return response()->json($result, $status);
     }
 
+
     // add parameters
-    public function showPMs()
+    public function showPMs(ShowProjectRequest $request, $projectId)
     {
+        echo "shit~!!!";
         $user = $this->jwtService->getUser();
         $project = Project::findOrFail($projectId);
         // if this is a pm of the project
         if ($user->isCreatorOfProject($project)) {
-            $pms = $project->project_managers()->get();
+            $pms = $project->managers()->get();
         }
+        else
+        {
+            // return error status
+        }
+
+        $manager = TransformerService::getJsonApiManager();
+        $resource = TransformerService::getResourceCollection($pms,
+            'App\Transformers\JsonApiManagerTransformer', 'pms');
+        $result = $manager->createData($resource)->toArray();
+        $status = 200;
+
+        return response()->json($result, $status);
     }
 
     protected function isPublic(Project $project)

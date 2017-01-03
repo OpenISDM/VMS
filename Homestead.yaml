@@ -18,6 +18,7 @@ folders:
 sites:
     - map: vms.dev
       to: "/home/vagrant/vms/public"
+      hhvm: true
 
 databases:
     - homestead
