@@ -39,7 +39,7 @@ $api->version('v1.0', function ($api) {
     |
     */
     $api->group(['middleware' => ['check.header']], function ($api) {
-
+        
         // Register
         $api->post('register', 'App\Http\Controllers\Api\V1_0\VolunteerAuthController@register');
 
@@ -177,8 +177,12 @@ $api->version('v1.0', function ($api) {
             'App\Http\Controllers\Api\V1_0\ProjectController@attachVolunteer');
         $api->get('projects/{projectId}/members',
             'App\Http\Controllers\Api\V1_0\ProjectController@showMembers');
+        $api->get('projects/{projectId}/PSPmembers',
+            'App\Http\Controllers\Api\V1_0\ProjectController@showPSPMembers');
         $api->get('projects/{projectId}/pm',
             'App\Http\Controllers\Api\V1_0\ProjectController@showPMs');
+        $api->post('projects/{projectId}/pm',
+            'App\Http\Controllers\Api\V1_0\ProjectController@addPMs');
         
         $api->delete('projects/{projectId}/members/{userId}',
             'App\Http\Controllers\Api\V1_0\ProjectController@detachVolunteer');

@@ -285,11 +285,61 @@ class ProjectController extends BaseAuthController
         return response()->json($result, $status);
     }
 
+    public function showPSPMembers(ShowProjectRequest $request, $projectId)
+    {
+        $user = $this->jwtService->getUser();
+        $project = Project::findOrFail($projectId);
+
+        if ($user->isCreatorOfProject($project)) {
+            $members = $project->members()->get();
+        } else {
+            // Not a project manager
+            $members = $project->viewableMembers($user, $project);
+        }
+
+        $manager = TransformerService::getJsonApiManager();
+        $resource = TransformerService::getResourceCollection($members,
+            'App\Transformers\JsonApiMemberTransformer', 'members');
+
+        $result = $manager->createData($resource)->toArray();
+        $status = 200;
+
+        return response()->json($result, $status);
+    }
+
+
+    public function addPMs(InviteVolunteerInProjectRequest $request, $projectId)
+    {
+
+        //echo "I'm herer\n";
+
+         // get the ids of to-be-promoted volunteers from the $request
+         // by promoted, we mean, to become a PM of the given project
+        $volunteersId = $request->input('volunteers.*.id');
+        // check if these volunteers can be added to project
+        $volunteers = Volunteer::find($volunteersId);
+        //echo $volunteers[0];
+        $user = $this->jwtService->getUser();
+        //echo $user;
+        $project = Project::findOrFail($projectId);
+        // if this is a pm of the project
+        if ($user->isCreatorOfProject($project)) {
+            $pms = $project->managers()->get();
+            // Assign the project owner
+            $volunteers[0]->manageProjects()->attach($project);
+            return response()->json([], 204);
+        }
+        else
+        {
+            return response()->json([], 400);
+        }
+        
+    }
+
 
     // add parameters
     public function showPMs(ShowProjectRequest $request, $projectId)
     {
-        echo "shit~!!!";
         $user = $this->jwtService->getUser();
         $project = Project::findOrFail($projectId);
         // if this is a pm of the project
@@ -309,6 +359,8 @@ class ProjectController extends BaseAuthController
 
         return response()->json($result, $status);
     }
+
+
 
     protected function isPublic(Project $project)
     {
