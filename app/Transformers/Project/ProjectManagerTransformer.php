@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Transformers;
+namespace App\Transformers\Project;
 
 use League\Fractal\TransformerAbstract;
 use App\Volunteer;
 
-class ManagerTransformer extends TransformerAbstract
+class ProjectManagerTransformer extends TransformerAbstract
 {
     public function transform(Volunteer $volunteer)
     {
@@ -17,15 +17,11 @@ class ManagerTransformer extends TransformerAbstract
             'avatar_path',
             'email'
         ];
-
         $volunteerArray = $volunteer->toArray();
         $item = array_only($volunteerArray, $visibleFields);
-
         $item['avatar_url'] = config('vms.avatarHost') . '/' .
             config('vms.avatarRootPath') . '/' . $volunteerArray['avatar_path'];
-
         unset($item['avatar_path']);
-
         return $item;
     }
 }

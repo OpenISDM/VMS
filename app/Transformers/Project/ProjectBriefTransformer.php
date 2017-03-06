@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Transformers;
+namespace App\Transformers\Project;
 
 use Illuminate\Contracts\Support\Arrayable;
 use League\Fractal\TransformerAbstract;
@@ -10,17 +10,10 @@ class ProjectBriefTransformer extends TransformerAbstract
 {
     public function __call($method, $arguments)
     {
-        // echo '** __call() **';
-
-        // var_dump($method);
-        // var_dump($arguments);
-
         if ($method === 'transform') {
             if ($arguments instanceof Project) {
-                // echo 'project';
                 return $this->_transformProjectType($arguments);
             } elseif (is_array($arguments)) {
-                // echo 'stdClass';
                 return $this->transformStdClassType($arguments[0]);
             }
         }
@@ -37,8 +30,6 @@ class ProjectBriefTransformer extends TransformerAbstract
 
     private function transformStdClassType($value)
     {
-        // echo 'transformStdClassType';
-        // var_dump($value);
         $project = Project::find($value->id);
 
         return $this->transformProjectType($project);

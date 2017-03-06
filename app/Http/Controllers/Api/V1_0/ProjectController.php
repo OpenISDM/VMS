@@ -19,7 +19,7 @@ use App\Exceptions\GeneralException;
 use App\Exceptions\AccessDeniedException;
 use App\Repositories\ProjectDbQueryRepository;
 use App\Utils\ArrayUtil;
-use App\Transformers\ProjectTransformer;
+use App\Transformers\Project\ProjectTransformer;
 use App\Transformers\JsonApiProjectTransformer;
 
 class ProjectController extends BaseAuthController
@@ -156,7 +156,7 @@ class ProjectController extends BaseAuthController
         if (!empty($projects)) {
             $manager = TransformerService::getManager();
             $resource = TransformerService::getResourceCollection($projectsCollection,
-                'App\Transformers\ProjectBriefTransformer', 'data');
+                'App\Transformers\Project\ProjectBriefTransformer', 'data');
 
             // $manager->parseIncludes(['managers', 'hyperlinks']);
 

@@ -24,7 +24,8 @@ class CredentialRequest extends AbstractJsonRequest
     public function rules()
     {
         return [
-            'username' => 'required',
+            'username' => 'required_without:email',
+            'email'    => 'required_without:username|email',
             'password' => 'required',
         ];
     }

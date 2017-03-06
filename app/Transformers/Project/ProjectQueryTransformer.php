@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Transformers;
+namespace App\Transformers\Project;
 
 use League\Fractal\TransformerAbstract;
 use App\Project;

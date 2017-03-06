@@ -4,7 +4,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use League\Fractal\Resource\Item;
 use App\Project;
-use App\Transformers\ProjectTransformer;
+use App\Transformers\Project\ProjectTransformer;
 use App\Services\TransformerService;
 use App\CustomField\RadioButtonMetadata;
 

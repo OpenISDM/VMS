@@ -89,7 +89,7 @@ return [
 
     'custom' => [
         'password' => [
-            'regex' => 'not_enough_password_strength',
+            'regex' => 'weak_password_strength',
         ],
     ],
 
