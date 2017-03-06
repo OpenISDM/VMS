@@ -9,6 +9,7 @@ use App\Http\Requests\Api\V1_0\CreateProjectRequest;
 use App\Http\Requests\Api\V1_0\ShowProjectRequest;
 use App\Http\Requests\Api\V1_0\UpdateProjectRequest;
 use App\Http\Requests\Api\V1_0\AttachVolunteerInProjectRequest;
+use App\Http\Requests\Api\V1_0\InviteVolunteerInProjectRequest;
 use App\Http\Requests\Api\V1_0\DetachVolunteerInProjectRequest;
 use App\Project;
 use App\Hyperlink;
@@ -169,6 +170,38 @@ class ProjectController extends BaseAuthController
         return response()->json($result, $status);
     }
 
+
+    /**
+     * For the project manager to invite a volunteer to become member of his/her project
+     * 
+     */
+
+    public function inviteVolunteer(InviteVolunteerInProjectRequest $request, $projectId)
+    {
+        // get the ids of to-be-invited volunteers from the $request
+        $volunteersId = $request->input('volunteers.*.id');
+        // check if these volunteers can be added to project
+        $volunteers = Volunteer::find($volunteersId);
+        $project = Project::find($projectId);
+        $checked = true;
+
+        
+        $volunteers->each(function($volunteer) use ($project, $checked) {
+            if ($volunteer->inProject($project)) {
+                $checked = false;
+
+                return false;
+            }
+        });
+
+        // if yes, invite them to the project, send them an email to notify that they
+        // are being invited to this project. Then respond 200
+        // 
+        // if no, respond error 
+        // resond
+    }
+
+
     /**
      * Attch a volunteer in a project
      * @param  AttachVolunteerInProjectRequest $request
@@ -251,6 +284,83 @@ class ProjectController extends BaseAuthController
 
         return response()->json($result, $status);
     }
+
+    public function showPSPMembers(ShowProjectRequest $request, $projectId)
+    {
+        $user = $this->jwtService->getUser();
+        $project = Project::findOrFail($projectId);
+
+        if ($user->isCreatorOfProject($project)) {
+            $members = $project->members()->get();
+        } else {
+            // Not a project manager
+            $members = $project->viewableMembers($user, $project);
+        }
+
+        $manager = TransformerService::getJsonApiManager();
+        $resource = TransformerService::getResourceCollection($members,
+            'App\Transformers\JsonApiMemberTransformer', 'members');
+
+        $result = $manager->createData($resource)->toArray();
+        $status = 200;
+
+        return response()->json($result, $status);
+    }
+
+
+    public function addPMs(InviteVolunteerInProjectRequest $request, $projectId)
+    {
+
+        //echo "I'm herer\n";
+
+         // get the ids of to-be-promoted volunteers from the $request
+         // by promoted, we mean, to become a PM of the given project
+        $volunteersId = $request->input('volunteers.*.id');
+        // check if these volunteers can be added to project
+        $volunteers = Volunteer::find($volunteersId);
+        //echo $volunteers[0];
+        $user = $this->jwtService->getUser();
+        //echo $user;
+        $project = Project::findOrFail($projectId);
+        // if this is a pm of the project
+        if ($user->isCreatorOfProject($project)) {
+            $pms = $project->managers()->get();
+            // Assign the project owner
+            $volunteers[0]->manageProjects()->attach($project);
+            return response()->json([], 204);
+        }
+        else
+        {
+            return response()->json([], 400);
+        }
+        
+    }
+
+
+    // add parameters
+    public function showPMs(ShowProjectRequest $request, $projectId)
+    {
+        $user = $this->jwtService->getUser();
+        $project = Project::findOrFail($projectId);
+        // if this is a pm of the project
+        if ($user->isCreatorOfProject($project)) {
+            $pms = $project->managers()->get();
+        }
+        else
+        {
+            // return error status
+        }
+
+        $manager = TransformerService::getJsonApiManager();
+        $resource = TransformerService::getResourceCollection($pms,
+            'App\Transformers\JsonApiManagerTransformer', 'pms');
+        $result = $manager->createData($resource)->toArray();
+        $status = 200;
+
+        return response()->json($result, $status);
+    }
+
+
 
     protected function isPublic(Project $project)
     {
