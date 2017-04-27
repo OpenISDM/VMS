@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Api\V1_0;
 
 use App\Http\Requests\AbstractJsonRequest;
-use Gate;
 
 class FillBulkCustomFieldsRequest extends AbstractJsonRequest
 {
@@ -26,7 +25,7 @@ class FillBulkCustomFieldsRequest extends AbstractJsonRequest
     {
         return [
             '*.custom_field_id' => 'required|exists:project_custom_field,id',
-            '*.data' => 'required',
+            '*.data'            => 'required',
         ];
     }
 }

@@ -24,10 +24,10 @@ class ExperienceRequest extends AbstractJsonRequest
     public function rules()
     {
         return [
-            'company' => 'required|string',
-            'job_title' => 'required|string',
+            'company'    => 'required|string',
+            'job_title'  => 'required|string',
             'start_year' => 'required|date_format:Y',
-            'end_year' => 'sometimes|required|date_format:Y',
+            'end_year'   => 'sometimes|required|date_format:Y',
         ];
     }
 }

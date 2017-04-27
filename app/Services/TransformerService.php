@@ -1,17 +1,16 @@
 <?php
-namespace App\Services;
 
-use League\Fractal\Serializer\ArraySerializer;
-use League\Fractal\Serializer\DataArraySerializer;
+namespace App\Services;
 
 /**
  * TransformerSerivce class is responsible for Tansformer object
- * creation in controller
+ * creation in controller.
  */
 class TransformerService
 {
     /**
-     * Get Fractal Manager
+     * Get Fractal Manager.
+     *
      * @return \League\Fractal\Manager
      */
     public static function getManager()
@@ -45,30 +44,34 @@ class TransformerService
     }
 
     /**
-     * Get resource item object
-     * @param  \Illuminate\Database\Eloquent\Model $object
-     * @param  String $transformer
-     * @param  String $key
+     * Get resource item object.
+     *
+     * @param \Illuminate\Database\Eloquent\Model $object
+     * @param string                              $transformer
+     * @param string                              $key
+     *
      * @return \League\Fractal\Resource\Item
      */
     public static function getResourceItem($object, $transformer, $key)
     {
         // transform Experience model into array
-        $resource = new \League\Fractal\Resource\Item($object, new $transformer, $key);
+        $resource = new \League\Fractal\Resource\Item($object, new $transformer(), $key);
 
         return $resource;
     }
 
     /**
-     * Get resource collection
-     * @param  \Illuminate\Database\Eloquent\Model $object
-     * @param  String $transformer
-     * @param  String $key
+     * Get resource collection.
+     *
+     * @param \Illuminate\Database\Eloquent\Model $object
+     * @param string                              $transformer
+     * @param string                              $key
+     *
      * @return \League\Fractal\Resource\Collection
      */
     public static function getResourceCollection($object, $transformer, $key)
     {
-        $resource = new \League\Fractal\Resource\Collection($object, new $transformer, $key);
+        $resource = new \League\Fractal\Resource\Collection($object, new $transformer(), $key);
 
         return $resource;
     }

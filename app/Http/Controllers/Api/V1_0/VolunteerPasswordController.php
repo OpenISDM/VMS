@@ -2,28 +2,28 @@
 
 namespace App\Http\Controllers\Api\V1_0;
 
-use App\Http\Controllers\Controller;
+use App\Exceptions\GeneralException;
+use App\Exceptions\InvalidUserException;
 use App\Http\Controllers\Api\BaseAuthController;
+use App\Http\Requests\Api\V1_0\ChangePasswordRequest;
 use App\Http\Requests\Api\V1_0\ForgotPasswordRequest;
 use App\Http\Requests\Api\V1_0\PasswordResetRequest;
-use App\Http\Requests\Api\V1_0\ChangePasswordRequest;
 use App\Http\Requests\Api\V1_0\VerifyPasswordResetRequest;
-use Password;
-use Auth;
-use Illuminate\Mail\Message;
-use App\Exceptions\InvalidUserException;
-use App\Exceptions\GeneralException;
 use App\Services\JwtService;
 use App\Volunteer;
+use Auth;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Password;
 
 class VolunteerPasswordController extends BaseAuthController
 {
     use ResetsPasswords;
 
     /**
-     * Create a password reset request
-     * @param  App\Http\Requests\Api\V1_0\ForgotPasswordRequest $request
+     * Create a password reset request.
+     *
+     * @param App\Http\Requests\Api\V1_0\ForgotPasswordRequest $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function forgotPassword(ForgotPasswordRequest $request)
@@ -62,10 +62,12 @@ class VolunteerPasswordController extends BaseAuthController
     /**
      * Reset password
      * It will check the token. If the token is correct,
-     * volunteer is able to reset his/her password
-     * @param  String               $email
-     * @param  String               $token
-     * @param  App\Http\Requests\Api\V1_0\PasswordResetRequest $request
+     * volunteer is able to reset his/her password.
+     *
+     * @param string                                          $email
+     * @param string                                          $token
+     * @param App\Http\Requests\Api\V1_0\PasswordResetRequest $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function postPasswordReset(PasswordResetRequest $request)
@@ -74,7 +76,7 @@ class VolunteerPasswordController extends BaseAuthController
             'email',
             'token',
             'password',
-            'password_confirmation'
+            'password_confirmation',
         ]);
 
         $response = Password::reset($credentials, function ($volunteer, $password) {
@@ -91,9 +93,11 @@ class VolunteerPasswordController extends BaseAuthController
 
     /**
      * Volunteer changes his/her own password
-     * It will validate the new_password by ChangePasswordRequest
-     * @param  App\Http\Requests\Api\V1_0\ChangePasswordRequest $request
-     * @param  App\Services\JwtService                          $jwtService
+     * It will validate the new_password by ChangePasswordRequest.
+     *
+     * @param App\Http\Requests\Api\V1_0\ChangePasswordRequest $request
+     * @param App\Services\JwtService                          $jwtService
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function postChangePassword(ChangePasswordRequest $request, JwtService $jwtService)
@@ -101,7 +105,7 @@ class VolunteerPasswordController extends BaseAuthController
         $volunteer = $jwtService->getVolunteer();
         $credentials = [
             'username' => $volunteer->username,
-            'password' => $request->input('existing_password')
+            'password' => $request->input('existing_password'),
         ];
 
         // Check credentials
@@ -116,8 +120,10 @@ class VolunteerPasswordController extends BaseAuthController
 
     /**
      * Reset the given user's password.
-     * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
-     * @param  string  $password
+     *
+     * @param \Illuminate\Contracts\Auth\CanResetPassword $user
+     * @param string                                      $password
+     *
      * @return void
      */
     protected function resetPassword($user, $password)
@@ -130,8 +136,9 @@ class VolunteerPasswordController extends BaseAuthController
     }
 
     /**
-     * Get the subject of password reset email
-     * @return String
+     * Get the subject of password reset email.
+     *
+     * @return string
      */
     protected function getPasswordResetEmailSubject()
     {

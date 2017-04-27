@@ -3,24 +3,18 @@
 namespace App\Http\Controllers\Api\V1_0;
 
 use App\Http\Controllers\Api\BaseAuthController;
-use App\Http\Requests\Api\V1_0\FillBulkCustomFieldsRequest;
 use App\Http\Requests\Api\V1_0\CreateProjectCustomFieldRequest;
+use App\Http\Requests\Api\V1_0\FillBulkCustomFieldsRequest;
+use App\Http\Requests\Api\V1_0\FillCustomFieldRequest;
 use App\Http\Requests\Api\V1_0\ShowAllMembersCustomFieldDataRequest;
 use App\Http\Requests\Api\V1_0\ShowProjectRequest;
-use App\Http\Requests\Api\V1_0\FillCustomFieldRequest;
-use App\Repositories\ProjectCustomFieldRepository;
-use App\Repositories\MemberCustomFieldDataRepository;
-use App\Repositories\MemberCustomFieldDataDbRepository;
 use App\Project;
-use App\CustomField\TypeMapping;
-use App\Services\TransformerService;
-use App\Transformers\ProjectCustomFieldTransformer;
-use App\Transformers\JsonApiMemberCustomFieldsDbTransformer;
-use App\Transformers\ProjectMemberDataCustomFieldTransformer;
-use App\Transformers\ProjectMemberWithCustomFieldDataTransformer;
+use App\Repositories\MemberCustomFieldDataDbRepository;
+use App\Repositories\MemberCustomFieldDataRepository;
+use App\Repositories\ProjectCustomFieldRepository;
 use App\Transformers\CustomField\UserCustomFieldWithDataTransformer;
-use App\ProjectMember;
-use Illuminate\Support\Arr;
+use App\Transformers\ProjectCustomFieldTransformer;
+use App\Transformers\ProjectMemberWithCustomFieldDataTransformer;
 
 class ProjectCustomFieldController extends BaseAuthController
 {
@@ -36,7 +30,7 @@ class ProjectCustomFieldController extends BaseAuthController
             'description',
             'required',
             'order',
-            'metadata'
+            'metadata',
         ]);
 
         $transformer = new ProjectCustomFieldTransformer();
@@ -72,7 +66,7 @@ class ProjectCustomFieldController extends BaseAuthController
         $customFields = $project->customFields()->get();
 
         return $this->response->collection($customFields,
-            new ProjectCustomFieldTransformer);
+            new ProjectCustomFieldTransformer());
     }
 
     public function fillCustomField(FillCustomFieldRequest $request,
@@ -81,7 +75,7 @@ class ProjectCustomFieldController extends BaseAuthController
         $user = $this->jwtService->getUser();
 
         /**
-         * TODO: Should be validated
+         * TODO: Should be validated.
          */
         $data = $request->input('data.attributes.content');
         $customFieldId = $request->input('data.relationships.custom_field.data.id');
@@ -105,7 +99,7 @@ class ProjectCustomFieldController extends BaseAuthController
         $project = Project::find($projectId);
         $mapping = [];
 
-        /**
+        /*
          * @TODO MUST validate the custom field id is able to be updated
          */
         $collection->each(function ($customFieldData) use (&$mapping) {

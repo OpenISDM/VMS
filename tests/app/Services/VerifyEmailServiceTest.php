@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\Services\VerifyEmailService;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class VerifyEmailServiceTest extends TestCase
 {
@@ -101,20 +100,20 @@ class VerifyEmailServiceTest extends TestCase
     {
         return factory(App\Volunteer::class)
             ->make([
-                'username' => 'user01',
-                'password' => bcrypt('PASSW0RD01'),
-                'first_name' => 'Huang',
-                'last_name' => 'AMing',
-                'birth_year' => 1991,
-                'gender' => 'male',
-                'city_id' => 1,
-                'location' => 'MY Address',
-                'phone_number' => '0910123456',
-                'email' => 'abc@abc.com',
+                'username'          => 'user01',
+                'password'          => bcrypt('PASSW0RD01'),
+                'first_name'        => 'Huang',
+                'last_name'         => 'AMing',
+                'birth_year'        => 1991,
+                'gender'            => 'male',
+                'city_id'           => 1,
+                'location'          => 'MY Address',
+                'phone_number'      => '0910123456',
+                'email'             => 'abc@abc.com',
                 'emergency_contact' => 'Huang PAPA',
-                'emergency_phone' => '0988123456',
-                'avatar_path' => 'avatar.png',
-                'introduction' => 'Hi, my name is XXX'
+                'emergency_phone'   => '0988123456',
+                'avatar_path'       => 'avatar.png',
+                'introduction'      => 'Hi, my name is XXX',
         ]);
     }
 }

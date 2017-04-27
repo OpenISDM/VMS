@@ -15,12 +15,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\City;
 
 class Country extends Model
 {
     /**
-     * Table name
+     * Table name.
      *
      * @var string
      */
@@ -32,7 +31,7 @@ class Country extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer'
+        'id' => 'integer',
     ];
 
     /**

@@ -2,14 +2,14 @@
 
 namespace App\Transformers\Project;
 
-use League\Fractal\TransformerAbstract;
 use App\Project;
+use League\Fractal\TransformerAbstract;
 
 class ProjectTransformer extends TransformerAbstract
 {
     protected $defaultIncludes = [
         'managers',
-        'hyperlinks'
+        'hyperlinks',
     ];
 
     public function transform(Project $project)
@@ -23,13 +23,13 @@ class ProjectTransformer extends TransformerAbstract
     {
         $managerCollection = $project->managers()->get();
 
-        return $this->collection($managerCollection, new ProjectManagerTransformer);
+        return $this->collection($managerCollection, new ProjectManagerTransformer());
     }
 
     public function includeHyperlinks(Project $project)
     {
         $hyperlinkCollection = $project->hyperlinks()->get();
 
-        return $this->collection($hyperlinkCollection, new ProjectHyperlinkTransformer);
+        return $this->collection($hyperlinkCollection, new ProjectHyperlinkTransformer());
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Transformers;
 
-use League\Fractal\TransformerAbstract;
 use App\ProjectMember;
+use League\Fractal\TransformerAbstract;
 
 class ProjectMemberTransformer extends TransformerAbstract
 {
@@ -15,7 +15,7 @@ class ProjectMemberTransformer extends TransformerAbstract
             'first_name',
             'last_name',
             'email',
-            'avatar_path'
+            'avatar_path',
         ];
         $userArray = $user->toArray();
         $item = array_only($userArray, $visibleFields);

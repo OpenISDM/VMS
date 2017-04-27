@@ -2,21 +2,21 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\Validator;
-use App\Utils\ValidatorUtil;
 use App\Services\JwtService;
+use App\Utils\ValidatorUtil;
 use Dingo\Api\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
 
 /**
  * Reference from:
- * https://laracasts.com/discuss/channels/laravel/how-to-validate-json-input-using-requests
+ * https://laracasts.com/discuss/channels/laravel/how-to-validate-json-input-using-requests.
  */
 abstract class AbstractJsonRequest extends FormRequest
 {
     private $jwtService;
 
     /**
-     * Get the validator instanct
+     * Get the validator instanct.
      *
      * @return \Illuminate\Foundation\Validation\Validator
      */
@@ -51,14 +51,13 @@ abstract class AbstractJsonRequest extends FormRequest
     {
         return [
             'required' => 'missing_field',
-            'email' => 'incorrect_email_format',
-            'unique' => 'used_field',
-            'max' => 'exceed_max_length',
-            'in' => 'not_in_acceptable_list',
-            'exists' => 'not_exist',
+            'email'    => 'incorrect_email_format',
+            'unique'   => 'used_field',
+            'max'      => 'exceed_max_length',
+            'in'       => 'not_in_acceptable_list',
+            'exists'   => 'not_exist',
         ];
     }
-
 
     // protected function formatErrors(Validator $validator)
     // {

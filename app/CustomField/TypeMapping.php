@@ -14,8 +14,6 @@ class TypeMapping
         if (isset(self::$typeStrToIntMapping[$key]['number'])) {
             return self::$typeStrToIntMapping[$key]['number'];
         }
-
-        return null;
     }
 
     public static function strToMetadataClass($key)
@@ -25,8 +23,6 @@ class TypeMapping
         if (isset(self::$typeStrToIntMapping[$key]['metadata'])) {
             return self::$typeStrToIntMapping[$key]['metadata'];
         }
-
-        return null;
     }
 
     public static function intToStr($key)
@@ -36,8 +32,6 @@ class TypeMapping
         if (isset(self::$typeIntToStrMapping[$key]['type'])) {
             return self::$typeIntToStrMapping[$key]['type'];
         }
-
-        return null;
     }
 
     public static function intToClass($key)
@@ -47,8 +41,6 @@ class TypeMapping
         if (isset(self::$typeIntToStrMapping[$key]['class'])) {
             return self::$typeIntToStrMapping[$key]['class'];
         }
-
-        return null;
     }
 
     protected static function mappingType()
@@ -58,7 +50,7 @@ class TypeMapping
         }
 
         /**
-         * TODO: Check the configuration string exists
+         * TODO: Check the configuration string exists.
          */
         $customFieldTypeConfig = config('constants.custom_field_type');
         static::$typeStrToIntMapping = $customFieldTypeConfig;

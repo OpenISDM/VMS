@@ -2,9 +2,9 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use App\Traits\ProjectMemberTrait;
 use App\Traits\ProjectHasCustomFieldTraits;
+use App\Traits\ProjectMemberTrait;
+use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
@@ -13,16 +13,16 @@ class Project extends Model
 
     protected $table = 'projects';
     protected $fillable = ['name', 'description', 'is_published', 'permission',
-        'organization'];
+        'organization', ];
     protected $casts = [
-      'id' => 'integer',
+      'id'           => 'integer',
       'is_published' => 'boolean',
-      'permission' => 'integer',
-      'created_at' => 'datetime',
-      'updated_at' => 'datetime'
+      'permission'   => 'integer',
+      'created_at'   => 'datetime',
+      'updated_at'   => 'datetime',
     ];
     protected $visible = ['id', 'name', 'description', 'organization', 'is_published',
-        'permission', 'created_at', 'updated_at', 'managers', 'hyperlinks'
+        'permission', 'created_at', 'updated_at', 'managers', 'hyperlinks',
     ];
 
     public function hyperlinks()

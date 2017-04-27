@@ -11,6 +11,6 @@ class ApiKey extends Model
     protected $fillable = ['api_key'];
 
     protected $casts = [
-        'id' => 'integer'
+        'id' => 'integer',
     ];
 }

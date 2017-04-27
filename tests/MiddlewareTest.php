@@ -1,8 +1,6 @@
 <?php
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class MiddlewareTest extends TestCase
 {
@@ -16,7 +14,7 @@ class MiddlewareTest extends TestCase
         parent::setUp();
 
         $this->apiKey = '581dba93a4dbafa42a682d36b015d8484622f8e3543623bec5a291f67f5ddff1';
-        $this->postData = json_decode(file_get_contents(__DIR__ . '/examples/register_post.json'), true);
+        $this->postData = json_decode(file_get_contents(__DIR__.'/examples/register_post.json'), true);
     }
 
     /*
@@ -38,7 +36,7 @@ class MiddlewareTest extends TestCase
         $this->json('post', '/api/register', $this->postData, ['Content-Type'=> 'application/json'])
              ->seeJsonEquals([
                 'message' => 'API key is not validated',
-                'errors' => [['code' => 'incorrect_api_key']],
+                'errors'  => [['code' => 'incorrect_api_key']],
                ])
              ->assertResponseStatus(401);
     }
@@ -48,7 +46,7 @@ class MiddlewareTest extends TestCase
         $this->factoryModel();
         $this->expectsJobs(App\Jobs\SendVerificationEmail::class);
         $headerArray = [
-            'X-VMS-API-Key' => $this->apiKey
+            'X-VMS-API-Key' => $this->apiKey,
         ];
 
         StringUtil::shouldReceive('generateHashToken')
@@ -79,8 +77,8 @@ class MiddlewareTest extends TestCase
             '/api/auth',
             [],
             [
-                'Authorization' => 'Bearer ' . $token,
-                'X-VMS-API-Key' => $this->apiKey
+                'Authorization' => 'Bearer '.$token,
+                'X-VMS-API-Key' => $this->apiKey,
             ])
             ->assertResponseStatus(204);
     }
@@ -96,7 +94,7 @@ class MiddlewareTest extends TestCase
             '/api/auth',
             [],
             [
-                'X-VMS-API-Key' => $this->apiKey
+                'X-VMS-API-Key' => $this->apiKey,
             ])
             ->assertResponseStatus(401);
     }
@@ -104,7 +102,7 @@ class MiddlewareTest extends TestCase
     protected function factoryModel()
     {
         factory(App\ApiKey::class)->create([
-            'api_key' => $this->apiKey
+            'api_key' => $this->apiKey,
         ]);
 
         $countriesCitiesSeedData = [
@@ -131,7 +129,7 @@ class MiddlewareTest extends TestCase
                 'Kinmen County',
                 'Lienchiang County',
                 'Penghu County',
-            ]
+            ],
         ];
 
         foreach ($countriesCitiesSeedData as $countryName => $cityList) {

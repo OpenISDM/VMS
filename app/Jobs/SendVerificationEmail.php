@@ -2,13 +2,12 @@
 
 namespace App\Jobs;
 
-use App\Jobs\Job;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Bus\SelfHandling;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Contracts\Mail\Mailer;
 use App\Volunteer;
+use Illuminate\Contracts\Bus\SelfHandling;
+use Illuminate\Contracts\Mail\Mailer;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 class SendVerificationEmail extends Job implements SelfHandling, ShouldQueue
 {
@@ -40,8 +39,8 @@ class SendVerificationEmail extends Job implements SelfHandling, ShouldQueue
         if ($this->attempts() < 10) {
             $verificationUrl = $this->verificationUrlStringBuilder($this->volunteer->email, $this->verificationCode);
             $data = [
-                'name' => $this->volunteer->last_name,  // the volunteer's name
-                'verificationUrl' => $verificationUrl   // the URL for email verification
+                'name'            => $this->volunteer->last_name,  // the volunteer's name
+                'verificationUrl' => $verificationUrl,   // the URL for email verification
             ];
 
             $lastName = $this->volunteer->last_name;
@@ -59,16 +58,18 @@ class SendVerificationEmail extends Job implements SelfHandling, ShouldQueue
     }
 
     /**
-     * For verification url string builder
-     * @param  String $email
-     * @param  String $verificationCode
-     * @return String
+     * For verification url string builder.
+     *
+     * @param string $email
+     * @param string $verificationCode
+     *
+     * @return string
      */
     private function verificationUrlStringBuilder($email, $verificationCode)
     {
         $url = config('vms.emailVerificationUrl');
-        $url .= '?email=' . rawurlencode($email);
-        $url .= '&verification_token=' . rawurlencode($this->verificationCode);
+        $url .= '?email='.rawurlencode($email);
+        $url .= '&verification_token='.rawurlencode($this->verificationCode);
 
         return $url;
     }

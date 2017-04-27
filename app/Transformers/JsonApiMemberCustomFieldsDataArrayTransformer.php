@@ -2,15 +2,13 @@
 
 namespace App\Transformers;
 
-use League\Fractal\TransformerAbstract;
 use App\ProjectCustomField;
-use App\MemberCustomFieldData;
-use App\Transformers\JsonApiProjectCustomFieldTransformer;
+use League\Fractal\TransformerAbstract;
 
 class JsonApiMemberCustomFieldsDataArrayTransformer extends TransformerAbstract
 {
     protected $availableIncludes = [
-        'project-custom-field'
+        'project-custom-field',
     ];
 
     public function transform($value)
@@ -18,8 +16,8 @@ class JsonApiMemberCustomFieldsDataArrayTransformer extends TransformerAbstract
         $payload = unserialize($value->data);
 
         return [
-            'id' => $value->id,
-            'data' => $payload->get(),
+            'id'         => $value->id,
+            'data'       => $payload->get(),
             'created_at' => $value->created_at,
             'updated_at' => $value->updated_at,
         ];

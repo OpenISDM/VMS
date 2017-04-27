@@ -2,12 +2,6 @@
 
 namespace App\Traits;
 
-use App\CustomField\Types\AbstractType;
-use App\ProjectCustomField;
-
-/**
- *
- */
 trait ProjectHasCustomFieldTraits
 {
     public function customFields()

@@ -2,15 +2,13 @@
 
 namespace App\Transformers;
 
-use League\Fractal\TransformerAbstract;
-use App\ProjectCustomField;
 use App\MemberCustomFieldData;
-use App\Transformers\JsonApiProjectCustomFieldTransformer;
+use League\Fractal\TransformerAbstract;
 
 class JsonApiMemberCustomFieldsDataTransformer extends TransformerAbstract
 {
     protected $availableIncludes = [
-        'project_custom_field'
+        'project_custom_field',
     ];
 
     public function transform(MemberCustomFieldData $value)

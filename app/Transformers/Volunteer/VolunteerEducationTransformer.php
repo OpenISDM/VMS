@@ -2,17 +2,17 @@
 
 namespace App\Transformers\Volunteer;
 
-use League\Fractal\TransformerAbstract;
 use App\Education;
+use League\Fractal\TransformerAbstract;
 
 class VolunteerEducationTransformer extends TransformerAbstract
 {
     public function transform(Education $education)
     {
         $educationItem = [
-            'id' => (int) $education->id,
-            'school' => $education->school,
-            'degree' => (int) $education->degree,
+            'id'         => (int) $education->id,
+            'school'     => $education->school,
+            'degree'     => (int) $education->degree,
             'start_year' => (int) $education->start_year,
         ];
 

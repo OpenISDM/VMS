@@ -15,12 +15,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Country;
 
 class City extends Model
 {
     /**
-     * Table name
+     * Table name.
      *
      * @var string
      */
@@ -32,11 +31,11 @@ class City extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer'
+        'id' => 'integer',
     ];
 
     /**
-     * Disable timestamps in the table
+     * Disable timestamps in the table.
      *
      * @var bool
      */

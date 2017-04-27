@@ -2,10 +2,9 @@
 
 namespace App\Transformers\CustomField;
 
-use League\Fractal\TransformerAbstract;
 use App\ProjectCustomField;
-use App\Transformers\CustomField\CustomFieldDataTransformer;
 use App\Services\TransformerService;
+use League\Fractal\TransformerAbstract;
 
 class UserCustomFieldWithDataTransformer extends TransformerAbstract
 {

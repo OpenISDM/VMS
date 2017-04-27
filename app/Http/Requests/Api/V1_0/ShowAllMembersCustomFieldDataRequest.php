@@ -3,8 +3,8 @@
 namespace App\Http\Requests\Api\V1_0;
 
 use App\Http\Requests\AbstractJsonRequest;
-use Gate;
 use App\Project;
+use Gate;
 
 class ShowAllMembersCustomFieldDataRequest extends AbstractJsonRequest
 {

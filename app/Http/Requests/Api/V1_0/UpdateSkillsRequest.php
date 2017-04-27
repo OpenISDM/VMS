@@ -25,7 +25,7 @@ class UpdateSkillsRequest extends AbstractJsonRequest
     {
         // TODO: array validation
         return [
-            'skills' => 'required',
+            'skills'                 => 'required',
             'existing_skill_indexes' => 'sometimes|array_index:skills',
         ];
     }

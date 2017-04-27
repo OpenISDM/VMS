@@ -24,10 +24,10 @@ class CreateProjectRequest extends AbstractJsonRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'name'         => 'required',
             'organization' => 'required',
             'is_published' => 'required|boolean',
-            'permission' => 'required|in:0,1,2'
+            'permission'   => 'required|in:0,1,2',
         ];
     }
 }

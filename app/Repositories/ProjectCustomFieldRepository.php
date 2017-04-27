@@ -2,11 +2,9 @@
 
 namespace App\Repositories;
 
-use App\CustomField\Types\AbstractType;
 use App\CustomField\TypeMapping;
-use App\MemberCustomFieldData;
-use App\ProjectCustomField;
 use App\Project;
+use App\ProjectCustomField;
 
 class ProjectCustomFieldRepository
 {
@@ -20,11 +18,11 @@ class ProjectCustomFieldRepository
         $isPublished = true
     ) {
         $data = [
-            'name' => $name,
-            'description' => $description,
-            'required' => $required,
-            'type' => $type,
-            'order' => $order,
+            'name'         => $name,
+            'description'  => $description,
+            'required'     => $required,
+            'type'         => $type,
+            'order'        => $order,
             'is_published' => $isPublished,
         ];
 

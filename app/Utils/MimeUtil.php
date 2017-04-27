@@ -28,7 +28,7 @@ class MimeUtil
             throw new TypeErrorException();
         }
 
-        $data = substr($data, $startPosition+1);
+        $data = substr($data, $startPosition + 1);
         $endPosition = strpos($data, ';');
 
         if (!$startPosition || !$endPosition) {

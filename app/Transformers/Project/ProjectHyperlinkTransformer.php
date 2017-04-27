@@ -2,8 +2,8 @@
 
 namespace App\Transformers\Project;
 
-use League\Fractal\TransformerAbstract;
 use App\Hyperlink;
+use League\Fractal\TransformerAbstract;
 
 class ProjectHyperlinkTransformer extends TransformerAbstract
 {

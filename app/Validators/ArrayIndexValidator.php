@@ -2,9 +2,8 @@
 
 namespace App\Validators;
 
-use Illuminate\Support\Arr;
-use Illuminate\Validation\Validator;
 use App\Utils\ArrayUtil;
+use Illuminate\Support\Arr;
 
 class ArrayIndexValidator
 {
@@ -27,6 +26,6 @@ class ArrayIndexValidator
 
     public function message($message, $attribute)
     {
-        return "exceeding_index_value";
+        return 'exceeding_index_value';
     }
 }

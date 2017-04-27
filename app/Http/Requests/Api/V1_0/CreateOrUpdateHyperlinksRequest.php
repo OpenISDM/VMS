@@ -30,12 +30,12 @@ class CreateOrUpdateHyperlinksRequest extends AbstractJsonRequest
     public function rules()
     {
         return [
-            'create.*.name'=> 'required',
+            'create.*.name' => 'required',
             'create.*.link' => 'required|url',
-            'update' => 'array',
-            'update.*.id' => 'required|exists:hyperlinks,id',
+            'update'        => 'array',
+            'update.*.id'   => 'required|exists:hyperlinks,id',
             'update.*.name' => 'required',
-            'update.*.link' => 'required|url'
+            'update.*.link' => 'required|url',
         ];
     }
 }

@@ -2,14 +2,13 @@
 
 namespace App\Transformers;
 
-use League\Fractal\TransformerAbstract;
 use App\Hyperlink;
-use App\Transformers\JsonApiProjectTransformer;
+use League\Fractal\TransformerAbstract;
 
 class JsonApiHyperlinkTransformer extends TransformerAbstract
 {
     protected $availableIncludes = [
-        'project'
+        'project',
     ];
 
     public function transform(Hyperlink $hyperlink)

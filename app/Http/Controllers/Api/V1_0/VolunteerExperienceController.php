@@ -25,7 +25,8 @@ use Gate;
 class VolunteerExperienceController extends BaseAuthController
 {
     /**
-     * Show user's own experiences
+     * Show user's own experiences.
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function show()
@@ -41,8 +42,10 @@ class VolunteerExperienceController extends BaseAuthController
     }
 
     /**
-     * Store a new user's experience
-     * @param  ExperienceRequest $request
+     * Store a new user's experience.
+     *
+     * @param ExperienceRequest $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(ExperienceRequest $request)
@@ -53,16 +56,18 @@ class VolunteerExperienceController extends BaseAuthController
         $experience = $volunteer->experiences()->save($experience);
         $responseJson = [
             'experience' => [
-                'id' => $experience->id
-            ]
+                'id' => $experience->id,
+            ],
         ];
 
         return response()->json($responseJson, 201);
     }
 
     /**
-     * Update an existing user's own experience
-     * @param  App\Http\Requests\Api\V1_0\UpdateExperienceRequest $request
+     * Update an existing user's own experience.
+     *
+     * @param App\Http\Requests\Api\V1_0\UpdateExperienceRequest $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateExperienceRequest $request)
@@ -81,9 +86,10 @@ class VolunteerExperienceController extends BaseAuthController
     }
 
     /**
-     * Destroy an existing user's own experience
+     * Destroy an existing user's own experience.
      *
-     * @param  integer $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)

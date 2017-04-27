@@ -38,7 +38,7 @@ class VerifyPasswordResetRequest extends AbstractJsonRequest
     {
         return [
             'email' => 'required|email|exists:volunteers,email',
-            'token' => 'required'
+            'token' => 'required',
         ];
     }
 }

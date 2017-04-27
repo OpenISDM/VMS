@@ -1,10 +1,8 @@
 <?php
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
+use App\Project;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Collection;
-use App\Project;
-use App\Hyperlink;
 
 class ProjectControllerTest extends AbstractTestCase
 {
@@ -18,11 +16,11 @@ class ProjectControllerTest extends AbstractTestCase
 
         $token = JWTAuth::fromUser($volunteer);
         $postData = [
-            'name' => 'Flood surveillance',
-            'description' => 'FoOfOoFoOfOoFoOfOoFoOfOoFoOfOo',
+            'name'         => 'Flood surveillance',
+            'description'  => 'FoOfOoFoOfOoFoOfOoFoOfOoFoOfOo',
             'organization' => 'QOQOQOQOQO...OOO',
             'is_published' => true,
-            'permission' => 0,
+            'permission'   => 0,
         ];
 
         $jsonRequest = $this->json('post',
@@ -97,15 +95,15 @@ class ProjectControllerTest extends AbstractTestCase
         $project->managers()->save($volunteer);
 
         $this->json('get',
-            '/api/projects/' . $project->id,
+            '/api/projects/'.$project->id,
             [],
             [
                 'X-VMS-API-Key' => $this->getApiKey(),
-                'Authorization' => 'Bearer ' . JWTAuth::fromUser($volunteer),
+                'Authorization' => 'Bearer '.JWTAuth::fromUser($volunteer),
             ]
         )->assertResponseStatus(200);
 
-        /**
+        /*
          * TODO: test transformer
          */
     }
@@ -122,22 +120,22 @@ class ProjectControllerTest extends AbstractTestCase
         $project->managers()->save($this->volunteer);
 
         $putData = [
-            'id' => '1',
-            'name' => 'POPOPO',
-            'description' => 'OPOPOOPPOOOP',
+            'id'           => '1',
+            'name'         => 'POPOPO',
+            'description'  => 'OPOPOOPPOOOP',
             'organization' => 'ZOZOZOZOZ',
             'is_published' => false,
-            'permission' => 1,
+            'permission'   => 1,
         ];
 
         $this->json(
             'put',
-            '/api/projects/' . $project->id,
+            '/api/projects/'.$project->id,
             $putData,
             $this->getHeaderWithAuthorization()
         )->assertResponseStatus(200);
 
-        /**
+        /*
          * @TODO Test transformer
          */
     }
@@ -147,10 +145,10 @@ class ProjectControllerTest extends AbstractTestCase
         $this->factoryModel();
 
         $user1 = factory(App\Volunteer::class)->create([
-                    'is_actived' => true
+                    'is_actived' => true,
             ]);
         $user2 = factory(App\Volunteer::class)->create([
-                    'is_actived' => true
+                    'is_actived' => true,
             ]);
 
         $user1ManageProjects = $this->makeCreateProjectWithPublic($user1, 2);
@@ -169,12 +167,12 @@ class ProjectControllerTest extends AbstractTestCase
             '/api/projects',
             [],
             [
-                'Authorization' => 'Bearer ' . JWTAuth::fromUser($user2),
-                'X-VMS-API-Key' => $this->getApiKey()
+                'Authorization' => 'Bearer '.JWTAuth::fromUser($user2),
+                'X-VMS-API-Key' => $this->getApiKey(),
             ]
         )->assertResponseStatus(200);
 
-        /**
+        /*
          * TODO Transformer testing
          */
     }
@@ -184,37 +182,37 @@ class ProjectControllerTest extends AbstractTestCase
         $this->factoryModel();
 
         $user1 = factory(App\Volunteer::class)->create([
-                    'is_actived' => true
+                    'is_actived' => true,
             ]);
         $user2 = factory(App\Volunteer::class)->create([
-                    'is_actived' => true
+                    'is_actived' => true,
             ]);
         $project = $this->makeCreateProjectWithPrivateForUser($user1, 1, true);
 
         $postData = [
             'data' => [
-                'type' => 'members',
+                'type'       => 'members',
                 'attributes' => [
-                    'volunteer_id' => $user2->id
-                ]
-            ]
+                    'volunteer_id' => $user2->id,
+                ],
+            ],
         ];
 
         $this->json(
             'post',
-            '/api/projects/' . $project->id . '/members',
+            '/api/projects/'.$project->id.'/members',
             $postData,
             [
-                'Authorization' => 'Bearer ' . JWTAuth::fromUser($user1),
-                'X-VMS-API-Key' => $this->getApiKey()
+                'Authorization' => 'Bearer '.JWTAuth::fromUser($user1),
+                'X-VMS-API-Key' => $this->getApiKey(),
             ]
         )->assertResponseStatus(204);
 
         $newProject = Project::find($project->id)->first();
 
         $this->seeInDatabase('project_volunteers', [
-            'project_id' => $project->id,
-            'volunteer_id' => $user2->id
+            'project_id'   => $project->id,
+            'volunteer_id' => $user2->id,
         ]);
     }
 
@@ -223,10 +221,10 @@ class ProjectControllerTest extends AbstractTestCase
         $this->factoryModel();
 
         $user1 = factory(App\Volunteer::class)->create([
-                    'is_actived' => true
+                    'is_actived' => true,
             ]);
         $user2 = factory(App\Volunteer::class)->create([
-                    'is_actived' => true
+                    'is_actived' => true,
             ]);
         $project = $this->makeCreateProjectWithPrivateForUser($user1, 1, true);
 
@@ -234,17 +232,17 @@ class ProjectControllerTest extends AbstractTestCase
 
         $this->json(
             'delete',
-            '/api/projects/' . $project->id . '/members/' . $user2->id,
+            '/api/projects/'.$project->id.'/members/'.$user2->id,
             [],
             [
-                'Authorization' => 'Bearer ' . JWTAuth::fromUser($user1),
-                'X-VMS-API-Key' => $this->getApiKey()
+                'Authorization' => 'Bearer '.JWTAuth::fromUser($user1),
+                'X-VMS-API-Key' => $this->getApiKey(),
             ]
         )->assertResponseStatus(204);
 
         $this->notSeeInDatabase('project_volunteers', [
-            'project_id' => $project->id,
-            'volunteer_id' => $user2->id
+            'project_id'   => $project->id,
+            'volunteer_id' => $user2->id,
         ]);
     }
 
@@ -253,10 +251,10 @@ class ProjectControllerTest extends AbstractTestCase
         $this->factoryModel();
 
         $user1 = factory(App\Volunteer::class)->create([
-                    'is_actived' => true
+                    'is_actived' => true,
             ]);
         $user2 = factory(App\Volunteer::class)->create([
-                    'is_actived' => true
+                    'is_actived' => true,
             ]);
         $project = $this->makeCreateProjectWithPrivateForUser($user1, 1, true);
 
@@ -264,11 +262,11 @@ class ProjectControllerTest extends AbstractTestCase
 
         $this->json(
             'get',
-            '/api/projects/' . $project->id . '/members',
+            '/api/projects/'.$project->id.'/members',
             [],
             [
-                'Authorization' => 'Bearer ' . JWTAuth::fromUser($user2),
-                'X-VMS-API-Key' => $this->getApiKey()
+                'Authorization' => 'Bearer '.JWTAuth::fromUser($user2),
+                'X-VMS-API-Key' => $this->getApiKey(),
             ]
         )->assertResponseStatus(200);
     }
@@ -276,7 +274,7 @@ class ProjectControllerTest extends AbstractTestCase
     protected function makeCreateProjectWithPrivateForUser($user, $count, $isPublished = true)
     {
         $projects = factory(App\Project::class, 'project_private_for_user', $count)->create([
-                'is_published' => $isPublished
+                'is_published' => $isPublished,
             ]);
 
         if ($count === 1) {
@@ -293,7 +291,7 @@ class ProjectControllerTest extends AbstractTestCase
     protected function makeCreateProjectWithPrivateForMember($user, $count, $isPublished = true)
     {
         $projects = factory(App\Project::class, 'project_private_for_member', $count)->create([
-                    'is_published' => $isPublished
+                    'is_published' => $isPublished,
                 ]);
 
         if ($count === 1) {
@@ -334,7 +332,7 @@ class ProjectControllerTest extends AbstractTestCase
     protected function makeCreateProjectWithPublic($user, $count, $isPublished = true)
     {
         $projects = factory(App\Project::class, $count)->create([
-            'is_published' => $isPublished
+            'is_published' => $isPublished,
         ]);
 
         if ($count === 1) {

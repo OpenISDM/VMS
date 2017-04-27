@@ -8,7 +8,7 @@ trait CandidateKeywordsTrait
 
     public function scopeKeywordName($query, $keyword)
     {
-        $collection = $query->where('name', 'LIKE', '%' . $keyword . '%')->get();
+        $collection = $query->where('name', 'LIKE', '%'.$keyword.'%')->get();
 
         $collection->map(function ($item, $key) use ($keyword) {
             $item->keyword = $keyword;

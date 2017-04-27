@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1_0;
 
+use App\Exceptions\AccessDeniedException;
 use App\Http\Controllers\Api\BaseAuthController;
 use App\Http\Requests\Api\V1_0\CreateHyperlinkRequest;
 use App\Http\Requests\Api\V1_0\CreateOrUpdateHyperlinksRequest;
-use App\Transformers\Project\ProjectHyperlinkTransformer;
-use App\Services\TransformerService;
-use App\Exceptions\AccessDeniedException;
 use App\Project;
-use App\Hyperlink;
-use Illuminate\Support\Arr;
+use App\Services\TransformerService;
+use App\Transformers\Project\ProjectHyperlinkTransformer;
 use Gate;
 
 class HyperlinkController extends BaseAuthController
@@ -39,7 +37,7 @@ class HyperlinkController extends BaseAuthController
         $hyperlinks = $project->hyperlinks()->get();
 
         return $this->response
-                    ->collection($hyperlinks, new ProjectHyperlinkTransformer);
+                    ->collection($hyperlinks, new ProjectHyperlinkTransformer());
     }
 
     public function update($id)
@@ -85,7 +83,7 @@ class HyperlinkController extends BaseAuthController
         $merged = collect($createdHyperlinks)->merge($updatedHyperlinks);
 
         return $this->response
-                    ->collection($merged, new ProjectHyperlinkTransformer);
+                    ->collection($merged, new ProjectHyperlinkTransformer());
     }
 
     public function delete($projectId, $hyperlinkId)

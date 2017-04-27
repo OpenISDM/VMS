@@ -1,12 +1,12 @@
 <?php
 
-use Illuminate\Database\Seeder;
-use App\Country;
 use App\City;
+use App\Country;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Seeder;
 
 /**
- * A database seed for insert new countries and cities
+ * A database seed for insert new countries and cities.
  */
 class CountryCityTableSeeder extends Seeder
 {
@@ -43,7 +43,7 @@ class CountryCityTableSeeder extends Seeder
                 'Kinmen County',
                 'Lienchiang County',
                 'Penghu County',
-            ]
+            ],
         ];
 
         foreach ($seedData as $countryName => $cityList) {

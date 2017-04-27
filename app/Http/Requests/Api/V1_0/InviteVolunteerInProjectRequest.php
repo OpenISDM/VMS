@@ -19,10 +19,10 @@ class InviteVolunteerInProjectRequest extends AbstractJsonRequest
         $projectId = $this->route('projectId');
         // find if the projectId fits the projectId in the model
         $project = Project::findOrFail($projectId);
-        
+
         // access control: check if the user is the project manager
         // if he/she is the pm, the gate will return true
-        // Kind of like Gate -> AuthServiceProvider -> ProjectPolicy -> update 
+        // Kind of like Gate -> AuthServiceProvider -> ProjectPolicy -> update
         return Gate::allows('update', $project);
     }
 
@@ -34,8 +34,8 @@ class InviteVolunteerInProjectRequest extends AbstractJsonRequest
     public function rules()
     {
         return [
-            'volunteers' => 'required|array',
-            'volunteers.*.id' => 'required|exists:volunteers,id'
+            'volunteers'      => 'required|array',
+            'volunteers.*.id' => 'required|exists:volunteers,id',
         ];
     }
 }

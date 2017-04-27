@@ -31,7 +31,7 @@ class CreateHyperlinkRequest extends AbstractJsonRequest
     {
         return [
             '*.name' => 'required',
-            '*.link' => 'required|url'
+            '*.link' => 'required|url',
         ];
     }
 }

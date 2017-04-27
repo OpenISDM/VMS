@@ -24,12 +24,12 @@ class UpdateEducationRequest extends AbstractJsonRequest
     public function rules()
     {
         return [
-            'id' => 'required',
-            'school' => 'required|string',
-            'degree' => 'required',
+            'id'             => 'required',
+            'school'         => 'required|string',
+            'degree'         => 'required',
             'field_of_study' => 'sometimes|required',
-            'start_year' => 'required|date_format:Y',
-            'end_year' => 'sometimes|required|date_format:Y',
+            'start_year'     => 'required|date_format:Y',
+            'end_year'       => 'sometimes|required|date_format:Y',
         ];
     }
 }

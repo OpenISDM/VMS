@@ -29,8 +29,8 @@ class AttachVolunteerInProjectRequest extends AbstractJsonRequest
     public function rules()
     {
         return [
-            'data.type' => 'required|in:members',
-            'data.attributes' => 'required',
+            'data.type'                    => 'required|in:members',
+            'data.attributes'              => 'required',
             'data.attributes.volunteer_id' => 'required|exists:volunteers,id',
         ];
     }

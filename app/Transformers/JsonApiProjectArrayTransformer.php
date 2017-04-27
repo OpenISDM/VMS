@@ -3,7 +3,6 @@
 namespace App\Transformers;
 
 use App\Project;
-use App\Volunteer;
 use League\Fractal\TransformerAbstract;
 
 class JsonApiProjectArrayTransformer extends TransformerAbstract

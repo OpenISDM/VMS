@@ -2,9 +2,8 @@
 
 namespace App\Services;
 
-use JWTAuth;
-use App\Exceptions\NotFoundException;
 use App\Exceptions\AuthenticatedUserNotFoundException;
+use App\Exceptions\NotFoundException;
 
 /**
  * The class is responsible for verifying email address.
@@ -21,9 +20,10 @@ class VerifyEmailService
     protected $realVerificationCode;
 
     /**
-     * Set inouted email and verification code
-     * @param String $emailAddress
-     * @param String $verificationCode
+     * Set inouted email and verification code.
+     *
+     * @param string $emailAddress
+     * @param string $verificationCode
      */
     public function __construct($volunteer, $emailAddress, $verificationCode)
     {
@@ -34,16 +34,18 @@ class VerifyEmailService
 
     /**
      * Check if the verification code is expired.
-     * If the verification token is expired, it will throw an exception
-     * @param  \DateTime  $nowDateTime
-     * @return boolean
+     * If the verification token is expired, it will throw an exception.
+     *
+     * @param \DateTime $nowDateTime
+     *
+     * @return bool
      */
     public function isExpeired($nowDateTime)
     {
         $createdTime = $this->volunteer->verificationCode->created_at;
         $expiredTime = config('vms.emailVerificationExpired', 8);   // hours
         $codeCreatedDateTime = new \DateTime($createdTime);
-        $interval = new \DateInterval('PT' . $expiredTime . 'H');
+        $interval = new \DateInterval('PT'.$expiredTime.'H');
 
         $expiredDateTime = $codeCreatedDateTime->add($interval);
 
@@ -60,8 +62,9 @@ class VerifyEmailService
     /**
      * Compare the verification code.
      * If the verification code is not equal with real one, it
-     * will throw an exception
-     * @return boolean
+     * will throw an exception.
+     *
+     * @return bool
      */
     public function verificationCodeCompare()
     {
@@ -89,8 +92,9 @@ class VerifyEmailService
 
     /**
      * Compare the email address.
-     * If the email is not correct , it will throw an exception
-     * @return boolean [description]
+     * If the email is not correct , it will throw an exception.
+     *
+     * @return bool [description]
      */
     public function emailCompare()
     {
@@ -105,7 +109,7 @@ class VerifyEmailService
     }
 
     /**
-     * Activeate a volunteer and delete existing verification code
+     * Activeate a volunteer and delete existing verification code.
      */
     public function activeVolunteer()
     {

@@ -24,8 +24,8 @@ class UploadAvatarRequest extends AbstractJsonRequest
     public function rules()
     {
         return [
-            'avatar' => 'required',
-            'skip_profile' => 'sometimes|required'
+            'avatar'       => 'required',
+            'skip_profile' => 'sometimes|required',
         ];
     }
 }

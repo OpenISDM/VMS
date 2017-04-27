@@ -2,12 +2,11 @@
 
 namespace App\Repositories;
 
+use App\CustomField\Payload;
 use App\MemberCustomFieldData;
 use App\Project;
-use App\Volunteer;
 use App\ProjectMember;
-use App\CustomField\Payload;
-use App\ProjectCustomField;
+use App\Volunteer;
 
 class MemberCustomFieldDataRepository
 {
@@ -31,8 +30,8 @@ class MemberCustomFieldDataRepository
         } else {
             // Save a new one
             $value = new MemberCustomFieldData([
-                'data' => new Payload($data),
-                'member_id' => $projectMemberRelationship->id
+                'data'      => new Payload($data),
+                'member_id' => $projectMemberRelationship->id,
             ]);
             $customField->memberCustomFieldData()->save($value);
         }

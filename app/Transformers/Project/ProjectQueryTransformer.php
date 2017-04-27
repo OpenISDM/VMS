@@ -2,8 +2,8 @@
 
 namespace App\Transformers\Project;
 
-use League\Fractal\TransformerAbstract;
 use App\Project;
+use League\Fractal\TransformerAbstract;
 
 class ProjectQueryTransformer extends TransformerAbstract
 {
@@ -14,7 +14,7 @@ class ProjectQueryTransformer extends TransformerAbstract
             'username',
             'first_name',
             'last_name',
-            'avatar_path'
+            'avatar_path',
         ];
 
         $model = Project::find($project->id);

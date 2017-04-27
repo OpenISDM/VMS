@@ -1,8 +1,6 @@
 <?php
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class VolunteerPasswordControllerTest extends AbstractTestCase
 {
@@ -14,7 +12,7 @@ class VolunteerPasswordControllerTest extends AbstractTestCase
         $volunteer = factory(App\Volunteer::class)->create();
 
         $headerArray = [
-            'X-VMS-API-Key' => $this->getApiKey()
+            'X-VMS-API-Key' => $this->getApiKey(),
         ];
 
         // Mock mail
@@ -33,14 +31,14 @@ class VolunteerPasswordControllerTest extends AbstractTestCase
         $volunteer = factory(App\Volunteer::class)->create();
 
         $headerArray = [
-            'X-VMS-API-Key' => $this->getApiKey()
+            'X-VMS-API-Key' => $this->getApiKey(),
         ];
 
         $credentials = [
-            'email' => $volunteer->email,
-            'token' => 'ABCToKeNStRiNg',
-            'password' => 'VMSReSetPassw0Rd',
-            'password_confirmation' => 'VMSReSetPassw0Rd'
+            'email'                 => $volunteer->email,
+            'token'                 => 'ABCToKeNStRiNg',
+            'password'              => 'VMSReSetPassw0Rd',
+            'password_confirmation' => 'VMSReSetPassw0Rd',
         ];
 
         // Mock Password facades
@@ -52,10 +50,10 @@ class VolunteerPasswordControllerTest extends AbstractTestCase
         $this->json('post',
             '/api/users/password_reset/',
             [
-                'email' => $volunteer->email,
-                'token' => 'ABCToKeNStRiNg',
-                'password' => 'VMSReSetPassw0Rd',
-                'password_confirmation' => 'VMSReSetPassw0Rd'
+                'email'                 => $volunteer->email,
+                'token'                 => 'ABCToKeNStRiNg',
+                'password'              => 'VMSReSetPassw0Rd',
+                'password_confirmation' => 'VMSReSetPassw0Rd',
             ],
             $headerArray
         )
@@ -71,13 +69,13 @@ class VolunteerPasswordControllerTest extends AbstractTestCase
         $token = JWTAuth::fromUser($volunteer);
 
         $headerArray = [
-            'Authorization' => 'Bearer ' . $token,
-            'X-VMS-API-Key' => $this->getApiKey()
+            'Authorization' => 'Bearer '.$token,
+            'X-VMS-API-Key' => $this->getApiKey(),
         ];
 
         $data = [
             'existing_password' => 'ThisIsMyPassW0Rd',
-            'new_password' => 'MyNew1PASSWoRd'
+            'new_password'      => 'MyNew1PASSWoRd',
         ];
 
         $this->json('put',

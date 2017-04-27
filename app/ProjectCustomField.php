@@ -2,24 +2,24 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use App\CustomField\Metadata;
 use App\CustomField\TypeMapping;
+use Illuminate\Database\Eloquent\Model;
 
 class ProjectCustomField extends Model
 {
     protected $table = 'project_custom_field';
     protected $fillable = ['name', 'description', 'required', 'type', 'is_published', 'metadata', 'order'];
     protected $casts = [
-        'id' => 'integer',
-        'required' => 'boolean',
-        'type' => 'integer',
+        'id'           => 'integer',
+        'required'     => 'boolean',
+        'type'         => 'integer',
         'is_published' => 'boolean',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime'
+        'created_at'   => 'datetime',
+        'updated_at'   => 'datetime',
     ];
     protected $visible = ['id', 'name', 'description', 'required', 'type',
-        'is_published', 'metadata', 'order', 'created_at', 'updated_at'
+        'is_published', 'metadata', 'order', 'created_at', 'updated_at',
     ];
 
     public function memberCustomFieldData()

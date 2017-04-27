@@ -25,7 +25,7 @@ class ChangePasswordRequest extends AbstractJsonRequest
     {
         return [
             'existing_password' => 'required',
-            'new_password' => 'required|between:6,255|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/'
+            'new_password'      => 'required|between:6,255|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/',
         ];
     }
 }
