@@ -2,33 +2,29 @@
 
 namespace App\Http\Controllers\Api\V1_0;
 
-use App\Http\Requests\Api\V1_0\VolunteerRegistrationRequest;
-use App\Http\Requests\Api\V1_0\CredentialRequest;
-use App\Http\Requests\Request;
-use App\Http\Controllers\Controller;
-use App\Services\AvatarStorageService;
-use Dingo\Api\Routing\Helpers;
-use App\Volunteer;
 use App\City;
-use App\VerificationCode;
-use App\Jobs\SendVerificationEmail;
-use App\Utils\StringUtil;
-use App\Http\Responses\Error;
-use JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use App\Repositories\VolunteerRepository;
-use App\Repositories\CityRepository;
-use App\Repositories\VerificationCodeRepository;
-use App\Services\JwtService;
-use App\Services\VerifyEmailService;
 use App\Commands\VerifyEmailCommand;
 use App\Exceptions\UnauthorizedException;
-use App\Exceptions\AuthenticatedUserNotFoundException;
-use App\Exceptions\NotFoundException;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\V1_0\CredentialRequest;
+use App\Http\Requests\Api\V1_0\VolunteerRegistrationRequest;
+use App\Http\Requests\Request;
+use App\Http\Responses\Error;
+use App\Jobs\SendVerificationEmail;
+use App\Repositories\CityRepository;
+use App\Repositories\VerificationCodeRepository;
+use App\Repositories\VolunteerRepository;
+use App\Services\AvatarStorageService;
+use App\Services\JwtService;
+use App\Services\VerifyEmailService;
 use App\Transformers\Volunteer\VolunteerProfileTransformer;
+use App\Utils\StringUtil;
+use App\Volunteer;
+use Dingo\Api\Routing\Helpers;
+use JWTAuth;
 
 /**
- * The controller provides user authentications
+ * The controller provides user authentications.
  *
  * @Author: Yi-Ming, Huang <ymhuang>
  * @Date:   2015-11-19T14:59:59+08:00
@@ -45,9 +41,10 @@ class VolunteerAuthController extends Controller
     /**
      * Register a new volunteer. The request will be validated by
      * App\Http\Middleware\CheckHeaderFieldsMiddleware and
-     * App\Http\Requests\Api\V1_0\VolunteerRegistrationRequest classes
+     * App\Http\Requests\Api\V1_0\VolunteerRegistrationRequest classes.
      *
-     * @param  VolunteerRegistrationRequest $request
+     * @param VolunteerRegistrationRequest $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function register(VolunteerRegistrationRequest $request,
@@ -89,8 +86,8 @@ class VolunteerAuthController extends Controller
         $token = $jwtSerivce->getToken($credentials);
 
         return $this->response
-                    ->item($volunteer, new VolunteerProfileTransformer)
-                    ->withHeader('Authorization', 'Bearer ' . $token)
+                    ->item($volunteer, new VolunteerProfileTransformer())
+                    ->withHeader('Authorization', 'Bearer '.$token)
                     ->setStatusCode(201);
     }
 
@@ -98,7 +95,8 @@ class VolunteerAuthController extends Controller
      * Volunteer logs in the system.
      * It will response the JSON Web token.
      *
-     * @param  CredentialRequest $request
+     * @param CredentialRequest $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function login(CredentialRequest $request, JwtService $jwtSerivce)
@@ -116,7 +114,6 @@ class VolunteerAuthController extends Controller
         }
 
         $volunteer = Volunteer::where($key, '=', $credentials[$key])->first();
-
 
         if ($volunteer->is_locked == 1 || $volunteer->is_locked == true) {
             $token = null;
@@ -136,19 +133,20 @@ class VolunteerAuthController extends Controller
         // return response()->json($responseJson, 200);
 
         return $this->response
-                    ->item($volunteer, new VolunteerProfileTransformer)
-                    ->withHeader('Authorization', 'Bearer ' . $token)
+                    ->item($volunteer, new VolunteerProfileTransformer())
+                    ->withHeader('Authorization', 'Bearer '.$token)
                     ->setStatusCode(200);
     }
 
     /**
      * Volunteer logs out the system.
      * The JWT token will be in blacklist.
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function logout()
     {
-        if (! $token = JWTAuth::getToken()) {
+        if (!$token = JWTAuth::getToken()) {
             $message = 'Failed to logout';
             $error = new Error('no_existing_auth_access_token');
             $statusCode = 400;
@@ -163,8 +161,10 @@ class VolunteerAuthController extends Controller
 
     /**
      * Verify volunteer's email address with verification code.
-     * It will check the volunteer's verification code and the expired time
-     * @param  EmailVerificationRequest $reuqest
+     * It will check the volunteer's verification code and the expired time.
+     *
+     * @param EmailVerificationRequest $reuqest
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function emailVerification($emailAddress, $verificationCode, JwtService $jwtSerivce)
@@ -176,14 +176,15 @@ class VolunteerAuthController extends Controller
         $command->execute();
 
         $responseJson = [
-            'message' => 'Successful email verification'
+            'message' => 'Successful email verification',
         ];
 
         return response()->json($responseJson, 200);
     }
 
     /**
-     * Resend a new email verification
+     * Resend a new email verification.
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function resendEmailVerification(VerificationCodeRepository $verificationCodeRepository, JwtService $jwtSerivce)

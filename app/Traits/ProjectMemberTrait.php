@@ -4,9 +4,6 @@ namespace App\Traits;
 
 use App\Project;
 
-/**
- *
- */
 trait ProjectMemberTrait
 {
     public function members()
@@ -26,7 +23,7 @@ trait ProjectMemberTrait
     public function viewableMembers($user, Project $project)
     {
         $allowedPermissions = [
-            config('constants.member_project_permission.PUBLIC')
+            config('constants.member_project_permission.PUBLIC'),
         ];
 
         if ($user->inProject($project)) {

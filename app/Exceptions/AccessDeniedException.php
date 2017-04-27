@@ -3,7 +3,6 @@
 namespace App\Exceptions;
 
 use App\Http\Responses\Error;
-use App\Exceptions\AbstractException;
 
 class AccessDeniedException extends AbstractException
 {

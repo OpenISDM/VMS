@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use DB;
 use App\Project;
+use DB;
 
 class MemberCustomFieldDataDbRepository
 {

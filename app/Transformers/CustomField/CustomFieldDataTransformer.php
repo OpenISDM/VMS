@@ -2,14 +2,14 @@
 
 namespace App\Transformers\CustomField;
 
-use League\Fractal\TransformerAbstract;
 use App\MemberCustomFieldData;
 use App\Transformers\ProjectCustomFieldTransformer;
+use League\Fractal\TransformerAbstract;
 
 class CustomFieldDataTransformer extends TransformerAbstract
 {
     protected $defaultIncludes = [
-        'project_custom_field'
+        'project_custom_field',
     ];
 
     public function transform(MemberCustomFieldData $value)

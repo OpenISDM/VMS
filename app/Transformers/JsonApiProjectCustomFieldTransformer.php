@@ -2,9 +2,9 @@
 
 namespace App\Transformers;
 
+use App\ProjectCustomField;
 use Illuminate\Contracts\Support\Arrayable;
 use League\Fractal\TransformerAbstract;
-use App\ProjectCustomField;
 
 class JsonApiProjectCustomFieldTransformer extends TransformerAbstract
 {

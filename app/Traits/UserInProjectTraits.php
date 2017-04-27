@@ -4,9 +4,6 @@ namespace App\Traits;
 
 use App\Project;
 
-/**
- *
- */
 trait UserInProjectTraits
 {
     public function projects()
@@ -35,25 +32,25 @@ trait UserInProjectTraits
 
     public function isPendingProject(Project $project)
     {
-        return $this->pendingProjects()->where('projects.' . $this->getKeyName(), '=', $project->getKey())->first() ? true : false;
+        return $this->pendingProjects()->where('projects.'.$this->getKeyName(), '=', $project->getKey())->first() ? true : false;
     }
 
     public function inProject(Project $project)
     {
-        return $this->projects()->where('projects.' . $this->getKeyName(), '=', $project->getKey())->first() ? true : false;
+        return $this->projects()->where('projects.'.$this->getKeyName(), '=', $project->getKey())->first() ? true : false;
     }
 
     public function isAttendingProject(Project $project)
     {
-        return $this->attendingProjects()->where('projects.' . $this->getKeyName(), '=', $project->getKey())->first() ? true : false;
+        return $this->attendingProjects()->where('projects.'.$this->getKeyName(), '=', $project->getKey())->first() ? true : false;
     }
 
     public function attachProject(Project $project, $permission)
     {
         $this->projects()->attach($project->id, [
-            'status' => config('constants.member_project_status.ATTENDING'),
+            'status'                 => config('constants.member_project_status.ATTENDING'),
             'is_full_profile_permit' => true,
-            'permission' => $permission
+            'permission'             => $permission,
         ]);
     }
 

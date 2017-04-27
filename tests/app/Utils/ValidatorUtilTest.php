@@ -7,9 +7,9 @@ class ValidatorUtilTest extends TestCase
     public function testFormatterWithSameMessage()
     {
         $messages = [
-            'email' => ['missing_field'],
-            'phone_number' => ['missing_field'],
-            'emergency_phone' => ['missing_field']
+            'email'           => ['missing_field'],
+            'phone_number'    => ['missing_field'],
+            'emergency_phone' => ['missing_field'],
         ];
 
         $actualResult = ValidatorUtil::formatter($messages);
@@ -27,10 +27,10 @@ class ValidatorUtilTest extends TestCase
     public function testFormatterWithDifferentMessage()
     {
         $messages = [
-            'email' => ['missing_field'],
-            'phone_number' => ['missing_field'],
+            'email'           => ['missing_field'],
+            'phone_number'    => ['missing_field'],
             'emergency_phone' => ['missing_field'],
-            'password' => ['not_enough_password_strength', 'missing_field']
+            'password'        => ['not_enough_password_strength', 'missing_field'],
         ];
 
         $actualResult = ValidatorUtil::formatter($messages);

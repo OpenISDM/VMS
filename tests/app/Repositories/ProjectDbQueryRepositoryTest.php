@@ -1,12 +1,8 @@
 <?php
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Collection;
 use App\Repositories\ProjectDbQueryRepository;
-use App\Hyperlink;
-use App\Project;
-use App\Utils\ArrayUtil;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Collection;
 
 class ProjectDbQueryRepositoryTest extends TestCase
 {
@@ -154,7 +150,7 @@ class ProjectDbQueryRepositoryTest extends TestCase
             $this->assertContains($project->id, $user2Expected);
         });
 
-        /**
+        /*
          * TODO: Should be assert the count
          */
     }
@@ -162,7 +158,7 @@ class ProjectDbQueryRepositoryTest extends TestCase
     protected function makeCreateProjectWithPublic($user, $count, $isPublished = true)
     {
         $projects = factory(App\Project::class, $count)->create([
-            'is_published' => $isPublished
+            'is_published' => $isPublished,
         ]);
 
         if ($count === 1) {
@@ -179,7 +175,7 @@ class ProjectDbQueryRepositoryTest extends TestCase
     protected function makeCreateProjectWithPrivateForUser($user, $count, $isPublished = true)
     {
         $projects = factory(App\Project::class, 'project_private_for_user', $count)->create([
-                'is_published' => $isPublished
+                'is_published' => $isPublished,
             ]);
 
         if ($count === 1) {
@@ -196,7 +192,7 @@ class ProjectDbQueryRepositoryTest extends TestCase
     protected function makeCreateProjectWithPrivateForMember($user, $count, $isPublished = true)
     {
         $projects = factory(App\Project::class, 'project_private_for_member', $count)->create([
-                    'is_published' => $isPublished
+                    'is_published' => $isPublished,
                 ]);
 
         if ($count === 1) {
@@ -234,7 +230,7 @@ class ProjectDbQueryRepositoryTest extends TestCase
         return $hyperlinkMapping;
     }
 
-    protected function invokeMethod(&$object, $methodName, array $parameters = array())
+    protected function invokeMethod(&$object, $methodName, array $parameters = [])
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
@@ -245,7 +241,7 @@ class ProjectDbQueryRepositoryTest extends TestCase
 
     protected function getModelIds($models)
     {
-        $ids = array();
+        $ids = [];
 
         foreach ($models as $model) {
             $ids[] = $model->id;
@@ -257,10 +253,10 @@ class ProjectDbQueryRepositoryTest extends TestCase
     protected function makeUsers()
     {
         $this->user1 = factory(App\Volunteer::class)->create([
-                'is_actived' => true
+                'is_actived' => true,
         ]);
         $this->user2 = factory(App\Volunteer::class)->create([
-                'is_actived' => true
+                'is_actived' => true,
         ]);
     }
 }

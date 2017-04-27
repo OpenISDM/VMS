@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use JWTAuth;
 use App\Exceptions\UnauthorizedException;
+use JWTAuth;
 
 class JwtService
 {
@@ -20,7 +20,7 @@ class JwtService
     public function getVolunteer()
     {
         try {
-            if (! $volunteer = JWTAuth::parseToken()->authenticate()) {
+            if (!$volunteer = JWTAuth::parseToken()->authenticate()) {
                 throw new AuthenticatedUserNotFoundException();
             }
         } catch (JWTException $e) {

@@ -14,8 +14,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Traits\CandidateKeywordsTrait;
+use Illuminate\Database\Eloquent\Model;
 
 class Skill extends Model
 {
@@ -25,7 +25,7 @@ class Skill extends Model
     use CandidateKeywordsTrait;
 
     /**
-     * Table name
+     * Table name.
      *
      * @var string
      */
@@ -45,7 +45,7 @@ class Skill extends Model
      */
     protected $visible = [
         'id',
-        'name'
+        'name',
     ];
 
     /**
@@ -54,7 +54,7 @@ class Skill extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer'
+        'id' => 'integer',
     ];
 
     /**

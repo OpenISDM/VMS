@@ -2,10 +2,8 @@
 
 namespace App\Transformers;
 
-use League\Fractal\TransformerAbstract;
-use App\Hyperlink;
 use App\Volunteer;
-use App\Transformers\JsonApiProjectTransformer;
+use League\Fractal\TransformerAbstract;
 
 class JsonApiMemberTransformer extends TransformerAbstract
 {

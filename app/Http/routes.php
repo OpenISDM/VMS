@@ -39,7 +39,7 @@ $api->version('v1.0', function ($api) {
     |
     */
     $api->group(['middleware' => ['check.header']], function ($api) {
-        
+
         // Register
         $api->post('register', 'App\Http\Controllers\Api\V1_0\VolunteerAuthController@register');
 
@@ -183,7 +183,7 @@ $api->version('v1.0', function ($api) {
             'App\Http\Controllers\Api\V1_0\ProjectController@showPMs');
         $api->post('projects/{projectId}/pm',
             'App\Http\Controllers\Api\V1_0\ProjectController@addPMs');
-        
+
         $api->delete('projects/{projectId}/members/{userId}',
             'App\Http\Controllers\Api\V1_0\ProjectController@detachVolunteer');
         $api->post('projects/{projectId}/attend',
@@ -191,13 +191,11 @@ $api->version('v1.0', function ($api) {
         $api->post('projects/{projectId}/invite/volunteer',
             'App\Http\Controllers\Api\V1_0\ProjectController@inviteVolunteer');
 
-
         // Project custom field
         $api->post('projects/{id}/custom_fields',
             'App\Http\Controllers\Api\V1_0\ProjectCustomFieldController@store');
         $api->get('projects/{projectId}/custom_fields',
             'App\Http\Controllers\Api\V1_0\ProjectCustomFieldController@showAll');
-
 
         // Project custom field data
         $api->post('projects/{projectId}/members/custom_field_data',

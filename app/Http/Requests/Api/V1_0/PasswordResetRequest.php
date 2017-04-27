@@ -24,10 +24,10 @@ class PasswordResetRequest extends AbstractJsonRequest
     public function rules()
     {
         return [
-            'email' => 'required|email|exists:volunteers,email',
-            'token' => 'required',
-            'password' => 'required|between:6,255|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/',
-            'password_confirmation' => 'required|same:password'
+            'email'                 => 'required|email|exists:volunteers,email',
+            'token'                 => 'required',
+            'password'              => 'required|between:6,255|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/',
+            'password_confirmation' => 'required|same:password',
         ];
     }
 }

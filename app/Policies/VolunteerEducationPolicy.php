@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Volunteer;
 use App\Education;
+use App\Volunteer;
 
 class VolunteerEducationPolicy
 {

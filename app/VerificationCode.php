@@ -11,9 +11,8 @@ class VerificationCode extends Model
     protected $fillable = ['code'];
 
     protected $casts = [
-        'id' => 'integer'
+        'id' => 'integer',
     ];
-
 
     public function volunteer()
     {

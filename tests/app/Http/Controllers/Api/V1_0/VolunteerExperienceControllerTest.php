@@ -1,8 +1,6 @@
 <?php
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class VolunteerExperienceControllerTest extends AbstractTestCase
 {
@@ -20,18 +18,18 @@ class VolunteerExperienceControllerTest extends AbstractTestCase
             'equipment' => [
                 'Car',
                 'Scooter',
-                'Camera'
+                'Camera',
             ],
             'existing_equipment_indexes' => [
-            ]
+            ],
         ];
 
         $this->json('post',
                     '/api/users/me/equipment',
                     $postData,
                     [
-                        'Authorization' => 'Bearer ' . $token,
-                        'X-VMS-API-Key' => $this->getApiKey()
+                        'Authorization' => 'Bearer '.$token,
+                        'X-VMS-API-Key' => $this->getApiKey(),
                     ])
              ->assertResponseStatus(204);
 
@@ -56,15 +54,15 @@ class VolunteerExperienceControllerTest extends AbstractTestCase
             'equipment' => [
                 'Car',
                 'Scooter',
-                'Camera'
+                'Camera',
             ],
             'existing_equipment_indexes' => [
                 0,
                 1,
                 2,
                 3,
-                4
-            ]
+                4,
+            ],
         ];
 
         foreach ($postData['equipment'] as $equipment) {
@@ -75,15 +73,15 @@ class VolunteerExperienceControllerTest extends AbstractTestCase
                     '/api/users/me/equipment',
                     $postData,
                     [
-                        'Authorization' => 'Bearer ' . $token,
-                        'X-VMS-API-Key' => $this->getApiKey()
+                        'Authorization' => 'Bearer '.$token,
+                        'X-VMS-API-Key' => $this->getApiKey(),
                     ])
              ->seeJson([
-                 "errors" => [
-                     "existing_equipment_indexes" => ["exceeding_index_value"]
+                 'errors' => [
+                     'existing_equipment_indexes' => ['exceeding_index_value'],
                  ],
-                 "message" => "422 Unprocessable Entity",
-                 "status_code" => 422
+                 'message'     => '422 Unprocessable Entity',
+                 'status_code' => 422,
              ])
              ->assertResponseStatus(422);
     }
@@ -98,15 +96,15 @@ class VolunteerExperienceControllerTest extends AbstractTestCase
         $token = JWTAuth::fromUser($volunteer);
 
         $postData = [
-            'company' => 'Academia Sinica',
-            'job_title' => 'Research Assistant',
+            'company'    => 'Academia Sinica',
+            'job_title'  => 'Research Assistant',
             'start_year' => 2014,
         ];
 
         $this->json('post', '/api/users/me/experiences', $postData,
                     [
-                        'Authorization' => 'Bearer ' . $token,
-                        'X-VMS-API-Key' => $this->getApiKey()
+                        'Authorization' => 'Bearer '.$token,
+                        'X-VMS-API-Key' => $this->getApiKey(),
                     ])
              ->seeJsonEquals(['experience' => ['id' => 1]])
              ->assertResponseStatus(201);
@@ -125,17 +123,17 @@ class VolunteerExperienceControllerTest extends AbstractTestCase
         $token = JWTAuth::fromUser($volunteer);
 
         $putData = [
-            'id' => $experience->id,
-            'company' => 'Academia Sinica',
-            'job_title' => 'Research Assistant',
+            'id'         => $experience->id,
+            'company'    => 'Academia Sinica',
+            'job_title'  => 'Research Assistant',
             'start_year' => 2014,
-            'end_year' => 2016
+            'end_year'   => 2016,
         ];
 
         $this->json('put', '/api/users/me/experiences', $putData,
                     [
-                        'Authorization' => 'Bearer ' . $token,
-                        'X-VMS-API-Key' => $this->getApiKey()
+                        'Authorization' => 'Bearer '.$token,
+                        'X-VMS-API-Key' => $this->getApiKey(),
                     ])
              ->assertResponseStatus(204);
 
@@ -159,8 +157,8 @@ class VolunteerExperienceControllerTest extends AbstractTestCase
 
         $experienceB = factory(App\Experience::class)->make(
                             [
-                                'company' => 'Orz',
-                                'job_title' => 'CEO',
+                                'company'    => 'Orz',
+                                'job_title'  => 'CEO',
                                 'start_year' => 2010,
                             ]
                         );
@@ -168,23 +166,23 @@ class VolunteerExperienceControllerTest extends AbstractTestCase
 
         $token = JWTAuth::fromUser($volunteerA);
         $putData = [
-            'id' => $experienceB->id,
-            'company' => 'Orz',
-            'job_title' => 'CEO',
+            'id'         => $experienceB->id,
+            'company'    => 'Orz',
+            'job_title'  => 'CEO',
             'start_year' => 2010,
-            'end_year' => 2015
+            'end_year'   => 2015,
         ];
 
         $this->json('put', '/api/users/me/experiences', $putData,
                     [
-                        'Authorization' => 'Bearer ' . $token,
-                        'X-VMS-API-Key' => $this->getApiKey()
+                        'Authorization' => 'Bearer '.$token,
+                        'X-VMS-API-Key' => $this->getApiKey(),
                     ])
              ->seeJsonEquals([
                     'message' => 'Not have right to access',
-                    'errors' => [
-                        'cannot_access'
-                    ]
+                    'errors'  => [
+                        'cannot_access',
+                    ],
                 ])
              ->assertResponseStatus(403);
     }
@@ -202,9 +200,9 @@ class VolunteerExperienceControllerTest extends AbstractTestCase
         $token = JWTAuth::fromUser($volunteer);
 
         $this->json('delete',
-                    '/api/users/me/experiences/' . $experience->id, [], [
-                        'Authorization' => 'Bearer ' . $token,
-                        'X-VMS-API-Key' => $this->getApiKey()
+                    '/api/users/me/experiences/'.$experience->id, [], [
+                        'Authorization' => 'Bearer '.$token,
+                        'X-VMS-API-Key' => $this->getApiKey(),
                     ])
              ->assertResponseStatus(204);
         $this->notSeeInDatabase('experiences', ['id' => $experience->id]);
@@ -224,16 +222,16 @@ class VolunteerExperienceControllerTest extends AbstractTestCase
 
         $this->json('get',
                     '/api/users/me/experiences', [], [
-                        'Authorization' => 'Bearer ' . $token,
-                        'X-VMS-API-Key' => $this->getApiKey()
+                        'Authorization' => 'Bearer '.$token,
+                        'X-VMS-API-Key' => $this->getApiKey(),
                     ])
              ->seeJsonEquals([
                     'experiences' => [[
-                        'id' => $experience->id,
-                        'company' => 'Academia Sinica',
-                        'job_title' => 'Research Assistant',
+                        'id'         => $experience->id,
+                        'company'    => 'Academia Sinica',
+                        'job_title'  => 'Research Assistant',
                         'start_year' => 2014,
-                    ]]
+                    ]],
                 ])
              ->assertResponseStatus(200);
     }

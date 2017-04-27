@@ -2,9 +2,8 @@
 
 namespace App\Services;
 
-use Intervention\Image\ImageManager;
-use StringUtil;
 use Storage;
+use StringUtil;
 
 class AvatarStorageService
 {
@@ -35,7 +34,7 @@ class AvatarStorageService
         // Avatar path
         $extension = \App\Utils\MimeUtil::getExtensionByBase64($avatarBase64File);
 
-        $this->avatarFileName = substr(StringUtil::generateHashToken(), 0, 20) . '.' . $extension;
+        $this->avatarFileName = substr(StringUtil::generateHashToken(), 0, 20).'.'.$extension;
         $image = base64_decode($this->getBase64Data($avatarBase64File));
 
         return Storage::disk('avatar')->put($this->avatarFileName, $image);
@@ -49,6 +48,7 @@ class AvatarStorageService
     protected function getBase64Data($data)
     {
         $divider = strpos($data, ',');
+
         return substr($data, $divider + 1);
     }
 

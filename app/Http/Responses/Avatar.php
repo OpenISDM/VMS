@@ -3,7 +3,7 @@
 namespace App\Http\Responses;
 
 /**
- * Avatar object for response
+ * Avatar object for response.
  */
 class Avatar
 {
@@ -21,17 +21,17 @@ class Avatar
 
     public function __set($name, $value)
     {
-        if ($name == "avatar_name") {
+        if ($name == 'avatar_name') {
             $this->avatarName = $value;
         }
     }
 
     public function __get($name)
     {
-        if ($name == "avatar_name") {
+        if ($name == 'avatar_name') {
             return $this->avatarName;
-        } elseif ($name == "avatar_url") {
-            $avatarUrl = $this->avatarHost . '/' . $this->avatarRootPath . '/' . $this->avatarName;
+        } elseif ($name == 'avatar_url') {
+            $avatarUrl = $this->avatarHost.'/'.$this->avatarRootPath.'/'.$this->avatarName;
 
             return $avatarUrl;
         }

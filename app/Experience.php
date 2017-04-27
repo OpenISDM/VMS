@@ -20,7 +20,8 @@ use Illuminate\Database\Eloquent\Model;
 class Experience extends Model
 {
     /**
-     * Table name
+     * Table name.
+     *
      * @var string
      */
     protected $table = 'experiences';
@@ -34,7 +35,7 @@ class Experience extends Model
         'company',
         'job_title',
         'start_year',
-        'end_year'
+        'end_year',
     ];
 
     /**
@@ -43,8 +44,8 @@ class Experience extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
-        'volunteer_id' => 'integer'
+        'id'           => 'integer',
+        'volunteer_id' => 'integer',
     ];
 
     /**

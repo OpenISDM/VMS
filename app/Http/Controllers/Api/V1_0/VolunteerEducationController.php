@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1_0;
 
+use App\Education;
+use App\Exceptions\AccessDeniedException;
+use App\Http\Controllers\Api\BaseAuthController;
 use App\Http\Requests\Api\V1_0\EducationRequest;
 use App\Http\Requests\Api\V1_0\UpdateEducationRequest;
-use Gate;
-use App\Http\Controllers\Api\BaseAuthController;
-use App\Exceptions\AccessDeniedException;
-use App\Education;
 use App\Services\TransformerService;
+use Gate;
 
 /**
  * The contoller provides user to show, store, update and destroy
@@ -25,7 +25,8 @@ use App\Services\TransformerService;
 class VolunteerEducationController extends BaseAuthController
 {
     /**
-     * Show volunteer's own existing educations
+     * Show volunteer's own existing educations.
+     *
      * @return Illuminate\Http\JsonResponse
      */
     public function show()
@@ -42,8 +43,10 @@ class VolunteerEducationController extends BaseAuthController
     }
 
     /**
-     * Store a new education
-     * @param  App\Http\Requests\Api\V1_0\EducationRequest $request
+     * Store a new education.
+     *
+     * @param App\Http\Requests\Api\V1_0\EducationRequest $request
+     *
      * @return Illuminate\Http\JsonResponse
      */
     public function store(EducationRequest $request)
@@ -54,16 +57,18 @@ class VolunteerEducationController extends BaseAuthController
         $education = $volunteer->educations()->save($education);
         $responseJson = [
             'education' => [
-                'id' => (int) $education->id
-            ]
+                'id' => (int) $education->id,
+            ],
         ];
 
         return response()->json($responseJson, 201);
     }
 
     /**
-     * Update volunteer's own education
-     * @param  App\Http\Requests\Api\V1_0\UpdateEducationRequest $request
+     * Update volunteer's own education.
+     *
+     * @param App\Http\Requests\Api\V1_0\UpdateEducationRequest $request
+     *
      * @return Illuminate\Http\JsonResponse
      */
     public function update(UpdateEducationRequest $request)
@@ -82,8 +87,10 @@ class VolunteerEducationController extends BaseAuthController
     }
 
     /**
-     * Delete volunteer's own education
-     * @param  Integer $educationId
+     * Delete volunteer's own education.
+     *
+     * @param int $educationId
+     *
      * @return Illuminate\Http\JsonResponse
      */
     public function destroy($id)

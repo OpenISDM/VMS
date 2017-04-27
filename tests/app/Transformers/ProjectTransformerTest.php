@@ -1,11 +1,7 @@
 <?php
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use League\Fractal\Resource\Item;
-use App\Project;
-use App\Transformers\Project\ProjectTransformer;
 use App\Services\TransformerService;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class ProjectTransformerTest extends TestCase
 {
@@ -16,34 +12,34 @@ class ProjectTransformerTest extends TestCase
     protected function setUpDatabase()
     {
         $user = factory(App\Volunteer::class)->create([
-            'username' => 'aBcD',
-            'first_name' => 'LollLo',
-            'last_name' => 'CocO',
+            'username'    => 'aBcD',
+            'first_name'  => 'LollLo',
+            'last_name'   => 'CocO',
             'avatar_path' => '01a34d.jpg',
-            'email' => 'abc@abc.cc'
+            'email'       => 'abc@abc.cc',
         ]);
 
         $this->project = factory(App\Project::class)->create([
-            'name' => 'OrzZz',
-            'description' => 'AQoQO0Ol',
+            'name'         => 'OrzZz',
+            'description'  => 'AQoQO0Ol',
             'organization' => 'fOoFoo',
             'is_published' => true,
-            'permission' => 1,
+            'permission'   => 1,
         ]);
 
         $hyperlink1 = factory(App\Hyperlink::class)->make([
             'name' => 'WaHahA',
-            'link' => 'http://qoo.oo/AbC'
+            'link' => 'http://qoo.oo/AbC',
         ]);
 
         $hyperlink2 = factory(App\Hyperlink::class)->make([
             'name' => 'OoOoOkO',
-            'link' => 'http://cc.Qoqo/1k/l'
+            'link' => 'http://cc.Qoqo/1k/l',
         ]);
 
         $this->project->hyperlinks()->saveMany([
             $hyperlink1,
-            $hyperlink2
+            $hyperlink2,
         ]);
 
         $this->project->managers()->save($user);
@@ -60,38 +56,38 @@ class ProjectTransformerTest extends TestCase
         $actual = $manager->createData($resource)->toArray();
 
         $expectedProject = [
-            'id'=> 1,
-            'name' => 'OrzZz',
-            'description' => 'AQoQO0Ol',
+            'id'           => 1,
+            'name'         => 'OrzZz',
+            'description'  => 'AQoQO0Ol',
             'organization' => 'fOoFoo',
             'is_published' => true,
-            'permission' => 1
+            'permission'   => 1,
         ];
 
         $expectedManagers = [
             'data' => [
                 [
-                    'id' => 1,
-                    'username' => 'aBcD',
+                    'id'         => 1,
+                    'username'   => 'aBcD',
                     'first_name' => 'LollLo',
-                    'last_name' => 'CocO',
+                    'last_name'  => 'CocO',
                     'avatar_url' => 'http://vms-openisdm.s3-website-ap-northeast-1.amazonaws.com/upload/avatars/01a34d.jpg',
-                    'email' => 'abc@abc.cc'
-                ]
-            ]
+                    'email'      => 'abc@abc.cc',
+                ],
+            ],
         ];
 
         $expectedHyperlinks = [
             [
-                'id' => 1,
+                'id'   => 1,
                 'name' => 'WaHahA',
-                'link' => 'http://qoo.oo/AbC'
+                'link' => 'http://qoo.oo/AbC',
             ],
             [
-                'id' => 2,
+                'id'   => 2,
                 'name' => 'OoOoOkO',
-                'link' => 'http://cc.Qoqo/1k/l'
-            ]
+                'link' => 'http://cc.Qoqo/1k/l',
+            ],
         ];
 
         $this->assertContains($expectedProject, $actual);

@@ -15,28 +15,25 @@
 
 namespace App\Http\Controllers\Api\V1_0;
 
-use App\Http\Controllers\Api\BaseAuthController;
-use JWTAuth;
-use Gate;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use App\Http\Requests\Api\V1_0\UpdateEquipmentRequest;
-use App\Http\Requests\Api\V1_0\UpdateSkillsRequest;
-use App\Http\Requests\Api\V1_0\UpdateProfileRequest;
-use App\Http\Requests\Api\V1_0\UploadAvatarRequest;
-use App\Http\Requests\Api\V1_0\CredentialRequest;
-use App\Http\Responses\Avatar;
-use App\Exceptions\AccessDeniedException;
-use App\Exceptions\ExceedingIndexException;
 use App\City;
-use App\Volunteer;
-use App\Utils\ArrayUtil;
-use App\Transformers\Volunteer\VolunteerProfileTransformer;
-use App\Transformers\Volunteer\VolunteerSkillTransformer;
-use App\Transformers\Volunteer\VolunteerAvatarTransformer;
-use App\Transformers\AttendingProjectTransformer;
+use App\Exceptions\AccessDeniedException;
+use App\Http\Controllers\Api\BaseAuthController;
+use App\Http\Requests\Api\V1_0\CredentialRequest;
+use App\Http\Requests\Api\V1_0\UpdateEquipmentRequest;
+use App\Http\Requests\Api\V1_0\UpdateProfileRequest;
+use App\Http\Requests\Api\V1_0\UpdateSkillsRequest;
+use App\Http\Requests\Api\V1_0\UploadAvatarRequest;
+use App\Http\Responses\Avatar;
 use App\Services\AvatarStorageService;
 use App\Services\JwtService;
 use App\Services\TransformerService;
+use App\Transformers\AttendingProjectTransformer;
+use App\Transformers\Volunteer\VolunteerAvatarTransformer;
+use App\Transformers\Volunteer\VolunteerProfileTransformer;
+use App\Transformers\Volunteer\VolunteerSkillTransformer;
+use App\Utils\ArrayUtil;
+use App\Volunteer;
+use Gate;
 
 class VolunteerProfileController extends BaseAuthController
 {
@@ -46,23 +43,24 @@ class VolunteerProfileController extends BaseAuthController
      * It should identify and get user's model object from JWT token.
      * And then, the user model is transformed into array.
      *
-     * @return JsonResponse    User's profile with HTTP 200
+     * @return JsonResponse User's profile with HTTP 200
      */
     public function showMe()
     {
         $volunteer = $this->jwtService->getVolunteer();
 
-        return $this->item($volunteer, new VolunteerProfileTransformer);
+        return $this->item($volunteer, new VolunteerProfileTransformer());
     }
 
     /**
-     * Update volunteer's own profile
+     * Update volunteer's own profile.
      *
      * The request will be validated through
      * `App\Http\Requests\Api\V1_0\UpdateProfileRequest`
      *
-     * @param  UpdateProfileRequest $request             Updated profile request data
-     * @return JsonResponse                              user's profile with HTTP 200
+     * @param UpdateProfileRequest $request Updated profile request data
+     *
+     * @return JsonResponse user's profile with HTTP 200
      */
     public function updateMe(UpdateProfileRequest $request)
     {
@@ -76,7 +74,7 @@ class VolunteerProfileController extends BaseAuthController
             'is_actived',
             'is_locked',
             'updated_at',
-            'created_at'
+            'created_at',
         ];
 
         // Filter some unnecessary keys
@@ -92,19 +90,20 @@ class VolunteerProfileController extends BaseAuthController
         // Update volunteer profile
         $volunteer->update($profile);
 
-        return $this->item($volunteer, new VolunteerProfileTransformer);
+        return $this->item($volunteer, new VolunteerProfileTransformer());
     }
 
     /**
-     * Upload user's avatar
+     * Upload user's avatar.
      *
      * The user's avatar image is encode by base64. And `AvatarStorageService`
      * is repsonsible for storing avatar into storage.
      *
-     * @param  UploadAvatarRequest  $request              Request data also provides authorization and validation
-     * @param  AvatarStorageService $avatarStorageService Store avatar
-     * @param  Avatar               $avatar               Avatar model
-     * @return JsonResponse                               Avatar URL with HTTP 200
+     * @param UploadAvatarRequest  $request              Request data also provides authorization and validation
+     * @param AvatarStorageService $avatarStorageService Store avatar
+     * @param Avatar               $avatar               Avatar model
+     *
+     * @return JsonResponse Avatar URL with HTTP 200
      */
     public function uploadAvatarMe(UploadAvatarRequest $request,
         AvatarStorageService $avatarStorageService,
@@ -132,7 +131,7 @@ class VolunteerProfileController extends BaseAuthController
                 'App\Transformers\Volunteer\VolunteerAvatarTransformer',
                 'avatar');
 
-            return $this->response->item($avatar, new VolunteerAvatarTransformer);
+            return $this->response->item($avatar, new VolunteerAvatarTransformer());
             //
             // return response()
             //         ->json($manager->createData($resource)->toArray(), 200);
@@ -143,19 +142,19 @@ class VolunteerProfileController extends BaseAuthController
         //
         // return response()->json($manager->createData($resource)->toArray(), 200);
 
-
-        return $this->response->item($volunteer, new VolunteerProfileTransformer);
+        return $this->response->item($volunteer, new VolunteerProfileTransformer());
     }
 
     /**
-     * Upload avatar without authorization
+     * Upload avatar without authorization.
      *
      * The avatar image is encode by base64. And `AvatarStorageService` is
      * repsonsible for storing avatar into storage.
      *
-     * @param  UploadAvatarRequest   $request               Request data also provides validation and authorization
-     * @param  AvatarStorageService  $avatarStorageService  For store avatar
-     * @return JsonResponse                                 Avatar URL with HTTP 200
+     * @param UploadAvatarRequest  $request              Request data also provides validation and authorization
+     * @param AvatarStorageService $avatarStorageService For store avatar
+     *
+     * @return JsonResponse Avatar URL with HTTP 200
      */
     public function uploadAvatar(UploadAvatarRequest $request,
         AvatarStorageService $avatarStorageService,
@@ -176,14 +175,15 @@ class VolunteerProfileController extends BaseAuthController
     }
 
     /**
-     * Update volunteer's own skills
+     * Update volunteer's own skills.
      *
      * The request body contains new and existing skills.
      * The indexes of existing skills are `existing_skill_indexes`, and
      * the rest of skills will be attached into user.
      *
-     * @param  UpdateSkillsRequest   $request   Request data also provides validation and authorization
-     * @return JsonResponse                     HTTP response 204
+     * @param UpdateSkillsRequest $request Request data also provides validation and authorization
+     *
+     * @return JsonResponse HTTP response 204
      */
     public function updateSkillsMe(UpdateSkillsRequest $request)
     {
@@ -209,15 +209,15 @@ class VolunteerProfileController extends BaseAuthController
 
         $skills = $volunteer->skills()->get();
 
-        return $this->response->collection($skills, new VolunteerSkillTransformer);
+        return $this->response->collection($skills, new VolunteerSkillTransformer());
 
         // return response()->json(null, 204);
     }
 
     /**
-     * Get user's skills
+     * Get user's skills.
      *
-     * @return JsonResponse    user's skills with HTTP 200
+     * @return JsonResponse user's skills with HTTP 200
      */
     public function getSkillsMe()
     {
@@ -232,12 +232,13 @@ class VolunteerProfileController extends BaseAuthController
     }
 
     /**
-     * Get skill candidated keywords
+     * Get skill candidated keywords.
      *
      * The method searches skills by keywords.
      *
-     * @param  String       $keyword    A searched keyword string
-     * @return JsonResponse             skill candidates with HTTP 200
+     * @param string $keyword A searched keyword string
+     *
+     * @return JsonResponse skill candidates with HTTP 200
      */
     public function getSkillCandidatedKeywords($keyword)
     {
@@ -245,10 +246,11 @@ class VolunteerProfileController extends BaseAuthController
     }
 
     /**
-     * Get equipment candidated keywords
+     * Get equipment candidated keywords.
      *
-     * @param  String       $keyword    A searched keyword string
-     * @return JsonResponse             equipment candidates with HTTP 200
+     * @param string $keyword A searched keyword string
+     *
+     * @return JsonResponse equipment candidates with HTTP 200
      */
     public function getEquipmentCandidatedKeywords($keyword)
     {
@@ -256,14 +258,15 @@ class VolunteerProfileController extends BaseAuthController
     }
 
     /**
-     * Update volunteer's own equipment
+     * Update volunteer's own equipment.
      *
      * The request body contains new and existing equipment.
      * The indexes of existing equipment are `existing_equipment_indexes`, and
      * the rest of equipment will be attached into user.
      *
-     * @param  UpdateEquipmentRequest $request  Updated equipment data
-     * @return JsonResponse                     no content with HTTP 204
+     * @param UpdateEquipmentRequest $request Updated equipment data
+     *
+     * @return JsonResponse no content with HTTP 204
      */
     public function updateEquipmentMe(UpdateEquipmentRequest $request)
     {
@@ -291,9 +294,9 @@ class VolunteerProfileController extends BaseAuthController
     }
 
     /**
-     * Get user's equipment
+     * Get user's equipment.
      *
-     * @return JsonResponse     Equipment with HTTP 200
+     * @return JsonResponse Equipment with HTTP 200
      */
     public function getEquipmentMe()
     {
@@ -310,12 +313,13 @@ class VolunteerProfileController extends BaseAuthController
     }
 
     /**
-     * Delete volunteer's own account
+     * Delete volunteer's own account.
      *
-     * @param  CredentialRequest    $request
-     * @param  AvatarStorageService $avatarStorageService
-     * @param  JwtService           $jwtService
-     * @return JsonResponse                                 HTTP 204
+     * @param CredentialRequest    $request
+     * @param AvatarStorageService $avatarStorageService
+     * @param JwtService           $jwtService
+     *
+     * @return JsonResponse HTTP 204
      */
     public function deleteMe(CredentialRequest $request,
         AvatarStorageService $avatarStorageService,
@@ -344,11 +348,12 @@ class VolunteerProfileController extends BaseAuthController
     }
 
     /**
-     * Get candidated keywords from models
+     * Get candidated keywords from models.
      *
-     * @param  String           $model      Model namespace
-     * @param  String           $keyword    Searched keyword
-     * @return JsonResponse                 Keyword items
+     * @param string $model   Model namespace
+     * @param string $keyword Searched keyword
+     *
+     * @return JsonResponse Keyword items
      */
     protected function getCandidatedKeywordsResult($model, $keyword)
     {
@@ -365,11 +370,11 @@ class VolunteerProfileController extends BaseAuthController
     }
 
     /**
-     * Delete non-updated skills or equipment
+     * Delete non-updated skills or equipment.
      *
-     * @param Object        $model              Model object
-     * @param Array         $originalList       Original array
-     * @param Array         $nonExistenceList   Non existent array
+     * @param object $model            Model object
+     * @param array  $originalList     Original array
+     * @param array  $nonExistenceList Non existent array
      */
     private function deleteNonUpdatedSkillEquipment($model,
         $originalList,
@@ -379,7 +384,7 @@ class VolunteerProfileController extends BaseAuthController
 
         if (!empty($existent)) {
             foreach ($model->get() as $value) {
-                if (! in_array($value->name, $existent)) {
+                if (!in_array($value->name, $existent)) {
                     $model->detach($value->id);
                 }
             }
@@ -399,6 +404,6 @@ class VolunteerProfileController extends BaseAuthController
 
         // var_dump($projects);
 
-        return $this->response->collection($projects, new AttendingProjectTransformer);
+        return $this->response->collection($projects, new AttendingProjectTransformer());
     }
 }

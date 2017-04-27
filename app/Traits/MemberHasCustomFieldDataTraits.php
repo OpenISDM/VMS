@@ -2,9 +2,6 @@
 
 namespace App\Traits;
 
-/**
- *
- */
 trait MemberHasCustomFieldDataTraits
 {
     public function customFieldData()

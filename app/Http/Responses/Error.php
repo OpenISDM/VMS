@@ -4,7 +4,7 @@ namespace App\Http\Responses;
 
 class Error implements \JsonSerializable
 {
-    protected $code = "";
+    protected $code = '';
 
     public function __construct($code)
     {

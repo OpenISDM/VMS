@@ -1,11 +1,8 @@
 <?php
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use App\ProjectCustomField;
-use App\CustomField\RadioButtonMetadata;
 use App\CustomField\Payload;
-use App\MemberCustomFieldData;
+use App\CustomField\RadioButtonMetadata;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class ProjectCustomFieldControllerTest extends AbstractTestCase
 {
@@ -23,39 +20,39 @@ class ProjectCustomFieldControllerTest extends AbstractTestCase
         $project->managers()->save($this->volunteer);
 
         $postData = [
-            'name' => 'FOFOLOlOLo',
-            'type' => 'RADIO_BUTTON',
+            'name'        => 'FOFOLOlOLo',
+            'type'        => 'RADIO_BUTTON',
             'description' => 'FooOFoooQooOOOqOqf',
-            'required' => true,
-            'metadata' => [
+            'required'    => true,
+            'metadata'    => [
                 'options' => [
                     [
-                        'value' => 0,
+                        'value'        => 0,
                         'display_name' => 'abc',
                     ],
                     [
-                        'value' => 1,
+                        'value'        => 1,
                         'display_name' => 'def',
                     ],
                     [
-                        'value' => 2,
+                        'value'        => 2,
                         'display_name' => 'ghi',
                     ],
-                ]
+                ],
             ],
-            'order' => 1
+            'order' => 1,
         ];
 
         $this->json(
             'post',
-            '/api/projects/' . $project->id . '/custom_fields',
+            '/api/projects/'.$project->id.'/custom_fields',
             $postData,
             $this->getHeaderWithAuthorization()
         )->assertResponseStatus(201);
 
         $this->seeInDatabase('project_custom_field', [
-            'name' => 'FOFOLOlOLo',
-            'project_id' => $project->id
+            'name'       => 'FOFOLOlOLo',
+            'project_id' => $project->id,
         ]);
     }
 
@@ -71,23 +68,23 @@ class ProjectCustomFieldControllerTest extends AbstractTestCase
         $project->managers()->save($this->volunteer);
 
         $postData = [
-            'name' => 'FOFOLOlOLo',
-            'type' => 'TEXT',
+            'name'        => 'FOFOLOlOLo',
+            'type'        => 'TEXT',
             'description' => 'FooOFoooQooOOOqOqf',
-            'required' => true,
-            'order' => 1
+            'required'    => true,
+            'order'       => 1,
         ];
 
         $this->json(
             'post',
-            '/api/projects/' . $project->id . '/custom_fields',
+            '/api/projects/'.$project->id.'/custom_fields',
             $postData,
             $this->getHeaderWithAuthorization()
         )->assertResponseStatus(201);
 
         $this->seeInDatabase('project_custom_field', [
-            'name' => 'FOFOLOlOLo',
-            'project_id' => $project->id
+            'name'       => 'FOFOLOlOLo',
+            'project_id' => $project->id,
         ]);
     }
 
@@ -103,63 +100,63 @@ class ProjectCustomFieldControllerTest extends AbstractTestCase
         $project->managers()->save($this->volunteer);
 
         $radioCustomField1 = factory(App\ProjectCustomField::class)->make([
-            'order' => 1,
+            'order'    => 1,
             'metadata' => new RadioButtonMetadata([
                 'options' => [
                     [
-                        'value' => 0,
+                        'value'        => 0,
                         'display_name' => 'abc',
                     ],
                     [
-                        'value' => 1,
+                        'value'        => 1,
                         'display_name' => 'def',
                     ],
-                ]
-            ])
+                ],
+            ]),
         ]);
         $radioCustomField2 = factory(App\ProjectCustomField::class)->make([
-            'order' => 2,
+            'order'    => 2,
             'metadata' => new RadioButtonMetadata([
                 'options' => [
                     [
-                        'value' => 0,
+                        'value'        => 0,
                         'display_name' => 'qoo',
                     ],
                     [
-                        'value' => 1,
+                        'value'        => 1,
                         'display_name' => 'foo',
                     ],
-                ]
-            ])
+                ],
+            ]),
         ]);
 
         $project->customFields()->saveMany([$radioCustomField1, $radioCustomField2]);
 
         $postData = [
-            'id' => $radioCustomField2->id,
-            'type' => 'project_custom_field',
-            'name' => 'FOFOLOlOLo',
-            'type' => 'RADIO_BUTTON',
+            'id'          => $radioCustomField2->id,
+            'type'        => 'project_custom_field',
+            'name'        => 'FOFOLOlOLo',
+            'type'        => 'RADIO_BUTTON',
             'description' => 'FooOFoooQooOOOqOqf',
-            'required' => true,
-            'order' => 2,
-            'metadata' => [
+            'required'    => true,
+            'order'       => 2,
+            'metadata'    => [
                 'options' => [
                     [
-                        'value' => 0,
+                        'value'        => 0,
                         'display_name' => 'abc',
                     ],
                     [
-                        'value' => 1,
+                        'value'        => 1,
                         'display_name' => 'def',
                     ],
-                ]
-            ]
+                ],
+            ],
         ];
 
         $this->json(
             'post',
-            '/api/projects/' . $project->id . '/custom_fields',
+            '/api/projects/'.$project->id.'/custom_fields',
             $postData,
             $this->getHeaderWithAuthorization()
         )->assertResponseStatus(200);
@@ -177,41 +174,41 @@ class ProjectCustomFieldControllerTest extends AbstractTestCase
         $project->managers()->save($this->volunteer);
 
         $radioCustomField1 = factory(App\ProjectCustomField::class)->make([
-            'order' => 1,
+            'order'    => 1,
             'metadata' => new RadioButtonMetadata([
                 'options' => [
                     [
-                        'value' => 0,
+                        'value'        => 0,
                         'display_name' => 'abc',
                     ],
                     [
-                        'value' => 1,
+                        'value'        => 1,
                         'display_name' => 'def',
                     ],
-                ]
-            ])
+                ],
+            ]),
         ]);
         $radioCustomField2 = factory(App\ProjectCustomField::class)->make([
-            'order' => 2,
+            'order'    => 2,
             'metadata' => new RadioButtonMetadata([
                 'options' => [
                     [
-                        'value' => 0,
+                        'value'        => 0,
                         'display_name' => 'qoo',
                     ],
                     [
-                        'value' => 1,
+                        'value'        => 1,
                         'display_name' => 'foo',
                     ],
-                ]
-            ])
+                ],
+            ]),
         ]);
 
         $project->customFields()->saveMany([$radioCustomField1, $radioCustomField2]);
 
         $this->json(
             'get',
-            '/api/projects/' . $project->id . '/custom_fields',
+            '/api/projects/'.$project->id.'/custom_fields',
             [],
             $this->getHeaderWithAuthorization()
         )->assertResponseStatus(200);
@@ -222,81 +219,81 @@ class ProjectCustomFieldControllerTest extends AbstractTestCase
         $this->factoryModel();
 
         $user1 = factory(App\Volunteer::class)->create([
-                    'is_actived' => true
+                    'is_actived' => true,
             ]);
         $user2 = factory(App\Volunteer::class)->create([
-                    'is_actived' => true
+                    'is_actived' => true,
             ]);
         $project = $this->makeCreateProjectWithPrivateForUser($user1, 1, true);
 
         $user2->attachProject($project, 0);
 
         $radioCustomField1 = factory(App\ProjectCustomField::class)->make([
-            'order' => 1,
+            'order'    => 1,
             'metadata' => new RadioButtonMetadata([
                 'options' => [
                     [
-                        'value' => 0,
+                        'value'        => 0,
                         'display_name' => 'abc',
                     ],
                     [
-                        'value' => 1,
+                        'value'        => 1,
                         'display_name' => 'def',
                     ],
-                ]
-            ])
+                ],
+            ]),
         ]);
         $radioCustomField2 = factory(App\ProjectCustomField::class)->make([
-            'order' => 2,
+            'order'    => 2,
             'metadata' => new RadioButtonMetadata([
                 'options' => [
                     [
-                        'value' => 0,
+                        'value'        => 0,
                         'display_name' => 'qoo',
                     ],
                     [
-                        'value' => 1,
+                        'value'        => 1,
                         'display_name' => 'foo',
                     ],
-                ]
-            ])
+                ],
+            ]),
         ]);
 
         $project->customFields()->saveMany([$radioCustomField1, $radioCustomField2]);
 
         $postData = [
             'data' => [
-                'type' => 'project_custom_field_data',
+                'type'       => 'project_custom_field_data',
                 'attributes' => [
                     'content' => [
                         'options' => [
-                            'value' => 0
-                        ]
-                    ]
+                            'value' => 0,
+                        ],
+                    ],
                 ],
                 'relationships' => [
                     'custom_field' => [
                         'data' => [
                             'type' => 'custom_fields',
-                            'id' => $radioCustomField1->id
-                        ]
-                    ]
-                ]
-            ]
+                            'id'   => $radioCustomField1->id,
+                        ],
+                    ],
+                ],
+            ],
         ];
 
         $this->json(
             'post',
-            '/api/projects/' . $project->id . '/members/custom_field_data',
+            '/api/projects/'.$project->id.'/members/custom_field_data',
             $postData,
             [
-                'Authorization' => 'Bearer ' . JWTAuth::fromUser($user2),
-                'X-VMS-API-Key' => $this->getApiKey()
+                'Authorization' => 'Bearer '.JWTAuth::fromUser($user2),
+                'X-VMS-API-Key' => $this->getApiKey(),
             ]
         )->assertResponseStatus(201);
 
         $this->seeInDatabase('member_custom_field_data', [
-            'project_custom_field_id' => $radioCustomField1->id
+            'project_custom_field_id' => $radioCustomField1->id,
         ]);
     }
 
@@ -305,44 +302,44 @@ class ProjectCustomFieldControllerTest extends AbstractTestCase
         $this->factoryModel();
 
         $user1 = factory(App\Volunteer::class)->create([
-                    'is_actived' => true
+                    'is_actived' => true,
             ]);
         $user2 = factory(App\Volunteer::class)->create([
-                    'is_actived' => true
+                    'is_actived' => true,
             ]);
         $project = $this->makeCreateProjectWithPrivateForUser($user1, 1, true);
 
         $user2->attachProject($project, 0);
 
         $radioCustomField1 = factory(App\ProjectCustomField::class)->make([
-            'order' => 1,
+            'order'    => 1,
             'metadata' => new RadioButtonMetadata([
                 'options' => [
                     [
-                        'value' => 0,
+                        'value'        => 0,
                         'display_name' => 'abc',
                     ],
                     [
-                        'value' => 1,
+                        'value'        => 1,
                         'display_name' => 'def',
                     ],
-                ]
-            ])
+                ],
+            ]),
         ]);
         $radioCustomField2 = factory(App\ProjectCustomField::class)->make([
-            'order' => 2,
+            'order'    => 2,
             'metadata' => new RadioButtonMetadata([
                 'options' => [
                     [
-                        'value' => 0,
+                        'value'        => 0,
                         'display_name' => 'qoo',
                     ],
                     [
-                        'value' => 1,
+                        'value'        => 1,
                         'display_name' => 'foo',
                     ],
-                ]
-            ])
+                ],
+            ]),
         ]);
 
         $project->customFields()->saveMany([$radioCustomField1, $radioCustomField2]);
@@ -351,36 +348,36 @@ class ProjectCustomFieldControllerTest extends AbstractTestCase
                 [
                     'data' => [
                         'options' => [
-                            'value' => 0
-                        ]
+                            'value' => 0,
+                        ],
                     ],
-                    'custom_field_id' => $radioCustomField1->id
+                    'custom_field_id' => $radioCustomField1->id,
                 ],
                 [
                     'data' => [
                         'options' => [
-                            'value' => 0
-                        ]
+                            'value' => 0,
+                        ],
                     ],
-                    'custom_field_id' => $radioCustomField2->id
-                ]
+                    'custom_field_id' => $radioCustomField2->id,
+                ],
         ];
 
         $this->json(
             'post',
-            '/api/projects/' . $project->id . '/members/bulk_custom_field_data',
+            '/api/projects/'.$project->id.'/members/bulk_custom_field_data',
             $postData,
             [
-                'Authorization' => 'Bearer ' . JWTAuth::fromUser($user2),
-                'X-VMS-API-Key' => $this->getApiKey()
+                'Authorization' => 'Bearer '.JWTAuth::fromUser($user2),
+                'X-VMS-API-Key' => $this->getApiKey(),
             ]
         )->assertResponseStatus(201);
 
         $this->seeInDatabase('member_custom_field_data', [
-            'project_custom_field_id' => $radioCustomField1->id
+            'project_custom_field_id' => $radioCustomField1->id,
         ]);
         $this->seeInDatabase('member_custom_field_data', [
-            'project_custom_field_id' => $radioCustomField2->id
+            'project_custom_field_id' => $radioCustomField2->id,
         ]);
     }
 
@@ -389,93 +386,93 @@ class ProjectCustomFieldControllerTest extends AbstractTestCase
         $this->factoryModel();
 
         $user1 = factory(App\Volunteer::class)->create([
-                    'is_actived' => true
+                    'is_actived' => true,
             ]);
         $user2 = factory(App\Volunteer::class)->create([
-                    'is_actived' => true
+                    'is_actived' => true,
             ]);
         $project = $this->makeCreateProjectWithPrivateForUser($user1, 1, true);
 
         $user2->attachProject($project, 0);
 
         $radioCustomField1 = factory(App\ProjectCustomField::class)->make([
-            'order' => 1,
+            'order'    => 1,
             'metadata' => new RadioButtonMetadata([
                 'options' => [
                     [
-                        'value' => 0,
+                        'value'        => 0,
                         'display_name' => 'abc',
                     ],
                     [
-                        'value' => 1,
+                        'value'        => 1,
                         'display_name' => 'def',
                     ],
-                ]
-            ])
+                ],
+            ]),
         ]);
         $radioCustomField2 = factory(App\ProjectCustomField::class)->make([
-            'order' => 2,
+            'order'    => 2,
             'metadata' => new RadioButtonMetadata([
                 'options' => [
                     [
-                        'value' => 0,
+                        'value'        => 0,
                         'display_name' => 'qoo',
                     ],
                     [
-                        'value' => 1,
+                        'value'        => 1,
                         'display_name' => 'foo',
                     ],
-                ]
-            ])
+                ],
+            ]),
         ]);
 
         $project->customFields()->saveMany([$radioCustomField1, $radioCustomField2]);
 
         factory(App\MemberCustomFieldData::class)->create([
-            'data' => new Payload([0]),
+            'data'                    => new Payload([0]),
             'project_custom_field_id' => $radioCustomField1->id,
-            'member_id' => 1
+            'member_id'               => 1,
         ]);
         factory(App\MemberCustomFieldData::class)->create([
-            'data' => new Payload([1]),
+            'data'                    => new Payload([1]),
             'project_custom_field_id' => $radioCustomField2->id,
-            'member_id' => 1
+            'member_id'               => 1,
         ]);
 
         $postData = [
                 [
                     'data' => [
                         'options' => [
-                            'value' => 1
-                        ]
+                            'value' => 1,
+                        ],
                     ],
-                    'custom_field_id' => $radioCustomField1->id
+                    'custom_field_id' => $radioCustomField1->id,
                 ],
                 [
                     'data' => [
                         'options' => [
-                            'value' => 0
-                        ]
+                            'value' => 0,
+                        ],
                     ],
-                    'custom_field_id' => $radioCustomField2->id
-                ]
+                    'custom_field_id' => $radioCustomField2->id,
+                ],
         ];
 
         $this->json(
             'post',
-            '/api/projects/' . $project->id . '/members/bulk_custom_field_data',
+            '/api/projects/'.$project->id.'/members/bulk_custom_field_data',
             $postData,
             [
-                'Authorization' => 'Bearer ' . JWTAuth::fromUser($user2),
-                'X-VMS-API-Key' => $this->getApiKey()
+                'Authorization' => 'Bearer '.JWTAuth::fromUser($user2),
+                'X-VMS-API-Key' => $this->getApiKey(),
             ]
         )->assertResponseStatus(201);
 
         $this->seeInDatabase('member_custom_field_data', [
-            'project_custom_field_id' => $radioCustomField1->id
+            'project_custom_field_id' => $radioCustomField1->id,
         ]);
         $this->seeInDatabase('member_custom_field_data', [
-            'project_custom_field_id' => $radioCustomField2->id
+            'project_custom_field_id' => $radioCustomField2->id,
         ]);
     }
 
@@ -484,66 +481,66 @@ class ProjectCustomFieldControllerTest extends AbstractTestCase
         $this->factoryModel();
 
         $user1 = factory(App\Volunteer::class)->create([
-                    'is_actived' => true
+                    'is_actived' => true,
             ]);
         $user2 = factory(App\Volunteer::class)->create([
-                    'is_actived' => true
+                    'is_actived' => true,
             ]);
         $project = $this->makeCreateProjectWithPrivateForUser($user1, 1, true);
 
         $user2->attachProject($project, 0);
 
         $radioCustomField1 = factory(App\ProjectCustomField::class)->make([
-            'order' => 1,
+            'order'    => 1,
             'metadata' => new RadioButtonMetadata([
                 'options' => [
                     [
-                        'value' => 0,
+                        'value'        => 0,
                         'display_name' => 'abc',
                     ],
                     [
-                        'value' => 1,
+                        'value'        => 1,
                         'display_name' => 'def',
                     ],
-                ]
-            ])
+                ],
+            ]),
         ]);
         $radioCustomField2 = factory(App\ProjectCustomField::class)->make([
-            'order' => 2,
+            'order'    => 2,
             'metadata' => new RadioButtonMetadata([
                 'options' => [
                     [
-                        'value' => 0,
+                        'value'        => 0,
                         'display_name' => 'qoo',
                     ],
                     [
-                        'value' => 1,
+                        'value'        => 1,
                         'display_name' => 'foo',
                     ],
-                ]
-            ])
+                ],
+            ]),
         ]);
 
         $project->customFields()->saveMany([$radioCustomField1, $radioCustomField2]);
 
         factory(App\MemberCustomFieldData::class)->create([
-            'data' => new Payload([0]),
+            'data'                    => new Payload([0]),
             'project_custom_field_id' => $radioCustomField1->id,
-            'member_id' => 1
+            'member_id'               => 1,
         ]);
         factory(App\MemberCustomFieldData::class)->create([
-            'data' => new Payload([1]),
+            'data'                    => new Payload([1]),
             'project_custom_field_id' => $radioCustomField2->id,
-            'member_id' => 1
+            'member_id'               => 1,
         ]);
 
         $this->json(
             'get',
-            '/api/projects/' . $project->id . '/members/custom_field_data',
+            '/api/projects/'.$project->id.'/members/custom_field_data',
             [],
             [
-                'Authorization' => 'Bearer ' . JWTAuth::fromUser($user2),
-                'X-VMS-API-Key' => $this->getApiKey()
+                'Authorization' => 'Bearer '.JWTAuth::fromUser($user2),
+                'X-VMS-API-Key' => $this->getApiKey(),
             ]
         )->assertResponseStatus(200);
     }
@@ -553,61 +550,61 @@ class ProjectCustomFieldControllerTest extends AbstractTestCase
         $this->factoryModel();
 
         $user1 = factory(App\Volunteer::class)->create([
-                    'is_actived' => true
+                    'is_actived' => true,
             ]);
         $user2 = factory(App\Volunteer::class)->create([
-                    'is_actived' => true
+                    'is_actived' => true,
             ]);
         $project = $this->makeCreateProjectWithPrivateForUser($user1, 1, true);
 
         $user2->attachProject($project, 0);
 
         $radioCustomField1 = factory(App\ProjectCustomField::class)->make([
-            'order' => 1,
+            'order'    => 1,
             'metadata' => new RadioButtonMetadata([
                 'options' => [
                     [
-                        'value' => 0,
+                        'value'        => 0,
                         'display_name' => 'abc',
                     ],
                     [
-                        'value' => 1,
+                        'value'        => 1,
                         'display_name' => 'def',
                     ],
-                ]
-            ])
+                ],
+            ]),
         ]);
         $radioCustomField2 = factory(App\ProjectCustomField::class)->make([
-            'order' => 2,
+            'order'    => 2,
             'metadata' => new RadioButtonMetadata([
                 'options' => [
                     [
-                        'value' => 0,
+                        'value'        => 0,
                         'display_name' => 'qoo',
                     ],
                     [
-                        'value' => 1,
+                        'value'        => 1,
                         'display_name' => 'foo',
                     ],
-                ]
-            ])
+                ],
+            ]),
         ]);
 
         $project->customFields()->saveMany([$radioCustomField1, $radioCustomField2]);
 
         factory(App\MemberCustomFieldData::class)->create([
-            'data' => new Payload([0]),
+            'data'                    => new Payload([0]),
             'project_custom_field_id' => $radioCustomField1->id,
-            'member_id' => 1
+            'member_id'               => 1,
         ]);
 
         $this->json(
             'get',
-            '/api/projects/' . $project->id . '/members/custom_field_data',
+            '/api/projects/'.$project->id.'/members/custom_field_data',
             [],
             [
-                'Authorization' => 'Bearer ' . JWTAuth::fromUser($user2),
-                'X-VMS-API-Key' => $this->getApiKey()
+                'Authorization' => 'Bearer '.JWTAuth::fromUser($user2),
+                'X-VMS-API-Key' => $this->getApiKey(),
             ]
         )->assertResponseStatus(200);
     }
@@ -617,13 +614,13 @@ class ProjectCustomFieldControllerTest extends AbstractTestCase
         $this->factoryModel();
 
         $user1 = factory(App\Volunteer::class)->create([
-                    'is_actived' => true
+                    'is_actived' => true,
             ]);
         $user2 = factory(App\Volunteer::class)->create([
-                    'is_actived' => true
+                    'is_actived' => true,
             ]);
         $user3 = factory(App\Volunteer::class)->create([
-                    'is_actived' => true
+                    'is_actived' => true,
             ]);
         $project = $this->makeCreateProjectWithPrivateForUser($user1, 1, true);
 
@@ -631,67 +628,67 @@ class ProjectCustomFieldControllerTest extends AbstractTestCase
         $user3->attachProject($project, 0);
 
         $radioCustomField1 = factory(App\ProjectCustomField::class)->make([
-            'order' => 1,
+            'order'    => 1,
             'metadata' => new RadioButtonMetadata([
                 'options' => [
                     [
-                        'value' => 0,
+                        'value'        => 0,
                         'display_name' => 'abc',
                     ],
                     [
-                        'value' => 1,
+                        'value'        => 1,
                         'display_name' => 'def',
                     ],
-                ]
-            ])
+                ],
+            ]),
         ]);
         $radioCustomField2 = factory(App\ProjectCustomField::class)->make([
-            'order' => 2,
+            'order'    => 2,
             'metadata' => new RadioButtonMetadata([
                 'options' => [
                     [
-                        'value' => 0,
+                        'value'        => 0,
                         'display_name' => 'qoo',
                     ],
                     [
-                        'value' => 1,
+                        'value'        => 1,
                         'display_name' => 'foo',
                     ],
-                ]
-            ])
+                ],
+            ]),
         ]);
 
         $project->customFields()->saveMany([$radioCustomField1, $radioCustomField2]);
 
         factory(App\MemberCustomFieldData::class)->create([
-            'data' => new Payload([0]),
+            'data'                    => new Payload([0]),
             'project_custom_field_id' => $radioCustomField1->id,
-            'member_id' => 1
+            'member_id'               => 1,
         ]);
         factory(App\MemberCustomFieldData::class)->create([
-            'data' => new Payload([1]),
+            'data'                    => new Payload([1]),
             'project_custom_field_id' => $radioCustomField2->id,
-            'member_id' => 1
+            'member_id'               => 1,
         ]);
 
         factory(App\MemberCustomFieldData::class)->create([
-            'data' => new Payload([1]),
+            'data'                    => new Payload([1]),
             'project_custom_field_id' => $radioCustomField1->id,
-            'member_id' => 2
+            'member_id'               => 2,
         ]);
         factory(App\MemberCustomFieldData::class)->create([
-            'data' => new Payload([1]),
+            'data'                    => new Payload([1]),
             'project_custom_field_id' => $radioCustomField2->id,
-            'member_id' => 2
+            'member_id'               => 2,
         ]);
 
         $this->json(
             'get',
-            '/api/projects/' . $project->id . '/members/all_custom_field_data',
+            '/api/projects/'.$project->id.'/members/all_custom_field_data',
             [],
             [
-                'Authorization' => 'Bearer ' . JWTAuth::fromUser($user1),
-                'X-VMS-API-Key' => $this->getApiKey()
+                'Authorization' => 'Bearer '.JWTAuth::fromUser($user1),
+                'X-VMS-API-Key' => $this->getApiKey(),
             ]
         )->assertResponseStatus(200);
     }
@@ -699,7 +696,7 @@ class ProjectCustomFieldControllerTest extends AbstractTestCase
     protected function makeCreateProjectWithPrivateForUser($user, $count, $isPublished = true)
     {
         $projects = factory(App\Project::class, 'project_private_for_user', $count)->create([
-                'is_published' => $isPublished
+                'is_published' => $isPublished,
             ]);
 
         if ($count === 1) {

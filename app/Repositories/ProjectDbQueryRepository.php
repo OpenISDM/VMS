@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use DB;
 use App\Volunteer;
+use DB;
 
 class ProjectDbQueryRepository
 {
@@ -75,7 +75,7 @@ class ProjectDbQueryRepository
                     ->where('is_published', '=', true)
                     ->whereIn('projects.permission', [
                         config('constants.project_permission.PUBLIC'),
-                        config('constants.project_permission.PRIVATE_FOR_USER')
+                        config('constants.project_permission.PRIVATE_FOR_USER'),
                     ])
                     ->select('projects.*');
 

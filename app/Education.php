@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Model;
 class Education extends Model
 {
     /**
-     * Table name
+     * Table name.
      *
      * @var string
      */
@@ -36,7 +36,7 @@ class Education extends Model
         'degree',
         'field_of_study',
         'start_year',
-        'end_year'
+        'end_year',
     ];
 
     /**
@@ -45,7 +45,7 @@ class Education extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
+        'id'           => 'integer',
         'volunteer_id' => 'integer',
     ];
 

@@ -24,17 +24,17 @@ class UpdateProfileRequest extends AbstractJsonRequest
     public function rules()
     {
         return [
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'birth_year' => 'required|date_format:Y',
-            'gender' => 'required|in:male,female,other',
-            'introduction' => 'required|max:255',
-            'city' => 'required',
-            'city.id' => 'required|exists:cities,id',
-            'location' => 'required|string|max:255',
-            'phone_number' => 'required|max:255',
+            'first_name'        => 'required|max:255',
+            'last_name'         => 'required|max:255',
+            'birth_year'        => 'required|date_format:Y',
+            'gender'            => 'required|in:male,female,other',
+            'introduction'      => 'required|max:255',
+            'city'              => 'required',
+            'city.id'           => 'required|exists:cities,id',
+            'location'          => 'required|string|max:255',
+            'phone_number'      => 'required|max:255',
             'emergency_contact' => 'required|max:255',
-            'emergency_phone' => 'required|string|max:255',
+            'emergency_phone'   => 'required|string|max:255',
         ];
     }
 }

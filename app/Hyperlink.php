@@ -9,7 +9,7 @@ class Hyperlink extends Model
     protected $table = 'hyperlinks';
     protected $fillable = ['name', 'link'];
     protected $casts = [
-        'id' => 'integer'
+        'id' => 'integer',
     ];
     protected $visible = ['id', 'name', 'link'];
 

@@ -2,20 +2,20 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use App\Exceptions\AbstractException;
-use App\Http\Responses\Responses;
 use App\Http\Responses\Error;
+use App\Http\Responses\Responses;
+use Illuminate\Support\ServiceProvider;
+use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
-use Tymon\JWTAuth\Exceptions\JWTException;
 
 class ApiErrorHandlerServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
      * Register custom error response in Dingo API.
-     * Reference: https://github.com/dingo/api/wiki/Errors-And-Error-Responses#custom-exception-responses
+     * Reference: https://github.com/dingo/api/wiki/Errors-And-Error-Responses#custom-exception-responses.
      *
      * @return void
      */

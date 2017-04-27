@@ -2,9 +2,8 @@
 
 namespace App\Transformers\Project;
 
-use Illuminate\Contracts\Support\Arrayable;
-use League\Fractal\TransformerAbstract;
 use App\Project;
+use League\Fractal\TransformerAbstract;
 
 class ProjectBriefTransformer extends TransformerAbstract
 {

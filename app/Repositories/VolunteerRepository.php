@@ -3,14 +3,14 @@
 namespace App\Repositories;
 
 use App\Volunteer;
-use App\Repositories\CityRepository;
-use App\Repositories\VerificationCodeRepository;
 
 class VolunteerRepository
 {
     /**
-     * Create a new volunteer entity
-     * @param  array $data
+     * Create a new volunteer entity.
+     *
+     * @param array $data
+     *
      * @return App\Volunteer
      */
     public function create(array $data)

@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateProcessesTable extends Migration
 {
@@ -19,7 +19,6 @@ class CreateProcessesTable extends Migration
             $table->string('status');
             $table->timestamps();
             $table->foreign('project_id')->references('id')->on('projects');
-            
         });
     }
 

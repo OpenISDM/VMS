@@ -1,11 +1,9 @@
 <?php
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use App\Volunteer;
 use App\VerificationCode;
+use App\Volunteer;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class VolunteerAuthControllerTest extends AbstractTestCase
 {
@@ -19,22 +17,22 @@ class VolunteerAuthControllerTest extends AbstractTestCase
     {
         parent::setUp();
 
-        $this->exampleRoot = dirname(__FILE__) . '/../../../../../examples';
+        $this->exampleRoot = dirname(__FILE__).'/../../../../../examples';
         $this->apiKey = '581dba93a4dbafa42a682d36b015d8484622f8e3543623bec5a291f67f5ddff1';
-        $testExampleFilePath = $this->exampleRoot . '/register_post.json';
+        $testExampleFilePath = $this->exampleRoot.'/register_post.json';
         $this->postData = json_decode(file_get_contents($testExampleFilePath), true);
     }
 
     public function testJsonRequestValidation()
     {
         $validationErrorPostData =
-            json_decode(file_get_contents($this->exampleRoot . '/register_post_validation_error.json'), true);
+            json_decode(file_get_contents($this->exampleRoot.'/register_post_validation_error.json'), true);
         $expectedJsonResponseBody = [
-            "errors" => [
-                "password" => ["weak_password_strength"]
+            'errors' => [
+                'password' => ['weak_password_strength'],
             ],
-            "message" => "422 Unprocessable Entity",
-            "status_code" => 422
+            'message'     => '422 Unprocessable Entity',
+            'status_code' => 422,
         ];
 
         $this->factoryModel();
@@ -61,7 +59,7 @@ class VolunteerAuthControllerTest extends AbstractTestCase
 
         $this->json('post', '/api/register', $this->postData, $this->unauthoirzedHeader)
              ->seeJson([
-                'username' => $this->postData['username']
+                'username' => $this->postData['username'],
              ])
              ->assertResponseStatus(201);
         $this->seeInDatabase('volunteers', ['email' => $this->postData['email'], 'avatar_path' => 'avatar123.jpg']);
@@ -74,7 +72,7 @@ class VolunteerAuthControllerTest extends AbstractTestCase
         $volunteer = factory(App\Volunteer::class)->create();
         $code = \App\Utils\StringUtil::generateHashToken();
         $verificationCode = factory(App\VerificationCode::class)->make([
-            'code' => $code
+            'code' => $code,
         ]);
         $verificationCode->volunteer()->associate($volunteer);
         $verificationCode->save();
@@ -82,14 +80,14 @@ class VolunteerAuthControllerTest extends AbstractTestCase
         $token = JWTAuth::fromUser($volunteer);
 
         $this->json('get',
-                    '/api/email_verification/' . $volunteer->email . '/' . $code . '?token=' . $token,
+                    '/api/email_verification/'.$volunteer->email.'/'.$code.'?token='.$token,
                     [],
                     [
-                        'Authorization' => 'Bearer ' . $token,
-                        'X-VMS-API-Key' => $this->apiKey
+                        'Authorization' => 'Bearer '.$token,
+                        'X-VMS-API-Key' => $this->apiKey,
                     ])
              ->seeJsonEquals([
-                'message' => 'Successful email verification'
+                'message' => 'Successful email verification',
              ])
              ->assertResponseStatus(200);
 
@@ -110,11 +108,11 @@ class VolunteerAuthControllerTest extends AbstractTestCase
                     '/api/auth',
                     [
                         'username' => $volunteer->username,
-                        'password' => 'ThisIsMyPassW0Rd'
+                        'password' => 'ThisIsMyPassW0Rd',
                     ],
                     $this->unauthoirzedHeader)
              ->seeJson([
-                'username' => $volunteer->username
+                'username' => $volunteer->username,
              ])
              ->assertResponseStatus(200);
     }
@@ -130,8 +128,8 @@ class VolunteerAuthControllerTest extends AbstractTestCase
                     '/api/auth',
                     [],
                     [
-                        'Authorization' => 'Bearer ' . $token,
-                        'X-VMS-API-Key' => $this->apiKey
+                        'Authorization' => 'Bearer '.$token,
+                        'X-VMS-API-Key' => $this->apiKey,
                     ])
              ->assertResponseStatus(204);
     }
@@ -151,8 +149,8 @@ class VolunteerAuthControllerTest extends AbstractTestCase
                     '/api/resend_email_verification',
                     [],
                     [
-                        'Authorization' => 'Bearer ' . $token,
-                        'X-VMS-API-Key' => $this->apiKey
+                        'Authorization' => 'Bearer '.$token,
+                        'X-VMS-API-Key' => $this->apiKey,
                     ])
              ->assertResponseStatus(204);
 

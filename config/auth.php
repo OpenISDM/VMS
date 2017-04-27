@@ -1,4 +1,5 @@
 <?php
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -11,7 +12,7 @@ return [
     |
     */
     'defaults' => [
-        'guard' => 'jwt',
+        'guard'     => 'jwt',
         'passwords' => 'volunteers',
     ],
     /*
@@ -32,17 +33,17 @@ return [
     */
     'guards' => [
         'web' => [
-            'driver' => 'session',
+            'driver'   => 'session',
             'provider' => 'users',
         ],
         'api' => [
-            'driver' => 'token',
+            'driver'   => 'token',
             'provider' => 'users',
         ],
         'jwt' => [
-            'driver' => 'jwt',
-            'provider' => 'volunteers'
-        ]
+            'driver'   => 'jwt',
+            'provider' => 'volunteers',
+        ],
     ],
     /*
     |--------------------------------------------------------------------------
@@ -63,7 +64,7 @@ return [
     'providers' => [
         'volunteers' => [
             'driver' => 'eloquent',
-            'model' => App\Volunteer::class,
+            'model'  => App\Volunteer::class,
         ],
         // 'users' => [
         //     'driver' => 'database',
@@ -91,9 +92,9 @@ return [
     'passwords' => [
         'volunteers' => [
             'provider' => 'volunteers',
-            'email' => 'auth.emails.password',
-            'table' => 'password_resets',
-            'expire' => 60,
+            'email'    => 'auth.emails.password',
+            'table'    => 'password_resets',
+            'expire'   => 60,
         ],
     ],
 ];

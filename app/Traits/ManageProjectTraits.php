@@ -4,9 +4,6 @@ namespace App\Traits;
 
 use App\Project;
 
-/**
- *
- */
 trait ManageProjectTraits
 {
     public function manageProjects()

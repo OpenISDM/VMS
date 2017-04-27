@@ -3,9 +3,7 @@
 namespace App\Transformers;
 
 use App\Project;
-use App\Transformers\JsonApiManagerTransformer;
-use App\Transformers\JsonApiHyperlinkTransformer;
-use App\Hyperlink;
+
 use League\Fractal\TransformerAbstract;
 
 class JsonApiProjectTransformer extends TransformerAbstract

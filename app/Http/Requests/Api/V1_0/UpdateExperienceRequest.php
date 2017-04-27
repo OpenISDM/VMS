@@ -24,11 +24,11 @@ class UpdateExperienceRequest extends AbstractJsonRequest
     public function rules()
     {
         return [
-            'id' => 'required',
-            'company' => 'required|string',
-            'job_title' => 'required',
+            'id'         => 'required',
+            'company'    => 'required|string',
+            'job_title'  => 'required',
             'start_year' => 'required|date_format:Y',
-            'end_year' => 'sometimes|required|date_format:Y',
+            'end_year'   => 'sometimes|required|date_format:Y',
         ];
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The class is responsible for validating the volunteer data on registration
+ * The class is responsible for validating the volunteer data on registration.
  *
  * @Author: Yi-Ming, Huang <aming>
  * @Date:   2016-06-24T10:40:23+08:00
@@ -37,21 +37,21 @@ class VolunteerRegistrationRequest extends AbstractJsonRequest
     public function rules()
     {
         return [
-            'username' => 'required|unique:volunteers|max:255',
-            'password' => 'required|between:6,255|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/',
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'birth_year' => 'date_format:Y',
-            'gender' => 'required|in:male,female,other',
-            'city' => 'required',
-            'city.id' => 'required|exists:cities,id',
-            'location' => 'sometimes|required|string|max:255',
-            'phone_number' => 'sometimes|required|max:255',
-            'email' => 'required|email|unique:volunteers',
+            'username'          => 'required|unique:volunteers|max:255',
+            'password'          => 'required|between:6,255|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/',
+            'first_name'        => 'required|max:255',
+            'last_name'         => 'required|max:255',
+            'birth_year'        => 'date_format:Y',
+            'gender'            => 'required|in:male,female,other',
+            'city'              => 'required',
+            'city.id'           => 'required|exists:cities,id',
+            'location'          => 'sometimes|required|string|max:255',
+            'phone_number'      => 'sometimes|required|max:255',
+            'email'             => 'required|email|unique:volunteers',
             'emergency_contact' => 'sometimes|required|max:255',
-            'emergency_phone' => 'sometimes|required|string|max:255',
-            'introduction' => 'max:255',
-            'avatar' => 'sometimes'
+            'emergency_phone'   => 'sometimes|required|string|max:255',
+            'introduction'      => 'max:255',
+            'avatar'            => 'sometimes',
         ];
     }
 }

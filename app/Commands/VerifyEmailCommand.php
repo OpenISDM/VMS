@@ -5,7 +5,7 @@ namespace App\Commands;
 use App\Services\VerifyEmailService;
 
 /**
- * Use \App\Services\VerifyEmailService to check the parameters and so on
+ * Use \App\Services\VerifyEmailService to check the parameters and so on.
  */
 class VerifyEmailCommand implements CommandInterface
 {

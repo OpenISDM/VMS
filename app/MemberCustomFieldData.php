@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use App\CustomField\Payload;
+use Illuminate\Database\Eloquent\Model;
 
 class MemberCustomFieldData extends Model
 {

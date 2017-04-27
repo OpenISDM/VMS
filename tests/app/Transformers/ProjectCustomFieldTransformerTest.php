@@ -1,12 +1,8 @@
 <?php
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use League\Fractal\Resource\Item;
-use App\Project;
-use App\Transformers\Project\ProjectTransformer;
-use App\Services\TransformerService;
 use App\CustomField\RadioButtonMetadata;
+use App\Services\TransformerService;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class ProjectCustomFieldTransformerTest extends TestCase
 {
@@ -20,23 +16,23 @@ class ProjectCustomFieldTransformerTest extends TestCase
     protected function setUpDatabase()
     {
         $this->customField = factory(App\ProjectCustomField::class)->make([
-            'name' => 'FoofOo',
+            'name'        => 'FoofOo',
             'description' => 'oOoO.O0',
-            'required' => true,
-            'type' => 'RADIO_BUTTON',
-            'order' => 1,
-            'metadata' => new RadioButtonMetadata([
+            'required'    => true,
+            'type'        => 'RADIO_BUTTON',
+            'order'       => 1,
+            'metadata'    => new RadioButtonMetadata([
                 'options' => [
                     [
-                        'value' => 0,
+                        'value'        => 0,
                         'display_name' => 'abc',
                     ],
                     [
-                        'value' => 1,
+                        'value'        => 1,
                         'display_name' => 'def',
                     ],
-                ]
-            ])
+                ],
+            ]),
         ]);
     }
 
@@ -49,24 +45,24 @@ class ProjectCustomFieldTransformerTest extends TestCase
         $actual = $manager->createData($resource)->toArray();
 
         $expectCustomField = [
-            'name' => 'FoofOo',
+            'name'        => 'FoofOo',
             'description' => 'oOoO.O0',
-            'required' => true,
-            'type' => 'RADIO_BUTTON',
-            'order' => 1
+            'required'    => true,
+            'type'        => 'RADIO_BUTTON',
+            'order'       => 1,
         ];
 
         $expectedMetadata = [
             'options' => [
                 [
-                    'value' => 0,
+                    'value'        => 0,
                     'display_name' => 'abc',
                 ],
                 [
-                    'value' => 1,
+                    'value'        => 1,
                     'display_name' => 'def',
                 ],
-            ]
+            ],
         ];
 
         $this->assertContains($expectCustomField, $actual);

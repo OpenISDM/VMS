@@ -55,11 +55,11 @@ class VolunteerProfileControllerTest extends AbstractTestCase
         $fakeSkills = [
             'WoWoWo',
             'QoQoQo',
-            'Swimming'
+            'Swimming',
         ];
         $deleteSkills = [
             'WoWoWo',
-            'QoQoQo'
+            'QoQoQo',
         ];
         $testVolunter = App\Volunteer::find($this->volunteer->id);
 
@@ -74,7 +74,7 @@ class VolunteerProfileControllerTest extends AbstractTestCase
                 'Repo rescue',
             ],
             'existing_skill_indexes' => [
-                0
+                0,
             ],
         ];
 
@@ -127,11 +127,11 @@ class VolunteerProfileControllerTest extends AbstractTestCase
             $postData,
             $this->getHeaderWithAuthorization()
         )->seeJson([
-            "errors" => [
-                "existing_skill_indexes" => ["exceeding_index_value"]
+            'errors' => [
+                'existing_skill_indexes' => ['exceeding_index_value'],
             ],
-            "message" => "422 Unprocessable Entity",
-            "status_code" => 422
+            'message'     => '422 Unprocessable Entity',
+            'status_code' => 422,
         ])->assertResponseStatus(422);
     }
 
@@ -143,7 +143,7 @@ class VolunteerProfileControllerTest extends AbstractTestCase
         $skills = [
             'Swimming',
             'Programming',
-            'Repo rescue'
+            'Repo rescue',
         ];
 
         foreach ($skills as $skill) {
@@ -159,15 +159,15 @@ class VolunteerProfileControllerTest extends AbstractTestCase
             [
                 'skills' => [
                     [
-                        'name' => 'Swimming'
+                        'name' => 'Swimming',
                     ],
                     [
-                        'name' => 'Programming'
+                        'name' => 'Programming',
                     ],
                     [
-                        'name' => 'Repo rescue'
-                    ]
-                ]
+                        'name' => 'Repo rescue',
+                    ],
+                ],
             ]
         );
     }
@@ -181,11 +181,11 @@ class VolunteerProfileControllerTest extends AbstractTestCase
         $fakeEquipment = [
             'WoWoWo',
             'QoQoQo',
-            'Tent'
+            'Tent',
         ];
         $deleteEquipment = [
             'WoWoWo',
-            'QoQoQo'
+            'QoQoQo',
         ];
         $testVolunter = App\Volunteer::find($this->volunteer->id);
 
@@ -198,10 +198,10 @@ class VolunteerProfileControllerTest extends AbstractTestCase
                 'Car',
                 'Bike',
                 'Camera',
-                'Tent'
+                'Tent',
             ],
             'existing_equipment_indexes' => [
-                3
+                3,
             ],
         ];
 
@@ -235,7 +235,7 @@ class VolunteerProfileControllerTest extends AbstractTestCase
             'Car',
             'Bike',
             'Camera',
-            'Tent'
+            'Tent',
         ];
 
         foreach ($equipment as $eq) {
@@ -251,18 +251,18 @@ class VolunteerProfileControllerTest extends AbstractTestCase
             [
                 'equipment' => [
                     [
-                        'name' => 'Car'
+                        'name' => 'Car',
                     ],
                     [
-                        'name' => 'Bike'
+                        'name' => 'Bike',
                     ],
                     [
-                        'name' => 'Camera'
+                        'name' => 'Camera',
                     ],
                     [
-                        'name' => 'Tent'
-                    ]
-                ]
+                        'name' => 'Tent',
+                    ],
+                ],
             ]
         );
     }
@@ -289,18 +289,18 @@ class VolunteerProfileControllerTest extends AbstractTestCase
         $this->createSkillsAndEquipment();
 
         $putData = [
-            "first_name" => "Lin",
-            "last_name" => "Jim",
-            "birth_year" => 2015,
-            "gender" => "male",
-            "city" => [
-                "id"=> 1
+            'first_name' => 'Lin',
+            'last_name'  => 'Jim',
+            'birth_year' => 2015,
+            'gender'     => 'male',
+            'city'       => [
+                'id'=> 1,
             ],
-            "location" => "128 Academia Road, Section 2, Nankang Dist.",
-            "phone_number" => "0912345678",
-            "emergency_contact" => "Jeremy Lin",
-            "emergency_phone" => "0910123456",
-            "introduction"=> "My personal introduction"
+            'location'          => '128 Academia Road, Section 2, Nankang Dist.',
+            'phone_number'      => '0912345678',
+            'emergency_contact' => 'Jeremy Lin',
+            'emergency_phone'   => '0910123456',
+            'introduction'      => 'My personal introduction',
         ];
 
         $city = $this->cities[0];
@@ -313,10 +313,10 @@ class VolunteerProfileControllerTest extends AbstractTestCase
             $putData,
             $this->getHeaderWithAuthorization()
         )->seeJson([
-            'city' => ['id' => 1, 'name_en' => $city->name]
+            'city' => ['id' => 1, 'name_en' => $city->name],
         ])
         ->seeJson([
-            'emergency_phone' => '0910123456'
+            'emergency_phone' => '0910123456',
         ])
         ->assertResponseStatus(200);
     }
@@ -342,19 +342,19 @@ class VolunteerProfileControllerTest extends AbstractTestCase
         }
 
         $putData = [
-            "username" => $this->volunteer->username,
-            "first_name" => "Lin",
-            "last_name" => "Jim",
-            "birth_year" => 2015,
-            "gender" => "male",
-            "city" => [
-                "id"=> 1
+            'username'   => $this->volunteer->username,
+            'first_name' => 'Lin',
+            'last_name'  => 'Jim',
+            'birth_year' => 2015,
+            'gender'     => 'male',
+            'city'       => [
+                'id'=> 1,
             ],
-            "location" => "128 Academia Road, Section 2, Nankang Dist.",
-            "phone_number" => "0912345678",
-            "emergency_contact" => "Jeremy Lin",
-            "emergency_phone" => "0910123456",
-            "introduction"=> "My personal introduction"
+            'location'          => '128 Academia Road, Section 2, Nankang Dist.',
+            'phone_number'      => '0912345678',
+            'emergency_contact' => 'Jeremy Lin',
+            'emergency_phone'   => '0910123456',
+            'introduction'      => 'My personal introduction',
         ];
 
         $this->json(
@@ -388,7 +388,7 @@ class VolunteerProfileControllerTest extends AbstractTestCase
                       ->andReturn($fileSystemMock);
 
         $putData = [
-            'avatar' => 'data:image/'.$avatarType.';base64,'.base64_encode(file_get_contents($avatarPath)),
+            'avatar'       => 'data:image/'.$avatarType.';base64,'.base64_encode(file_get_contents($avatarPath)),
             'skip_profile' => true,
         ];
 
@@ -399,9 +399,9 @@ class VolunteerProfileControllerTest extends AbstractTestCase
             $this->getHeaderWithAuthorization()
         )->seeJsonEquals([
             'data' => [
-                'avatar_url' => config('vms.avatarHost').'/'.config('vms.avatarRootPath').'/'.$avatarFileName,
+                'avatar_url'  => config('vms.avatarHost').'/'.config('vms.avatarRootPath').'/'.$avatarFileName,
                 'avatar_name' => $avatarFileName,
-            ]
+            ],
         ])->assertResponseStatus(200);
     }
 
@@ -438,7 +438,7 @@ class VolunteerProfileControllerTest extends AbstractTestCase
 
         $responseJson->seeJsonEquals(
             [
-                'avatar_url' => config('vms.avatarHost').'/'.config('vms.avatarRootPath').'/'.$avatarFileName,
+                'avatar_url'  => config('vms.avatarHost').'/'.config('vms.avatarRootPath').'/'.$avatarFileName,
                 'avatar_name' => $avatarFileName,
             ]
         )->assertResponseStatus(200);
@@ -504,7 +504,7 @@ class VolunteerProfileControllerTest extends AbstractTestCase
         $example = [
             'Swimming',
             'Programming',
-            'Repo rescue'
+            'Repo rescue',
         ];
 
         foreach ($example as $skill) {
@@ -519,11 +519,11 @@ class VolunteerProfileControllerTest extends AbstractTestCase
              ->seeJsonEquals([
                 'result' => [
                     [
-                        'name' => 'Repo rescue',
-                        'id' => 3,
-                        'head_line' => '<strong>Re</strong>po rescue'
-                    ]
-                ]
+                        'name'      => 'Repo rescue',
+                        'id'        => 3,
+                        'head_line' => '<strong>Re</strong>po rescue',
+                    ],
+                ],
              ])
              ->assertResponseStatus(200);
     }
@@ -535,7 +535,7 @@ class VolunteerProfileControllerTest extends AbstractTestCase
             'Rope rescue',
             'Disaster Survellience',
             'Disaster Recovery',
-            'Water rescue'
+            'Water rescue',
         ];
 
         foreach ($example as $skill) {
@@ -550,16 +550,16 @@ class VolunteerProfileControllerTest extends AbstractTestCase
              ->seeJsonEquals([
                 'result' => [
                     [
-                        'name' => 'Disaster Survellience',
-                        'id' => 2,
-                        'head_line' => '<strong>Dis</strong>aster Survellience'
+                        'name'      => 'Disaster Survellience',
+                        'id'        => 2,
+                        'head_line' => '<strong>Dis</strong>aster Survellience',
                     ],
                     [
-                        'name' => 'Disaster Recovery',
-                        'id' => 3,
-                        'head_line' => '<strong>Dis</strong>aster Recovery'
-                    ]
-                ]
+                        'name'      => 'Disaster Recovery',
+                        'id'        => 3,
+                        'head_line' => '<strong>Dis</strong>aster Recovery',
+                    ],
+                ],
              ])
              ->assertResponseStatus(200);
     }
@@ -570,29 +570,29 @@ class VolunteerProfileControllerTest extends AbstractTestCase
         $skills = $this->volunteer->skills()->get();
 
         return [
-            'username' => $this->volunteer->username,
-            'first_name' => $this->volunteer->first_name,
-            'last_name' => $this->volunteer->last_name,
-            'birth_year' => $this->volunteer->birth_year,
-            'gender' => $this->volunteer->gender,
-            'city' => ['id' => $this->volunteer->city->id, 'name_en' => $this->volunteer->city->name],
-            'location' => $this->volunteer->location,
-            'phone_number' => $this->volunteer->phone_number,
-            'email' => $this->volunteer->email,
+            'username'          => $this->volunteer->username,
+            'first_name'        => $this->volunteer->first_name,
+            'last_name'         => $this->volunteer->last_name,
+            'birth_year'        => $this->volunteer->birth_year,
+            'gender'            => $this->volunteer->gender,
+            'city'              => ['id' => $this->volunteer->city->id, 'name_en' => $this->volunteer->city->name],
+            'location'          => $this->volunteer->location,
+            'phone_number'      => $this->volunteer->phone_number,
+            'email'             => $this->volunteer->email,
             'emergency_contact' => $this->volunteer->emergency_contact,
-            'emergency_phone' => $this->volunteer->emergency_phone,
-            'introduction' => 'Hi, my name is XXX',
-            'experiences' => ['href' => env('APP_URL').'/api/users/me/experiences'],
-            'educations' => ['href' => env('APP_URL').'/api/users/me/educations'],
-            'skills' => $skills,
-            'equipment' => $equipment,
-            'projects' => [
+            'emergency_phone'   => $this->volunteer->emergency_phone,
+            'introduction'      => 'Hi, my name is XXX',
+            'experiences'       => ['href' => env('APP_URL').'/api/users/me/experiences'],
+            'educations'        => ['href' => env('APP_URL').'/api/users/me/educations'],
+            'skills'            => $skills,
+            'equipment'         => $equipment,
+            'projects'          => [
                 'href' => env('APP_URL').'/api/users/me/projects',
             ],
             'processes' => [
                 'participating_number' => 0,
-                'participated_number' => 0,
-                'href' => env('APP_URL').'/api/users/me/processes',
+                'participated_number'  => 0,
+                'href'                 => env('APP_URL').'/api/users/me/processes',
             ],
             'avatar_url' => config('vms.avatarHost').'/'.config('vms.avatarRootPath').'/'.$this->volunteer->avatar_path,
             'is_actived' => $this->volunteer->is_actived,

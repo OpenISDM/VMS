@@ -2,8 +2,6 @@
 
 namespace App\Exceptions;
 
-use App\Http\Responses\Error;
-
 class NotFoundException extends AbstractException
 {
     public function __construct($message, $error)

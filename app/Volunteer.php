@@ -15,15 +15,15 @@
 
 namespace App;
 
+use App\Traits\ManageProjectTraits;
+use App\Traits\UserInProjectTraits;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Foundation\Auth\Access\Authorizable;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\UserInProjectTraits;
-use App\Traits\ManageProjectTraits;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Volunteer extends Model implements
@@ -32,7 +32,7 @@ class Volunteer extends Model implements
     CanResetPasswordContract,
     JWTSubject
 {
-    /**
+    /*
      * Traits.
      *
      * Authenticatable:     It provides authentication for the model.
@@ -48,7 +48,7 @@ class Volunteer extends Model implements
         ManageProjectTraits;
 
     /**
-     * Table name
+     * Table name.
      *
      * @var string
      */
@@ -73,7 +73,7 @@ class Volunteer extends Model implements
         'emergency_contact',
         'emergency_phone',
         'introduction',
-        'avatar_path'
+        'avatar_path',
     ];
 
     /**
@@ -95,7 +95,7 @@ class Volunteer extends Model implements
         'emergency_contact',
         'emergency_phone',
         'introduction',
-        'avatar_path'
+        'avatar_path',
     ];
 
     /**
@@ -105,7 +105,7 @@ class Volunteer extends Model implements
      */
     protected $hidden = [
         'password',
-        'remember_token'
+        'remember_token',
     ];
 
     /**
@@ -114,9 +114,9 @@ class Volunteer extends Model implements
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
+        'id'         => 'integer',
         'is_actived' => 'boolean',
-        'is_locked' => 'boolean'
+        'is_locked'  => 'boolean',
     ];
 
     /**

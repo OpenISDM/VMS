@@ -2,12 +2,12 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Support\ServiceProvider;
 
 /**
  * Error response macro
- * What is Response Macros: http://laravel.com/docs/5.1/responses#response-macros
+ * What is Response Macros: http://laravel.com/docs/5.1/responses#response-macros.
  */
 class ErrorResponseMacroServiceProvider extends ServiceProvider
 {
@@ -18,7 +18,7 @@ class ErrorResponseMacroServiceProvider extends ServiceProvider
      */
     public function boot(ResponseFactory $factory)
     {
-        /**
+        /*
          * Factory an response()->apiJsonError() for error response
          *
          * @param   String  $message       response message
@@ -29,7 +29,7 @@ class ErrorResponseMacroServiceProvider extends ServiceProvider
         $factory->macro('apiJsonError', function ($message, $errors, $statusCode) use ($factory) {
             $jsonResponse = [
                 'message' => $message,
-                'errors' => [ $errors ]
+                'errors'  => [$errors],
             ];
 
             return response()->make($jsonResponse, $statusCode);

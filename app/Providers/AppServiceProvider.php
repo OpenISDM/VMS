@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use Validator;
 use Illuminate\Support\ServiceProvider;
+use Validator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
          * Transformer
          */
          $this->app['Dingo\Api\Transformer\Factory']->setAdapter(function ($app) {
-             return new \Dingo\Api\Transformer\Adapter\Fractal(new \League\Fractal\Manager, 'include', ',');
+             return new \Dingo\Api\Transformer\Adapter\Fractal(new \League\Fractal\Manager(), 'include', ',');
          });
 
         /*
@@ -46,7 +46,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         app()->bind('stringUtil', function () {
-            return new \App\Utils\StringUtil;
+            return new \App\Utils\StringUtil();
         });
     }
 }

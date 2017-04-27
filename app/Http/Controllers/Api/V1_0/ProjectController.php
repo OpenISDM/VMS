@@ -2,32 +2,28 @@
 
 namespace App\Http\Controllers\Api\V1_0;
 
-use Illuminate\Support\Arr;
-use Gate;
+use App\Exceptions\AccessDeniedException;
 use App\Http\Controllers\Api\BaseAuthController;
+use App\Http\Requests\Api\V1_0\AttachVolunteerInProjectRequest;
 use App\Http\Requests\Api\V1_0\CreateProjectRequest;
+use App\Http\Requests\Api\V1_0\DetachVolunteerInProjectRequest;
+use App\Http\Requests\Api\V1_0\InviteVolunteerInProjectRequest;
 use App\Http\Requests\Api\V1_0\ShowProjectRequest;
 use App\Http\Requests\Api\V1_0\UpdateProjectRequest;
-use App\Http\Requests\Api\V1_0\AttachVolunteerInProjectRequest;
-use App\Http\Requests\Api\V1_0\InviteVolunteerInProjectRequest;
-use App\Http\Requests\Api\V1_0\DetachVolunteerInProjectRequest;
 use App\Project;
-use App\Hyperlink;
-use App\Volunteer;
-use App\Services\TransformerService;
-use App\Exceptions\GeneralException;
-use App\Exceptions\AccessDeniedException;
 use App\Repositories\ProjectDbQueryRepository;
-use App\Utils\ArrayUtil;
+use App\Services\TransformerService;
 use App\Transformers\Project\ProjectTransformer;
-use App\Transformers\JsonApiProjectTransformer;
+use App\Volunteer;
+use Gate;
 
 class ProjectController extends BaseAuthController
 {
     /**
-     * Create a new project
+     * Create a new project.
      *
-     * @param  CreateProjectRequest $request
+     * @param CreateProjectRequest $request
+     *
      * @return Illuminate\Http\JsonResponse
      */
     public function store(CreateProjectRequest $request)
@@ -40,7 +36,7 @@ class ProjectController extends BaseAuthController
             'description',
             'organization',
             'is_published',
-            'permission'
+            'permission',
         ]);
 
         $project = Project::create($data);
@@ -56,9 +52,10 @@ class ProjectController extends BaseAuthController
     }
 
     /**
-     * Show a particular project information
+     * Show a particular project information.
      *
-     * @param  integer      $id
+     * @param int $id
+     *
      * @return Illuminate\Http\JsonResponse
      */
     public function show($id)
@@ -77,22 +74,23 @@ class ProjectController extends BaseAuthController
         }
 
         return $this->response
-                    ->item($project, new ProjectTransformer)
+                    ->item($project, new ProjectTransformer())
                     ->addMeta('role', $this->getRoleInProject($user, $project));
     }
 
     public function delete($id)
     {
-        /**
+        /*
          * TODO To be implemented
          */
     }
 
     /**
-     * Update a project
+     * Update a project.
      *
-     * @param  UpdateProjectRequest $request For authorization and rules validation
-     * @param  integer              $id      Project id
+     * @param UpdateProjectRequest $request For authorization and rules validation
+     * @param int                  $id      Project id
+     *
      * @return Illuminate\Http\JsonResponse
      */
     public function update(UpdateProjectRequest $request, $id)
@@ -103,7 +101,7 @@ class ProjectController extends BaseAuthController
             'description',
             'organization',
             'is_published',
-            'permission'
+            'permission',
         ]);
 
         $project->update($data);
@@ -125,7 +123,7 @@ class ProjectController extends BaseAuthController
         $user = $this->jwtService->getUser();
         $projects = $user->manageProjects()->get();
 
-        return $this->collection($projects, new ProjectTransformer);
+        return $this->collection($projects, new ProjectTransformer());
     }
 
     public function showSelfAttendingProjects()
@@ -170,12 +168,9 @@ class ProjectController extends BaseAuthController
         return response()->json($result, $status);
     }
 
-
     /**
-     * For the project manager to invite a volunteer to become member of his/her project
-     * 
+     * For the project manager to invite a volunteer to become member of his/her project.
      */
-
     public function inviteVolunteer(InviteVolunteerInProjectRequest $request, $projectId)
     {
         // get the ids of to-be-invited volunteers from the $request
@@ -185,8 +180,7 @@ class ProjectController extends BaseAuthController
         $project = Project::find($projectId);
         $checked = true;
 
-        
-        $volunteers->each(function($volunteer) use ($project, $checked) {
+        $volunteers->each(function ($volunteer) use ($project, $checked) {
             if ($volunteer->inProject($project)) {
                 $checked = false;
 
@@ -196,16 +190,17 @@ class ProjectController extends BaseAuthController
 
         // if yes, invite them to the project, send them an email to notify that they
         // are being invited to this project. Then respond 200
-        // 
-        // if no, respond error 
+        //
+        // if no, respond error
         // resond
     }
 
-
     /**
-     * Attch a volunteer in a project
-     * @param  AttachVolunteerInProjectRequest $request
-     * @param  integer                          $id      Project id
+     * Attch a volunteer in a project.
+     *
+     * @param AttachVolunteerInProjectRequest $request
+     * @param int                             $id      Project id
+     *
      * @return Illuminate\Http\JsonResponse
      */
     public function attachVolunteer(AttachVolunteerInProjectRequest $request, $id)
@@ -248,10 +243,12 @@ class ProjectController extends BaseAuthController
     }
 
     /**
-     * Detach a volunteer from a project
-     * @param  DetachVolunteerInProjectRequest $request
-     * @param  integer                         $projectId
-     * @param  integer                         $userId    [description]
+     * Detach a volunteer from a project.
+     *
+     * @param DetachVolunteerInProjectRequest $request
+     * @param int                             $projectId
+     * @param int                             $userId    [description]
+     *
      * @return Illuminate\Http\JsonResponse
      */
     public function detachVolunteer(DetachVolunteerInProjectRequest $request, $projectId, $userId)
@@ -307,7 +304,6 @@ class ProjectController extends BaseAuthController
         return response()->json($result, $status);
     }
 
-
     public function addPMs(InviteVolunteerInProjectRequest $request, $projectId)
     {
 
@@ -327,15 +323,12 @@ class ProjectController extends BaseAuthController
             $pms = $project->managers()->get();
             // Assign the project owner
             $volunteers[0]->manageProjects()->attach($project);
+
             return response()->json([], 204);
-        }
-        else
-        {
+        } else {
             return response()->json([], 400);
         }
-        
     }
-
 
     // add parameters
     public function showPMs(ShowProjectRequest $request, $projectId)
@@ -345,9 +338,7 @@ class ProjectController extends BaseAuthController
         // if this is a pm of the project
         if ($user->isCreatorOfProject($project)) {
             $pms = $project->managers()->get();
-        }
-        else
-        {
+        } else {
             // return error status
         }
 
@@ -360,12 +351,10 @@ class ProjectController extends BaseAuthController
         return response()->json($result, $status);
     }
 
-
-
     protected function isPublic(Project $project)
     {
         if ($project->is_published === true) {
-            return ($project->permission == config('constants.project_permission.PUBLIC'));
+            return $project->permission == config('constants.project_permission.PUBLIC');
         }
 
         return false;
@@ -377,11 +366,11 @@ class ProjectController extends BaseAuthController
 
         if ($user->isCreatorOfProject($project)) {
             $role = [
-                'name' => 'creator'
+                'name' => 'creator',
             ];
         } elseif ($user->inProject($project)) {
             $role = [
-                'name' => 'member'
+                'name' => 'member',
             ];
 
             if ($user->isAttendingProject($project)) {
@@ -391,7 +380,7 @@ class ProjectController extends BaseAuthController
             }
         } else {
             $role = [
-                'name' => 'guest'
+                'name' => 'guest',
             ];
         }
 

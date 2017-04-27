@@ -12,13 +12,13 @@ class SkillTest extends TestCase
             'Rope rescue',
             'Disaster Survellience',
             'Disaster Recovery',
-            'Water rescue'
+            'Water rescue',
         ];
 
         foreach ($example as $skill) {
             factory(App\Skill::class)->create(
                 [
-                    'name' => $skill
+                    'name' => $skill,
                 ]
             );
         }
@@ -30,7 +30,7 @@ class SkillTest extends TestCase
         $skills->each(function ($item, $key) {
             $this->assertContains($item->name, [
                 'Disaster Survellience',
-                'Disaster Recovery'
+                'Disaster Recovery',
             ]);
         });
     }
